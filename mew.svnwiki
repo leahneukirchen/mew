@@ -1,0 +1,114 @@
+Mew is a library targetting R5RS/R7RS scheme, which provides some
+conveniences inspired from Goo, Clojure and Arc to allow writing more
+compact code.
+
+
+== Definitions, bindings and assignments
+
+<syntax>(def <variable> <expression>)</syntax>
+<syntax>(def (<variable> <formals>) <expression>)</syntax>
+
+Alias for {{define}}.
+
+<syntax>(fun <formals> <body>)</syntax>
+
+Alias for {{lambda}}.
+
+<syntax>(loc (<var1> <val1> ... <varN> <valN>) <body>)</syntax>
+
+Binds local variable {{var1}} to the result of evaluating {{val1}},
+then {{var2}} to {{val2}}, etc., then evaluates {{body}}.
+
+Assignments can refer to previously assigned values of the {{loc}}.
+
+<syntax>(rec <name> <expression>)</syntax>
+<syntax>(rec (<name> <formals>) <expression>)</syntax>
+
+See Module%20(chicken%20base)#rec or SRFI-31.
+
+Often, using {{def}} in an inner scope is preferable to using {{rec}}.
+
+<syntax>(set <variable> <expression>)</syntax>
+
+Alias for {{set!}}.
+
+
+== Control flow
+
+<syntax>(esc <escape> <body>)</syntax>
+
+Bind {{<escape>}} to the current continuation, then run {{<body>}}.
+Code should not pass {{<escape>}} outside the lexical scope
+and only call it once---use {{call/cc}} else.
+
+<syntax>(fin <body> . <cleanup>)</syntax>
+
+Evaluate {{<body>}}, then evaluate {{<cleanup>}}, even if {{<body>}}
+used a non-local exit (as from {{esc}}).
+
+Returns value of {{<body>}}, so can also be used as a replacment
+for Common Lisp PROG1.
+
+<syntax>(rep <name> ((<var> <init>) ...) <body>)</syntax>
+
+Explicit form of named let.
+
+<syntax>(seq . <body>)</syntax>
+
+Alias for {{begin}}.
+
+<syntax>(unless <cond> <expr>...)</syntax>
+<syntax>(when <cond> <expr>...)</syntax>
+
+As in R7RS-small.
+
+
+== Numeric helpers
+
+<procedure>(inc <num>)<procedure>
+<procedure>(dec <num>)<procedure>
+
+Increment or decrement the argument by 1.
+
+<procedure>(div . <num>)</procedure>
+
+Alias for {{floor-quotient}}.
+
+<procedure>(mod . <num>)</procedure>
+
+Alias for {{floor-remainder}}.
+
+
+== General helpers
+
+<procedure>(app <proc> . <args>)</procedure>
+
+Alias for {{apply}}.
+
+<syntax>(op <form>)</syntax>
+
+Returns a procedure that evaluates {{<form>}} with {{_}} bound to its
+only argument.
+
+If {{<form>>} is empty, behaves as {{(op _)}}, i.e. the identity function.
+
+{{(op 5)}} is the function that always returns 5.
+
+{{(op + 2 _)}} is the function that adds 2 to its argument.
+
+<procedure>(str . <args>)</procedure>
+
+Returns a new string composed by concatenating the strings given by
+applying {{display}} to all {{<args>}}.
+
+
+== Output helpers
+
+<procedure>(prn . <args>)<procedure>
+
+{{write}} all {{args}} separated by spaces and terminated by a newline
+to the current output stream.
+
+<procedure>(puts . <args>)<procedure>
+
+{{display}} all {{args}} terminated by a newline to the current output stream.
