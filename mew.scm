@@ -76,7 +76,7 @@
       ((_ () . rest)
        (let () . rest))
       ((_ (x y . brest) . rest)
-       (let ((x y)) (loc brest . rest)))))
+       (match-let ((x y)) (loc brest . rest)))))
 
   ;; possible additions: multiple _, allow ... for rest
   (define-syntax op
