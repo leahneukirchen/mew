@@ -1,10 +1,12 @@
-(module mew (dec def div esc fin inc loc mod nth op prn puts rep str
-             while until)
+(module mew (at dec def div esc fin get inc loc mod nth op prn puts rep str tbl while until)
   (import scheme
           (rename (chicken base)
              (print puts))
           (chicken module)
-          (chicken port))
+          (chicken port)
+          srfi-17
+          srfi-69
+          matchable)
 
   (reexport
     (only (chicken base)
@@ -103,4 +105,53 @@
     (syntax-rules ()
       ((_ cond body ...)
        (while (not cond) body ...))))
+
+  (define (list-ref-default l i default)
+    (if (zero? i)
+        (if (null? l)
+            default
+            (car l))
+        (list-ref-default (cdr l) (- i 1) default)))
+
+  (define (vector-ref-default v i default)
+    (if (< i (vector-length v))
+        (vector-ref v i)
+        default))
+
+  (define (string-ref-default s i default)
+    (if (< i (string-length s))
+        (string-ref s i)
+        default))
+
+  (define (get o k . default)
+    (if (null? default)
+        (cond ((list? o) (list-ref o k))
+              ((vector? o) (vector-ref o k))
+              ((hash-table? o) (hash-table-ref o k))
+              ((string? o) (string-ref o k))
+              (#t (error "no at defined")))
+        (cond ((list? o) (list-ref-default o k (car default)))
+              ((vector? o) (vector-ref-default o k (car default)))
+              ((hash-table? o) (hash-table-ref/default o k (car default)))
+              ((string? o) (string-ref-default o k (car default)))
+              (#t (error "no at defined")))))
+
+  (define (get-setter o k v)
+    (cond ; no list-set!
+          ((vector? o) (vector-set! o k v))
+          ((hash-table? o) (hash-table-set! o k v))
+          ((string? o) (string-set! o k v))
+          (#t (error "not set for at defined"))))
+
+  (define at (getter-with-setter get get-setter))
+
+  (define (kvs->alist kvs)
+    (let loop ((kvs kvs))
+      (match kvs
+        ((k v . kvs2) (cons (list k v) (loop kvs2)))
+        (()           '())
+        (_            (error "odd key value list")))))
+
+  (define (tbl . kvs)
+    (alist->hash-table (kvs->alist kvs)))
 )

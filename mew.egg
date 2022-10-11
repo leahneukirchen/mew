@@ -1,5 +1,10 @@
+;;; mew.egg -*- Scheme -*- vim: ft=scheme:
+
 ((components (extension mew))
  (version 0.0.1)
  (license "MIT")
  (author "Leah Neukirchen <leah@vuxu.org>")
- (synopsis "Convenience library for compact code"))
+ (synopsis "Convenience library for compact code")
+ (dependencies
+  (matchable 1.1)
+  (srfi-69 0.4.3)))
