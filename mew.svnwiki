@@ -14,10 +14,11 @@ Alias for {{define}}.
 
 Alias for {{lambda}}.
 
-<syntax>(loc (<var1> <val1> ... <varN> <valN>) <body>)</syntax>
+<syntax>(loc (<pat1> <val1> ... <patN> <valN>) <body>)</syntax>
 
-Binds local variable {{var1}} to the result of evaluating {{val1}},
-then {{var2}} to {{val2}}, etc., then evaluates {{body}}.
+Binds local variables in pattern (ala the {{match}} macro)
+{{pat1}} to the result of evaluating {{val1}},
+then {{pat2}} to {{val2}}, etc., then evaluates {{body}}.
 
 Assignments can refer to previously assigned values of the {{loc}}.
 
@@ -61,6 +62,11 @@ Alias for {{begin}}.
 <syntax>(when <cond> <expr>...)</syntax>
 
 As in R7RS-small.
+
+<syntax>(while <cond> <expr>...)</syntax>
+<syntax>(until <cond> <expr>...)</syntax>
+
+Evaluate {{<expr>}} while {{<cond>}} is true/false.
 
 
 == Numeric helpers
@@ -112,3 +118,17 @@ to the current output stream.
 <procedure>(puts . <args>)<procedure>
 
 {{display}} all {{args}} terminated by a newline to the current output stream.
+
+
+== Data types
+
+<procedure>(get <obj> <idx>)</procedure>
+<procedure>(at <obj> <idx>)</procedure>
+<procedure>(set (at <obj> <idx>) <val>)</procedure>
+
+Generalized accessor, supports indexing into lists, vectors,
+hash-tables, strings.
+
+<procedure>(tbl <key1> <val1> ... <keyN> <valN>)</procedure>
+
+Construct a hash-table; using {{equal?}}.
