@@ -132,3 +132,7 @@ hash-tables, strings.
 <procedure>(tbl <key1> <val1> ... <keyN> <valN>)</procedure>
 
 Construct a hash-table; using {{equal?}}.
+
+<procedure>(empty? <obj>)</procedure>
+
+Test if {{<obj>}} is an empty list/string/vector/hash-table.

@@ -1,4 +1,4 @@
-(module mew (at dec def div esc fin get inc loc mod nth op prn puts rep str tbl while until)
+(module mew (at dec def div empty? esc fin get inc loc mod nth op prn puts rep str tbl while until)
   (import scheme
           (rename (chicken base)
              (print puts))
@@ -154,4 +154,11 @@
 
   (define (tbl . kvs)
     (alist->hash-table (kvs->alist kvs)))
+
+  (define (empty? o)
+    (or (null? o)
+        (equal? o "")
+        (equal? o #())
+        (and (hash-table? o)
+             (zero? (hash-table-size o)))))
 )
