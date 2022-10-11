@@ -1,4 +1,4 @@
-(module mew (dec def div esc fin inc loc mod nil nth op prn puts rep str
+(module mew (dec def div esc fin inc loc mod nth op prn puts rep str
              while until)
   (import scheme
           (rename (chicken base)

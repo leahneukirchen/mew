@@ -1,0 +1,5 @@
+((components (extension mew))
+ (version 0.0.1)
+ (license "MIT")
+ (author "Leah Neukirchen <leah@vuxu.org>")
+ (synopsis "Convenience library for compact code"))
