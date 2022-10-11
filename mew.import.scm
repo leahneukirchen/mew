@@ -1,4 +1,5 @@
-(module mew (dec def div esc fin inc loc mod op prn puts rep str)
+(module mew (dec def div esc fin inc loc mod nil nth op prn puts rep str
+             while until)
   (import scheme
           (rename (chicken base)
              (print puts))
@@ -18,11 +19,11 @@
 
   (reexport
     (rename (scheme)
-;     (define def)
       (set! set)
-      (begin seq)   ; XXX return #f for (seq)
+      (begin seq)
       (lambda fun)
       (apply app)
+      (equal? =?)
       ))
 
   (define (inc i)
@@ -31,6 +32,9 @@
   (define (dec i)
     (- i 1))
 
+  (define (nth n lst)
+    (list-ref lst n))
+
   (define (str . args)
     (with-output-to-string
       (lambda ()
@@ -38,12 +42,12 @@
 
   (define (prn . args)
     (if (null? args)
-        (newline)
-        (begin
-          (write (car args))
-          (unless (null? (cdr args))
-            (display " "))
-          (apply prn (cdr args)))))
+      (newline)
+      (begin
+        (write (car args))
+        (unless (null? (cdr args))
+          (display " "))
+        (apply prn (cdr args)))))
   
   (define-syntax def                           
     (syntax-rules ()
@@ -85,4 +89,18 @@
     (syntax-rules ()
       ((_ name ((var val) ...) body ...)
        (let name ((var val) ...) body ...))))
+
+  (define-syntax while
+    (syntax-rules ()
+      ((_ cond body ...)
+       (let loop ((c cond))
+         (if c
+           (begin
+             body ...
+             (loop cond)))))))
+
+  (define-syntax until
+    (syntax-rules ()
+      ((_ cond body ...)
+       (while (not cond) body ...))))
 )
