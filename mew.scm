@@ -1,11 +1,13 @@
-(module mew (at dec def div empty? esc fin get inc loc mod nth op prn puts rep str tbl while until)
+(module mew (at dec def div empty? esc fin get inc keys keyvals loc mod nth op prn puts rep str tbl while until vals)
   (import scheme
           (rename (chicken base)
              (print puts))
           (chicken module)
           (chicken port)
           srfi-17
-          srfi-69
+          (rename (srfi-69)
+             (hash-table-keys keys)
+             (hash-table-values vals))
           matchable)
 
   (reexport
@@ -154,6 +156,9 @@
 
   (define (tbl . kvs)
     (alist->hash-table (kvs->alist kvs)))
+
+  (define (keyvals h)
+    (reverse (hash-table-fold h (lambda (k v l) (cons v (cons k l))) '())))
 
   (define (empty? o)
     (or (null? o)

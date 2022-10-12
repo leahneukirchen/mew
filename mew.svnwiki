@@ -133,6 +133,18 @@ hash-tables, strings.
 
 Construct a hash-table; using {{equal?}}.
 
+<procedure>(keys <hash-table>)</procedure>
+
+Alias for {{hash-table-keys}}.
+
+<procedure>(vals <hash-table>)</procedure>
+
+Alias for {{hash-table-values}}.
+
+<procedure>(keyvals <hash-table>)</procedure>
+
+Return a list of alternating keys and values of the hash table.
+
 <procedure>(empty? <obj>)</procedure>
 
 Test if {{<obj>}} is an empty list/string/vector/hash-table.
