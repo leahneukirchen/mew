@@ -1,8 +1,9 @@
-(module mew (at dec def div empty? esc fin get inc keys keyvals loc mod nth op prn puts rep str tbl while until vals)
+(module mew (at dec def div empty? esc fin for generic-for-each get inc keys keyvals loc mod nth op prn puts rep str tbl while until vals)
   (import scheme
           (rename (chicken base)
              (print puts))
           (chicken module)
+          (chicken syntax)
           (chicken port)
           srfi-17
           (rename (srfi-69)
@@ -166,4 +167,19 @@
         (equal? o #())
         (and (hash-table? o)
              (zero? (hash-table-size o)))))
+
+  (define (generic-for-each obj)
+    (cond ((list? obj) for-each)
+          ((vector? obj) vector-for-each)
+          ((hash-table? obj) (lambda (f h) (hash-table-for-each h f)))
+          (#t (error "no generic-for-each defined"))))
+
+  (define-syntax for
+    (syntax-rules ()
+      ((_ ((i j) obj) body ...)
+       (let ((o obj))
+         ((generic-for-each o) (lambda (i j) body ...) o)))
+      ((_ (i obj) body ...)
+       (let ((o obj))
+         ((generic-for-each o) (lambda (i) body ...) o)))))
 )

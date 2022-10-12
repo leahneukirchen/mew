@@ -148,3 +148,9 @@ Return a list of alternating keys and values of the hash table.
 <procedure>(empty? <obj>)</procedure>
 
 Test if {{<obj>}} is an empty list/string/vector/hash-table.
+
+<syntax>(for (<var> <obj>) <body>...)</syntax>
+<syntax>(for ((<key> <val>) <tbl>) <body>...)</syntax>
+
+Iterate over the items of the list or vector <obj>
+or the keys and values of the hash-table <tbl>.
