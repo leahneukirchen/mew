@@ -82,7 +82,7 @@
   (define-syntax op
     (er-macro-transformer
       (lambda (expr rename compare)
-        `(lambda (_)
+        `(,(rename 'lambda) (_)
            ,@(cond ((= 1 (length expr)) '(_))
                    ((= 2 (length expr)) (cdr expr))
                    (#t (list (cdr expr))))))))
