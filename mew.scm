@@ -148,7 +148,7 @@
   (define (kvs->alist kvs)
     (let loop ((kvs kvs))
       (match kvs
-        ((k v . kvs2) (cons (list k v) (loop kvs2)))
+        ((k v . kvs2) (cons (cons k v) (loop kvs2)))
         (()           '())
         (_            (error "odd key value list")))))
 
