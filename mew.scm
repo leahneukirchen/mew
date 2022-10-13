@@ -18,6 +18,11 @@
     (rename (srfi-158)
       (make-range-generator range)
       (circular-generator cycle)))
+  (reexport matchable)
+  (reexport
+    (rename (matchable)
+      (match-lambda match-fun)
+      (match-lambda* match-fun*)))
 
   (reexport
     (only (chicken base)
