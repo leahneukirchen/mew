@@ -175,3 +175,12 @@ Alias for {{make-range-generator}}.
 <procedure>(giterate <fun> <val>)<procedure>
 
 Generator returning {{<val>}}, {{(<fun> <val>)}}, {{(<fun> (<fun (<val>)))}}...
+
+<procedure>(gfix <gen>)</procedure>
+
+Returns a generator that runs the generator {{<gen>}} until it yields
+a value {{equal?}} to the preceding one, then stops.
+
+<procedure>(last <gen>)</procedure>
+
+Run the generator {{<gen>}} until it stops and return the last value.
