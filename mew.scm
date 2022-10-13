@@ -1,4 +1,4 @@
-(module mew (at dec def div empty? esc fin for generic-for-each get inc keys keyvals loc mod nth op prn puts rep str tbl while until vals)
+(module mew (at dec def div empty? esc fin for generic-for-each get giterate inc keys keyvals loc mod nth op prn puts rep str tbl while until vals)
   (import scheme
           (rename (chicken base)
              (print puts))
@@ -9,7 +9,15 @@
           (rename (srfi-69)
              (hash-table-keys keys)
              (hash-table-values vals))
+          srfi-158
           matchable)
+
+  (reexport srfi-69)
+  (reexport srfi-158)
+  (reexport
+    (rename (srfi-158)
+      (make-range-generator range)
+      (circular-generator cycle)))
 
   (reexport
     (only (chicken base)
@@ -172,6 +180,7 @@
     (cond ((list? obj) for-each)
           ((vector? obj) vector-for-each)
           ((hash-table? obj) (lambda (f h) (hash-table-for-each h f)))
+          ((procedure? obj) generator-for-each)
           (#t (error "no generic-for-each defined"))))
 
   (define-syntax for
@@ -182,4 +191,7 @@
       ((_ (i obj) body ...)
        (let ((o obj))
          ((generic-for-each o) (lambda (i) body ...) o)))))
+
+  (define (giterate f x)
+    (make-unfold-generator (op #f) (op) f x))
 )

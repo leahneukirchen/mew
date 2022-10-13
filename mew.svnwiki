@@ -2,6 +2,10 @@ Mew is a library targetting R5RS/R7RS scheme, which provides some
 conveniences inspired from Goo, Clojure and Arc to allow writing more
 compact code.
 
+== Re-Exports
+
+Mew re-exports SRFI-69 (Basic hash tables)
+and SRFI-158 (Generators and Accumulators).
 
 == Definitions, bindings and assignments
 
@@ -152,5 +156,22 @@ Test if {{<obj>}} is an empty list/string/vector/hash-table.
 <syntax>(for (<var> <obj>) <body>...)</syntax>
 <syntax>(for ((<key> <val>) <tbl>) <body>...)</syntax>
 
-Iterate over the items of the list or vector <obj>
-or the keys and values of the hash-table <tbl>.
+If {{<obj>}} is a list or a vector, iterate over its elements.
+If {{<obj>}} is a procedure, consider it a SRFI-158 generator
+and iterate over its values.
+If {{<obj>}} is a hash-table, iterate over its keys and values.
+
+
+== Generators
+
+<procedure>(cycle <val>...)</procedure>
+
+Alias for {{circular-generator}}.
+
+<procedure>(range <val>...)</procedure>
+
+Alias for {{make-range-generator}}.
+
+<procedure>(giterate <fun> <val>)<procedure>
+
+Generator returning {{<val>}}, {{(<fun> <val>)}}, {{(<fun> (<fun (<val>)))}}...

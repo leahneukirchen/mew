@@ -7,4 +7,5 @@
  (synopsis "Convenience library for compact code")
  (dependencies
   (matchable 1.1)
-  (srfi-69 0.4.3)))
+  (srfi-69 0.4.3)
+  (srfi-158 0.1)))
