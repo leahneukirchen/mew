@@ -1,4 +1,4 @@
-(module mew (at dec def div empty? esc fin for generic-for-each get gfix giterate inc keys keyvals last loc mod nth op prn puts rep str tbl while until vals)
+(module mew (at dec def div empty? esc fin for generic-for-each get gfix giterate inc keys keyvals last len loc mod nth op prn puts rep str tbl while until vals)
   (import scheme
           (rename (chicken base)
              (print puts))
@@ -175,6 +175,14 @@
         (equal? o #())
         (and (hash-table? o)
              (zero? (hash-table-size o)))))
+
+  (define (len o)
+    (cond ((list? o) (length o))
+          ((string? o) (string-length o))
+          ((vector? o) (vector-length o))
+          ((hash-table? o) (hash-table-size o))
+          ((procedure? o) (generator-count (op #t) o))
+          (#t (error "no len defined"))))
 
   (define (generic-for-each obj)
     (cond ((list? obj) for-each)

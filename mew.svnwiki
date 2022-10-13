@@ -153,6 +153,10 @@ Return a list of alternating keys and values of the hash table.
 
 Test if {{<obj>}} is an empty list/string/vector/hash-table.
 
+<procedure>(len <obj>)</procedure>
+
+Return the length of the list/vector/string/hash-table/generator {{<obj>}}.
+
 <syntax>(for (<var> <obj>) <body>...)</syntax>
 <syntax>(for ((<key> <val>) <tbl>) <body>...)</syntax>
 
