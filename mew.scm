@@ -1,4 +1,4 @@
-(module mew (at dec def div empty? esc fin for generic-for-each get gfix giterate inc keys keyvals last len loc mod nth op prn puts rep str tbl while until vals)
+(module mew (at dec def div empty? eof esc fin for generic-for-each get gfix giterate inc keys keyvals last len loc mod nth op prn puts rep str tbl while until vals)
   (import scheme
           (rename (chicken base)
              (print puts))
@@ -200,6 +200,8 @@
        (let ((o obj))
          ((generic-for-each o) (lambda (i) body ...) o)))))
 
+  (define (eof) #!eof)
+
   (define (giterate f x)
     (make-unfold-generator (op #f) (op) f x))
 
@@ -207,7 +209,7 @@
     (let ((prev (if #f #f)))
       (gmap (lambda (x)
               (if (equal? prev x)
-                (eof-object)
+                (eof)
                 (begin
                   (set! prev x)
                   x)))

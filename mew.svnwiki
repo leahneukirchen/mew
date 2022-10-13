@@ -112,7 +112,7 @@ Returns a new string composed by concatenating the strings given by
 applying {{display}} to all {{<args>}}.
 
 
-== Output helpers
+== I/O helpers
 
 <procedure>(prn . <args>)<procedure>
 
@@ -122,6 +122,10 @@ to the current output stream.
 <procedure>(puts . <args>)<procedure>
 
 {{display}} all {{args}} terminated by a newline to the current output stream.
+
+<procedure>(eof)<procedure>
+
+Return an object for which {{eof-object?}} is true.
 
 
 == Data types
