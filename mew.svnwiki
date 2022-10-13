@@ -193,3 +193,18 @@ a value {{equal?}} to the preceding one, then stops.
 <procedure>(last <gen>)</procedure>
 
 Run the generator {{<gen>}} until it stops and return the last value.
+
+
+== Special syntax
+
+<syntax>(-> a -> b c -> d e f)</syntax>
+<syntax>(->> a ->> b c ->> d e f)</syntax>
+
+Nesting macros: {{->}} inserts the previous part as the second argument:
+{{(-> a -> b c -> d e f)}} expands to {{(d (b a c) e f)}}.
+
+{{->>}} inserts the previous part as the last argument:
+{{(->> a ->> b c ->> d e f)}} expands to {{(d e f (b c a))}}.
+
+You can mix {{->}} and {{->>}} macros:
+{{(->> a -> b c ->> d e f)}} expands to {{(d e f (b a c))}}.

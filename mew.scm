@@ -1,4 +1,6 @@
-(module mew (at dec def div empty? eof esc fin for generic-for-each get gfix giterate inc keys keyvals last len loc mod nth op prn puts rep str tbl while until vals)
+(module mew (at dec def div empty? eof esc fin for generic-for-each get gfix giterate inc keys keyvals last len loc mod nth op prn puts rep str tbl while until vals -> ->>)
+  (import-for-syntax matchable)
+
   (import scheme
           (rename (chicken base)
              (print puts))
@@ -222,4 +224,43 @@
 
   (define (last g)
     (generator-fold (lambda (x a) x) (if #f #f) g))
+
+  (define-syntax ->
+    (er-macro-transformer
+     (lambda (expr rename compare)
+
+       (define (->? sym)
+         (compare sym (rename '->)))
+
+       (define (->>? sym)
+         (compare sym (rename '->>)))
+
+       (define (pass1 a b v)
+         (match v
+           ('()
+            (reverse (cons (reverse b) a)))
+           (((and (or (? ->?) (? ->>?)) arr) . rest)
+            (pass1 (cons (reverse b) a) `(,arr) rest))
+           ((other . rest)
+            (pass1 a (cons other b) rest))))
+
+       (define (pass2 a v)
+         (match v
+           ('()
+            a)
+           ((((? ->?) h . t) . rest)
+            (pass2 `(,h ,a ,@t) rest))
+           ((((? ->>?) . t) . rest)
+            (pass2 `(,@t ,a) rest))))
+
+       (let ((r (pass1 '() '() (cdr expr))))
+         (pass2 (if (= (length (car r)) 1)
+                  (caar r)
+                  (car r))
+                (cdr r))))))
+
+  (define-syntax ->>
+    (syntax-rules ()
+      ((_ . rest)
+       (-> . rest))))
 )
