@@ -10,5 +10,6 @@
 (put 'if 'scheme-indent-function 1)
 (put 'match 'scheme-indent-function 1)
 
-(put '-> 'scheme-indent-function #'(lambda (_ _ _) 1))
-(put '->> 'scheme-indent-function #'(lambda (_ _ _) 1))
+(setq auto-mode-alist
+      (cons '("\\.mew\\'" . scheme-mode)
+            auto-mode-alist))
