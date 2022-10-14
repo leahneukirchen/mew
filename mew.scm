@@ -1,4 +1,26 @@
-(module mew (at dec def div empty? eof esc fin final for generic-for-each get gfix giterate gmatch gsplit inc keys keyvals len loc mod nth op prn puts rep str slurp tbl while until vals -> ->> fun-> fun->> ~?)
+(module mew
+  (export
+     at
+     dec def div
+     empty? eof esc
+     fin final for generic-for-each
+     get gfix giterate gmatch gsplit
+     inc
+     keys keyvals
+     len loc
+     mod
+     nth
+     op
+     prn puts
+     rep
+     str slurp
+     tbl
+     while
+     until
+     vals
+     -> ->> fun-> fun->>
+     ~?)
+
   (import-for-syntax matchable)
 
   (import scheme
