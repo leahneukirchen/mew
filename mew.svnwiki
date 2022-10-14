@@ -190,9 +190,9 @@ Generator returning {{<val>}}, {{(<fun> <val>)}}, {{(<fun> (<fun (<val>)))}}...
 Returns a generator that runs the generator {{<gen>}} until it yields
 a value {{equal?}} to the preceding one, then stops.
 
-<procedure>(last <gen>)</procedure>
+<procedure>(final <gen>)</procedure>
 
-Run the generator {{<gen>}} until it stops and return the last value.
+Run the generator {{<gen>}} until it stops and return its final value.
 
 
 == Special syntax

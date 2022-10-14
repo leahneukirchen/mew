@@ -1,4 +1,4 @@
-(module mew (at dec def div empty? eof esc fin for generic-for-each get gfix giterate inc keys keyvals last len loc mod nth op prn puts rep str tbl while until vals -> ->>)
+(module mew (at dec def div empty? eof esc fin final for generic-for-each get gfix giterate inc keys keyvals len loc mod nth op prn puts rep str tbl while until vals -> ->>)
   (import-for-syntax matchable)
 
   (import scheme
@@ -222,7 +222,7 @@
                   x)))
             g)))
 
-  (define (last g)
+  (define (final g)
     (generator-fold (lambda (x a) x) (if #f #f) g))
 
   (define-syntax ->
