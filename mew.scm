@@ -1,4 +1,4 @@
-(module mew (at dec def div empty? eof esc fin final for generic-for-each get gfix giterate gmatch inc keys keyvals len loc mod nth op prn puts rep str tbl while until vals -> ->> ~?)
+(module mew (at dec def div empty? eof esc fin final for generic-for-each get gfix giterate gmatch inc keys keyvals len loc mod nth op prn puts rep str slurp tbl while until vals -> ->> ~?)
   (import-for-syntax matchable)
 
   (import scheme
@@ -288,4 +288,13 @@
                 (set! start -1)
                 (eof))))
           (eof)))))
+
+  (def (slurp io)
+    (cond ((not io)          (read-string #f (current-input-port)))
+          ((input-port? io)  (read-string #f io))
+          ((string? io)      (with-input-from-file io
+                               (lambda ()
+                                 (read-string #f (current-input-port)))))
+          (else              (error "no slurp defined"))))
+
 )

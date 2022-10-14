@@ -131,6 +131,12 @@ to the current output stream.
 
 Return an object for which {{eof-object?}} is true.
 
+<procedure>(slurp <obj>)<procedure>
+
+If {{<obj>}} is an input-port, read all data into a string.
+If {{<obj>}} is a string, read all data from the file named {{<<obj>>}.
+If {{<obj>}} is false, read all data from {{*current-input-port*}}.
+
 
 == Data types
 
