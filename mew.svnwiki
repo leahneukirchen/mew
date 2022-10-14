@@ -194,6 +194,12 @@ Alias for {{make-range-generator}}.
 
 Generator returning {{<val>}}, {{(<fun> <val>)}}, {{(<fun> (<fun (<val>)))}}...
 
+<procedure>(gwindow <gen> <len>)<procedure>
+
+Generator yielding a sliding window of length {{<len>}} (as a list)
+over the values yielded by the generator {{<gen>}}.  Yields never if
+the generator yielded fewer than {{<len>}} elements.
+
 <procedure>(gfix <gen>)</procedure>
 
 Returns a generator that runs the generator {{<gen>}} until it yields
