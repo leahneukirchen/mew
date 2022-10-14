@@ -48,6 +48,7 @@
     (rename (matchable)
       (match-lambda match-fun)
       (match-lambda* match-fun*)))
+  (reexport (chicken io))
   (reexport (chicken irregex))
 
   (reexport

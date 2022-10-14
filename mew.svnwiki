@@ -8,6 +8,7 @@ Mew re-exports
 SRFI-1 (List library),
 SRFI-69 (Basic hash tables),
 SRFI-158 (Generators and Accumulators),
+{{(chicken io)}},
 {{(chicken irregex)}},
 and {{matchable}}.
 
