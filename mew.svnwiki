@@ -8,6 +8,7 @@ Mew re-exports
 SRFI-1 (List library),
 SRFI-69 (Basic hash tables),
 SRFI-158 (Generators and Accumulators),
+{{(chicken irregex)}},
 and {{matchable}}.
 
 == Definitions, bindings and assignments
@@ -195,6 +196,21 @@ a value {{equal?}} to the preceding one, then stops.
 <procedure>(final <gen>)</procedure>
 
 Run the generator {{<gen>}} until it stops and return its final value.
+
+
+== Regular expressions
+
+<procedure>(?~ <str> <irx>)</procedure>
+
+Matches the string {{<str>}} against the irregex (string or sexp) {{<irx>}}
+without anchoring.  Returns false on no match, else a list of all
+match data strings.
+
+<procedure>(gmatch <irx> <str>)</procedure>
+
+Returns a generator that for each match of the irregex {{<irx>}} in
+the string {{<str>}} either yields the match, or a list of all
+match data strings (if there are any).
 
 
 == Special syntax

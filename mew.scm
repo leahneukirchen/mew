@@ -1,4 +1,4 @@
-(module mew (at dec def div empty? eof esc fin final for generic-for-each get gfix giterate inc keys keyvals len loc mod nth op prn puts rep str tbl while until vals -> ->>)
+(module mew (at dec def div empty? eof esc fin final for generic-for-each get gfix giterate gmatch inc keys keyvals len loc mod nth op prn puts rep str tbl while until vals -> ->> ~?)
   (import-for-syntax matchable)
 
   (import scheme
@@ -25,6 +25,7 @@
     (rename (matchable)
       (match-lambda match-fun)
       (match-lambda* match-fun*)))
+  (reexport (chicken irregex))
 
   (reexport
     (only (chicken base)
@@ -263,4 +264,28 @@
     (syntax-rules ()
       ((_ . rest)
        (-> . rest))))
+
+  (def (~? str pat)
+    (let ((data (irregex-search pat str)))
+      (if data
+        (map (op irregex-match-substring data _)
+             (iota (inc (irregex-match-num-submatches data))))
+        #f)))
+
+  (def (gmatch pat str)
+    (let ((start 0))
+      (lambda ()
+        (if (>= start 0)
+          (let ((data (irregex-search pat str start)))
+            (if data
+              (begin
+                (set! start (irregex-match-end-index data 0))
+                (if (> (irregex-match-num-submatches data) 0)
+                  (map (op irregex-match-substring data _)
+                       (iota (inc (irregex-match-num-submatches data))))
+                  (irregex-match-substring data 0)))
+              (begin
+                (set! start -1)
+                (eof))))
+          (eof)))))
 )
