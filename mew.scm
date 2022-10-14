@@ -345,11 +345,14 @@
   (def (gmatch pat str)
     (let ((start 0))
       (lambda ()
-        (if (>= start 0)
+        (if (<= 0 start (string-length str))
           (let ((data (irregex-search pat str start)))
             (if data
               (begin
                 (set! start (irregex-match-end-index data 0))
+                (when (= (irregex-match-start-index data 0)
+                         (irregex-match-end-index data 0))
+                  (set! start (inc start)))
                 (if (> (irregex-match-num-submatches data) 0)
                   (map (op irregex-match-substring data _)
                        (iota (inc (irregex-match-num-submatches data))))
