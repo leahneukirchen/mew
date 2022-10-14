@@ -14,7 +14,7 @@
           srfi-158
           matchable)
 
-  (reexport srfi-69)
+  (reexport srfi-1)
   (reexport srfi-158)
   (reexport
     (rename (srfi-158)
