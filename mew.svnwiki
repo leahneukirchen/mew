@@ -213,6 +213,13 @@ a value {{equal?}} to the preceding one, then stops.
 
 Run the generator {{<gen>}} until it stops and return its final value.
 
+<procedure>(into <acc> <gen>)</procedure>
+
+Feed all elements of the generator {{<gen>}} into the accumulator {{<acc>}}.
+Uses {{gen}} to convert {{<gen>}} into a generator.
+If {{<acc>}} is a list/vector/hash-table/string, accumulate into
+a corresponding accumulator initialized to {{<acc>}}.
+
 
 == Regular expressions
 

@@ -5,7 +5,7 @@
      empty? eof esc
      fin final for generic-for-each
      get gen gfix giterate gmatch gsplit gwindow
-     inc
+     inc into
      keys keyvals
      len loc
      mod
@@ -405,4 +405,28 @@
           ((hash-table? o) (apply hash-table->generator o rest))
           ((procedure? o)  o)
           (else            (error "no gen defined"))))
+
+  (define (generic-make-accumulator a)
+    (cond ((procedure? a) a)
+          ((list? a)      (make-accumulator cons (reverse a) reverse))
+          ((vector? a)    (make-accumulator cons (reverse (vector->list a))
+                                            (lambda (x)
+                                              (list->vector (reverse x)))))
+          ((hash-table? a) (make-accumulator (lambda (kv h)
+                                               (apply hash-table-set! h kv)
+                                               h)
+                                             a
+                                             (op)))
+          ((string? a)     (make-accumulator cons (reverse (string->list a))
+                                             (lambda (lst) (list->string (reverse lst)))))
+          (else            (error "no make-accumulator defined"))))
+
+  (def (into acc generator)
+    (let ((acc (generic-make-accumulator acc))
+          (gen (gen generator)))
+      (let loop ((val (gen)))
+        (acc val)
+        (if (not (eof-object? val))
+          (loop (gen))
+          (acc val)))))
 )
