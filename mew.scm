@@ -4,7 +4,7 @@
      dec def div
      empty? eof esc
      fin final for generic-for-each
-     get gfix giterate gmatch gsplit gwindow
+     get gen gfix giterate gmatch gsplit gwindow
      inc
      keys keyvals
      len loc
@@ -37,6 +37,7 @@
           matchable)
 
   (reexport srfi-1)
+  (reexport srfi-69)
   (reexport srfi-158)
   (reexport
     (rename (srfi-158)
@@ -391,4 +392,17 @@
                                  (read-string #f (current-input-port)))))
           (else              (error "no slurp defined"))))
 
+  (def (hash-table->generator h)
+    (make-for-each-generator (lambda (f t)
+                               (hash-table-for-each t (lambda (k v)
+                                                        (f (list k v)))))
+                             h))
+
+  (def (gen o . rest)
+    (cond ((list? o)       (apply list->generator o rest))
+          ((vector? o)     (apply vector->generator o rest))
+          ((string? o)     (apply string->generator o rest))
+          ((hash-table? o) (apply hash-table->generator o rest))
+          ((procedure? o)  o)
+          (else            (error "no gen defined"))))
 )

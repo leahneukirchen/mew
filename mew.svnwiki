@@ -182,6 +182,10 @@ If {{<obj>}} is a hash-table, iterate over its keys and values.
 
 == Generators
 
+<procedure>(gen <val>)</procedure>
+
+Generic generator for list/vector/string/hash-table/generator.
+
 <procedure>(cycle <val>...)</procedure>
 
 Alias for {{circular-generator}}.
