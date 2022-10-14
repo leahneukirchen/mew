@@ -55,6 +55,10 @@
       when
       rec))
 
+  (reexport
+    (only (chicken time)
+      time))
+
   (import
     (rename (r7rs)
       (floor-quotient div)
