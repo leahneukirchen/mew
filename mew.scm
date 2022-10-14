@@ -336,14 +336,14 @@
       ((_ location rest ...)
        (set! location (->> location ->> rest ...)))))
 
-  (def (~? str pat)
+  (define (~? str pat)
     (let ((data (irregex-search pat str)))
       (if data
         (map (op irregex-match-substring data _)
              (iota (inc (irregex-match-num-submatches data))))
         #f)))
 
-  (def (gmatch pat str)
+  (define (gmatch pat str)
     (let ((start 0))
       (lambda ()
         (if (<= 0 start (string-length str))
@@ -363,7 +363,7 @@
                 (eof))))
           (eof)))))
 
-  (def (gsplit pat str . max)
+  (define (gsplit pat str . max)
     (let ((start 0)
           (n 1)
           (max (if (null? max) -1 (car max))))
@@ -384,7 +384,7 @@
                 s)))
           (eof)))))
 
-  (def (slurp io)
+  (define (slurp io)
     (cond ((not io)          (read-string #f (current-input-port)))
           ((input-port? io)  (read-string #f io))
           ((string? io)      (with-input-from-file io
@@ -392,13 +392,13 @@
                                  (read-string #f (current-input-port)))))
           (else              (error "no slurp defined"))))
 
-  (def (hash-table->generator h)
+  (define (hash-table->generator h)
     (make-for-each-generator (lambda (f t)
                                (hash-table-for-each t (lambda (k v)
                                                         (f (list k v)))))
                              h))
 
-  (def (gen o . rest)
+  (define (gen o . rest)
     (cond ((list? o)       (apply list->generator o rest))
           ((vector? o)     (apply vector->generator o rest))
           ((string? o)     (apply string->generator o rest))
