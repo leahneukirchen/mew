@@ -333,6 +333,8 @@
               (let ((s (substring str start (irregex-match-start-index data 0))))
                 (set! n (inc n))
                 (set! start (irregex-match-end-index data 0))
+                (when (= start (len str))
+                  (set! start -1))
                 s)
               (let ((s (substring str start)))
                 (set! n (inc n))
