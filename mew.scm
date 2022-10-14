@@ -422,9 +422,9 @@
                                              (lambda (lst) (list->string (reverse lst)))))
           (else            (error "no make-accumulator defined"))))
 
-  (def (into acc generator)
+  (def (into acc . generators)
     (let ((acc (generic-make-accumulator acc))
-          (gen (gen generator)))
+          (gen (apply gappend (map gen generators))))
       (let loop ((val (gen)))
         (acc val)
         (if (not (eof-object? val))
