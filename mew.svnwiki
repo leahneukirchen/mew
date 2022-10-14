@@ -254,3 +254,8 @@ Nesting lambdas: like {{->}} but the nesting starts with the argument
 of the lambda.
 {{(fun-> b c -> d e f)}} expands to {{(lambda (x) (-> x -> b c -> d e f))}}.
 {{(fun->> b c ->> d e f)}} expands to {{(lambda (x) (->> x ->> b c ->> d e f))}}.
+
+<syntax>(set-> loc -> ...)</syntax>
+<syntax>(set->> loc ->> ...)</syntax>
+
+Mutation with nesting macros: shortcut for {{(set loc (-> loc ...))}}.

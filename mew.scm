@@ -14,11 +14,11 @@
      prn puts
      rep
      str slurp
-     tbl
+     tbl time
      while
      until
      vals
-     -> ->> fun-> fun->>
+     -> ->> fun-> fun->> set-> set->>
      ~?)
 
   (import-for-syntax matchable)
@@ -312,6 +312,24 @@
     (syntax-rules ()
       ((_ rest ...)
        (lambda (x) (->> x ->> rest ...)))))
+
+  (define-syntax set->
+    (syntax-rules (-> ->>)
+      ((_ location -> rest ...)
+       (set! location (-> location -> rest ...)))
+      ((_ location ->> rest ...)
+       (set! location (-> location ->> rest ...)))
+      ((_ location rest ...)
+       (set! location (-> location -> rest ...)))))
+
+  (define-syntax set->>
+    (syntax-rules (-> ->>)
+      ((_ location -> rest ...)
+       (set! location (->> location -> rest ...)))
+      ((_ location ->> rest ...)
+       (set! location (->> location ->> rest ...)))
+      ((_ location rest ...)
+       (set! location (->> location ->> rest ...)))))
 
   (def (~? str pat)
     (let ((data (irregex-search pat str)))
