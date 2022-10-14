@@ -1,4 +1,4 @@
-(module mew (at dec def div empty? eof esc fin final for generic-for-each get gfix giterate gmatch inc keys keyvals len loc mod nth op prn puts rep str slurp tbl while until vals -> ->> ~?)
+(module mew (at dec def div empty? eof esc fin final for generic-for-each get gfix giterate gmatch gsplit inc keys keyvals len loc mod nth op prn puts rep str slurp tbl while until vals -> ->> ~?)
   (import-for-syntax matchable)
 
   (import scheme
@@ -287,6 +287,25 @@
               (begin
                 (set! start -1)
                 (eof))))
+          (eof)))))
+
+  (def (gsplit pat str . max)
+    (let ((start 0)
+          (n 1)
+          (max (if (null? max) -1 (car max))))
+      (lambda ()
+        (if (or (>= start 0)
+                (and (> max 0) (< n max)))
+          (let ((data (irregex-search pat str start)))
+            (if (and data (or (< max 0) (< n max)))
+              (let ((s (substring str start (irregex-match-start-index data 0))))
+                (set! n (inc n))
+                (set! start (irregex-match-end-index data 0))
+                s)
+              (let ((s (substring str start)))
+                (set! n (inc n))
+                (set! start -1)
+                s)))
           (eof)))))
 
   (def (slurp io)

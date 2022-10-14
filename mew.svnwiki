@@ -218,6 +218,14 @@ Returns a generator that for each match of the irregex {{<irx>}} in
 the string {{<str>}} either yields the match, or a list of all
 match data strings (if there are any).
 
+<procedure>(gsplit <irx> <str> <max>?)</procedure>
+
+Returns a generator that yields the strings between matches of the
+irregex {{<irx>}} in the string {{<str>}}, at most {{<max>>} times
+(by default, unlimited).
+
+When the pattern {{<irx>}} uses match data, the result is unspecified.
+
 
 == Special syntax
 
