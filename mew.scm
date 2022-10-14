@@ -1,4 +1,4 @@
-(module mew (at dec def div empty? eof esc fin final for generic-for-each get gfix giterate gmatch gsplit inc keys keyvals len loc mod nth op prn puts rep str slurp tbl while until vals -> ->> ~?)
+(module mew (at dec def div empty? eof esc fin final for generic-for-each get gfix giterate gmatch gsplit inc keys keyvals len loc mod nth op prn puts rep str slurp tbl while until vals -> ->> fun-> fun->> ~?)
   (import-for-syntax matchable)
 
   (import scheme
@@ -264,6 +264,16 @@
     (syntax-rules ()
       ((_ . rest)
        (-> . rest))))
+
+  (define-syntax fun->
+    (syntax-rules ()
+      ((_ rest ...)
+       (lambda (x) (-> x -> rest ...)))))
+
+  (define-syntax fun->>
+    (syntax-rules ()
+      ((_ rest ...)
+       (lambda (x) (->> x ->> rest ...)))))
 
   (def (~? str pat)
     (let ((data (irregex-search pat str)))

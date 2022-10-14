@@ -240,3 +240,11 @@ Nesting macros: {{->}} inserts the previous part as the second argument:
 
 You can mix {{->}} and {{->>}} macros:
 {{(->> a -> b c ->> d e f)}} expands to {{(d e f (b a c))}}.
+
+<syntax>(fun-> b c -> d e f)</syntax>
+<syntax>(fun->> b c ->> d e f)</syntax>
+
+Nesting lambdas: like {{->}} but the nesting starts with the argument
+of the lambda.
+{{(fun-> b c -> d e f)}} expands to {{(lambda (x) (-> x -> b c -> d e f))}}.
+{{(fun->> b c ->> d e f)}} expands to {{(lambda (x) (->> x ->> b c ->> d e f))}}.
