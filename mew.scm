@@ -6,7 +6,7 @@
      fin final for generic-for-each
      get gen gfix giterate gmatch gsplit gwindow
      inc into
-     keys keyvals
+     keys
      len loc
      mod
      nth
@@ -203,9 +203,6 @@
 
   (define (tbl . kvs)
     (alist->hash-table (kvs->alist kvs)))
-
-  (define (keyvals h)
-    (reverse (hash-table-fold h (lambda (k v l) (cons v (cons k l))) '())))
 
   (define (empty? o)
     (or (null? o)
