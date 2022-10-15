@@ -50,6 +50,7 @@
       (match-lambda* match-fun*)))
   (reexport (chicken io))
   (reexport (chicken irregex))
+  (reexport (chicken pretty-print))
 
   (reexport
     (only (chicken base)
