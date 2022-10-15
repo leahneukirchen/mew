@@ -222,18 +222,17 @@
   (define (generic-for-each obj)
     (cond ((list? obj) for-each)
           ((vector? obj) vector-for-each)
-          ((hash-table? obj) (lambda (f h) (hash-table-for-each h f)))
+          ((hash-table? obj) (lambda (f h)
+                               (hash-table-for-each h (lambda (k v)
+                                                        (f (cons k v))))))
           ((procedure? obj) generator-for-each)
           (#t (error "no generic-for-each defined"))))
 
   (define-syntax for
     (syntax-rules ()
-      ((_ ((i j) obj) body ...)
-       (let ((o obj))
-         ((generic-for-each o) (lambda (i j) body ...) o)))
       ((_ (i obj) body ...)
        (let ((o obj))
-         ((generic-for-each o) (lambda (i) body ...) o)))))
+         ((generic-for-each o) (match-lambda (i body ...)) o)))))
 
   (define (eof) #!eof)
 

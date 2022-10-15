@@ -169,7 +169,7 @@ Test if {{<obj>}} is an empty list/string/vector/hash-table.
 Return the length of the list/vector/string/hash-table/generator {{<obj>}}.
 
 <syntax>(for (<var> <obj>) <body>...)</syntax>
-<syntax>(for ((<key> <val>) <tbl>) <body>...)</syntax>
+<syntax>(for ((<key> . <val>) <tbl>) <body>...)</syntax>
 
 If {{<obj>}} is a list or a vector, iterate over its elements.
 If {{<obj>}} is a procedure, consider it a SRFI-158 generator
