@@ -398,7 +398,7 @@
   (define (hash-table->generator h)
     (make-for-each-generator (lambda (f t)
                                (hash-table-for-each t (lambda (k v)
-                                                        (f (list k v)))))
+                                                        (f (cons k v)))))
                              h))
 
   (define (gen o . rest)
@@ -416,7 +416,7 @@
                                             (lambda (x)
                                               (list->vector (reverse x)))))
           ((hash-table? a) (make-accumulator (lambda (kv h)
-                                               (apply hash-table-set! h kv)
+                                               (hash-table-set! h (car kv) (cdr kv))
                                                h)
                                              a
                                              (op)))
