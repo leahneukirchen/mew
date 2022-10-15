@@ -201,6 +201,12 @@ Generator yielding a sliding window of length {{<len>}} (as a list)
 over the values yielded by the generator {{<gen>}}.  Yields never if
 the generator yielded fewer than {{<len>}} elements.
 
+<procedure>(genumerate <gen>)<procedure>
+
+Takes the values yielded by the generator {{<gen>}} and yields them as
+a {{cons}} where the first cell is an index incremented on every
+yield.
+
 <procedure>(gfix <gen>)</procedure>
 
 Returns a generator that runs the generator {{<gen>}} until it yields

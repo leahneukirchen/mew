@@ -4,7 +4,7 @@
      dec def div
      empty? eof esc
      fin final for generic-for-each
-     get gen gfix giterate gmatch gsplit gwindow
+     get gen genumerate gfix giterate gmatch gsplit gwindow
      inc into
      keys
      len loc
@@ -251,6 +251,16 @@
               (begin
                 (set! window (append (cdr window) (list next)))
                 window)))))))
+
+  (define (genumerate gen)
+    (let ((n -1))
+      (lambda ()
+        (let ((val (gen)))
+          (if (eof-object? val)
+            val
+            (begin
+              (set! n (inc n))
+              (cons n val)))))))
 
   (define (giterate f x)
     (make-unfold-generator (op #f) (op) f x))
