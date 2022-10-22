@@ -10,7 +10,7 @@
      len loc
      mod
      nth
-     op
+     one-of op
      prn puts
      rep
      str slurp
@@ -456,4 +456,12 @@
         (if (not (eof-object? val))
           (loop (gen))
           (acc val)))))
+
+  (define-syntax one-of
+    (er-macro-transformer
+     (lambda (expr rename compare)
+       `(,(rename 'lambda) (x)
+         (,(rename 'or) ,@(map (lambda (v)
+                                 `(,(rename 'equal?) x ,v))
+                               (cdr expr)))))))
 )

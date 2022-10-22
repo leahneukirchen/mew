@@ -117,6 +117,11 @@ If {{<form>>} is empty, behaves as {{(op _)}}, i.e. the identity function.
 Returns a new string composed by concatenating the strings given by
 applying {{display}} to all {{<args>}}.
 
+<syntax>(one-of <val>...)</syntax>
+
+Expands to a lambda expression that is true if its argument is
+{{equal?}} to any of the {{<val>}} passed.
+
 
 == I/O helpers
 
