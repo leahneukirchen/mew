@@ -4,7 +4,7 @@
      dec def div
      empty? eof esc
      fin final for generic-for-each
-     get gen genumerate gfix giterate gmatch gsplit gwindow
+     get gen genumerate gfix given giterate gmatch gsplit gwindow
      inc into
      keys
      len loc
@@ -345,6 +345,23 @@
        (set! location (->> location ->> rest ...)))
       ((_ location rest ...)
        (set! location (->> location ->> rest ...)))))
+
+  (define-syntax given
+    (syntax-rules ()
+      ((_ expr bool (then . then-rest) (else . else-rest))
+       (let ((val expr))
+         (if bool
+           (then val . then-rest)
+           (else val . else-rest))))
+      ((_ expr bool (then . then-rest) else)
+       (given expr bool (then . then-rest) (else)))
+      ((_ expr bool then (else . else-rest))
+       (given expr bool (then) (else . else-rest)))
+      ((_ expr bool then else)
+       (given expr bool (then) (else)))
+      ((_ expr bool then)
+       (given expr bool then ((op))))
+      ))
 
   (define (~? str pat)
     (let ((data (irregex-search pat str)))
