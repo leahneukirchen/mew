@@ -183,7 +183,7 @@ and iterate over its values.
 If {{<obj>}} is a hash-table, iterate over its keys and values.
 
 
-== Generators
+== Generators and Accumulators
 
 <procedure>(gen <val>)</procedure>
 
@@ -226,6 +226,13 @@ Run the generator {{<gen>}} until it stops and return its final value.
 
 Feed all elements of the generators {{<gen>}} into the accumulator {{<acc>}}.
 Uses {{gen}} to convert {{<gen>}} into a generator.
+If {{<acc>}} is a list/vector/hash-table/string, accumulate into
+a corresponding accumulator initialized to {{<acc>}}.
+
+<syntax>(accumulate (<var> <acc>) body ...)</syntax>
+
+Bind {{<var>}} to the accumulator {{<var>}} and run {{body}}.
+Finally, return the result of accumulation.
 If {{<acc>}} is a list/vector/hash-table/string, accumulate into
 a corresponding accumulator initialized to {{<acc>}}.
 

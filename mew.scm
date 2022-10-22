@@ -1,6 +1,6 @@
 (module mew
   (export
-     at
+     accumulate at
      dec def div
      empty? eof esc
      fin final for generic-for-each
@@ -456,6 +456,13 @@
         (if (not (eof-object? val))
           (loop (gen))
           (acc val)))))
+
+  (define-syntax accumulate
+    (syntax-rules ()
+      ((_ (var init) body ...)
+       (let ((var (generic-make-accumulator init)))
+         body ...
+         (var (eof))))))
 
   (define-syntax one-of
     (er-macro-transformer
