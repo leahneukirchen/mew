@@ -78,7 +78,7 @@
 
   (define (inc i)
     (+ i 1))
-  
+
   (define (dec i)
     (- i 1))
 
@@ -98,8 +98,8 @@
         (unless (null? (cdr args))
           (display " "))
         (apply prn (cdr args)))))
-  
-  (define-syntax def                           
+
+  (define-syntax def
     (syntax-rules ()
       ((_ . rest)
        (define . rest))))
