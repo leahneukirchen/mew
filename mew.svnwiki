@@ -39,9 +39,9 @@ See Module%20(chicken%20base)#rec or SRFI-31.
 
 Often, using {{def}} in an inner scope is preferable to using {{rec}}.
 
-<syntax>(set <variable> <expression>)</syntax>
+<syntax>(set <location> <expression>)</syntax>
 
-Alias for {{set!}}.
+Like {{set!}}, but also return the value of {{<expression>}}.
 
 
 == Control flow

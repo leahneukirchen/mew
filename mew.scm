@@ -13,7 +13,7 @@
      one-of op
      prn puts
      rep
-     str slurp
+     set str slurp
      tbl time
      while
      until
@@ -69,7 +69,6 @@
 
   (reexport
     (rename (scheme)
-      (set! set)
       (begin seq)
       (lambda fun)
       (apply app)
@@ -103,6 +102,13 @@
     (syntax-rules ()
       ((_ . rest)
        (define . rest))))
+
+  (define-syntax set
+    (syntax-rules ()
+      ((_ id expr)
+       (let ((val expr))
+         (set! id val)
+         val))))
 
   (define-syntax esc
     (syntax-rules ()
