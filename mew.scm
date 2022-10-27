@@ -286,43 +286,36 @@
     (generator-fold (lambda (x a) x) (if #f #f) g))
 
   (define-syntax ->
-    (er-macro-transformer
-     (lambda (expr rename compare)
-
-       (define (->? sym)
-         (compare sym (rename '->)))
-
-       (define (->>? sym)
-         (compare sym (rename '->>)))
-
-       (define (pass1 a b v)
-         (match v
-           ('()
-            (reverse (cons (reverse b) a)))
-           (((and (or (? ->?) (? ->>?)) arr) . rest)
-            (pass1 (cons (reverse b) a) `(,arr) rest))
-           ((other . rest)
-            (pass1 a (cons other b) rest))))
-
-       (define (pass2 a v)
-         (match v
-           ('()
-            a)
-           ((((? ->?) h . t) . rest)
-            (pass2 `(,h ,a ,@t) rest))
-           ((((? ->>?) . t) . rest)
-            (pass2 `(,@t ,a) rest))))
-
-       (let ((r (pass1 '() '() (cdr expr))))
-         (pass2 (if (= (length (car r)) 1)
-                  (caar r)
-                  (car r))
-                (cdr r))))))
+    (syntax-rules ()
+      ((_ rest ...)
+       (->chunk () () (rest ...)))))
 
   (define-syntax ->>
     (syntax-rules ()
-      ((_ . rest)
-       (-> . rest))))
+      ((_ rest ...)
+       (->chunk () () (rest ...)))))
+
+  (define-syntax ->chunk
+    (syntax-rules (-> ->>)
+      ((_ (result ...) (current ...) (-> rest ...))
+       (->chunk (result ... (current ...)) (->) (rest ...)))
+      ((_ (result ...) (current ...) (->> rest ...))
+       (->chunk (result ... (current ...)) (->>) (rest ...)))
+      ((_ (result ...) (current ...) (a rest ...))
+       (->chunk (result ...) (current ... a) (rest ...)))
+      ((_ ((x) result ...) (current ...) ())
+       (->thread x (result ... (current ...))))
+      ((_ (x result ...) (current ...) ())
+       (->thread x (result ... (current ...))))))
+
+  (define-syntax ->thread
+    (syntax-rules (-> ->>)
+      ((_ result ((-> f args ...) rest ...))
+       (->thread (f result args ...) (rest ...)))
+      ((_ result ((->> f args ...) rest ...))
+       (->thread (f args ... result) (rest ...)))
+      ((_ result ())
+       result)))
 
   (define-syntax fun->
     (syntax-rules ()
