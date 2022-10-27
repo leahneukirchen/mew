@@ -289,6 +289,6 @@ Mutation with nesting macros: shortcut for {{(set loc (-> loc ...))}}.
 
 <syntax>(given <val> <cond> <then> <else>?)<syntax>
 
-Evaluate {{<val>}}.  Then, when {{<cond>}} is truthy, behaves like
+Evaluate {{<val>}}.  Then, when {{<cond>}} is not false, behaves like
 {{(-> <val> -> <then>}}, otherwise like {{(-> <val> -> <else>)}}
 (or just {{<val>}} if no {{<else>}} was passed).
