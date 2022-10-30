@@ -145,6 +145,17 @@ If {{<obj>}} is a string, read all data from the file named {{<<obj>>}.
 If {{<obj>}} is false, read all data from {{*current-input-port*}}.
 
 
+== Equality
+
+<procedure>(=? <val>...)</procedure>
+
+Alias for {{equal?}}.
+
+<procedure>(<>? <val1> <val2> ...)</procedure>
+
+Return true if all values are pairwise different.
+
+
 == Data types
 
 <procedure>(get <obj> <idx>)</procedure>

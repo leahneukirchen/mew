@@ -19,6 +19,7 @@
      until
      vals
      -> ->> fun-> fun->> set-> set->>
+     <>?
      ~?)
 
   (import-for-syntax matchable)
@@ -83,6 +84,29 @@
 
   (define (nth n lst)
     (list-ref lst n))
+
+  (define <>?
+    (case-lambda
+      ((a b) (not (equal? a b)))
+      ((a b c) (and (not (equal? a b))
+                    (not (equal? b c))
+                    (not (equal? c a))))
+      ((a b c d) (and (not (equal? a b))
+                      (not (equal? a c))
+                      (not (equal? a d))
+                      (not (equal? b c))
+                      (not (equal? b d))
+                      (not (equal? c d))))
+      ((a b c d . rest)
+       (call-with-current-continuation
+        (lambda (return)
+          (let ((seen (tbl)))
+            (for-each (lambda (o)
+                        (when (hash-table-update!/default seen o not #t)
+                          (return #f)))
+                      (apply list a b c d rest)))
+          #t)))
+      ))
 
   (define (str . args)
     (with-output-to-string
