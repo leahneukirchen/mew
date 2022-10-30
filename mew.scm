@@ -4,7 +4,8 @@
      dec def div
      empty? eof esc
      fin final for generic-for-each
-     get gen genumerate gfix given giterate gmatch gsplit gwindow
+     get gen genumerate gfix given giterate gmatch group-by-accumulator
+     gsplit gslice-when gwindow
      inc into
      keys
      len loc
@@ -14,7 +15,7 @@
      prn puts
      rep
      set str slurp
-     tbl time
+     tally-accumulator tbl time
      while
      until
      vals
@@ -517,6 +518,20 @@
        (let ((var (generic-make-accumulator init)))
          body ...
          (var (eof))))))
+
+  (define (tally-accumulator)
+    (let ((tally (tbl)))
+      (lambda (x)
+        (if (eof-object? x)
+            tally
+            (hash-table-update!/default tally x inc 0)))))
+
+  (define (group-by-accumulator f)
+    (let ((groups (tbl)))
+      (lambda (x)
+        (if (eof-object? x)
+            groups
+            (hash-table-update!/default groups (f x) (op cons x _) '())))))
 
   (define-syntax one-of
     (er-macro-transformer

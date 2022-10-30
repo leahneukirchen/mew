@@ -253,6 +253,16 @@ Finally, return the result of accumulation.
 If {{<acc>}} is a list/vector/hash-table/string, accumulate into
 a corresponding accumulator initialized to {{<acc>}}.
 
+<procedure>(tally-accumulator)</procedure>
+
+Returns an accumulator that counts how often each element was
+accumulated.  The accumulator results in a hash-table of objects to
+numbers.
+
+<procedure>(group-by-accumulator <f>)<procedure>
+
+Returns an accumulator that stores all elements in lists in a hash-table,
+applying {{<f>}} to the element to compute the key.
 
 == Regular expressions
 
