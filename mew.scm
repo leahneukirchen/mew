@@ -283,6 +283,32 @@
                 (set! window (append (cdr window) (list next)))
                 window)))))))
 
+  (define (gslice-when pred gen)
+    (let ((slice #f)
+          (prev #f)
+          (this #f))
+      (lambda ()
+        (unless slice
+          (set! prev (gen))
+          (when (eof-object? prev)
+            (set! this (eof)))
+          (set! slice (list prev)))
+        (if (eof-object? this)
+            this
+            (let loop ()
+              (set! this (gen))
+              (if (eof-object? this)
+                  (reverse slice)
+                  (if (pred prev this)
+                      (let ((finished-slice (reverse slice)))
+                        (set! slice (list this))
+                        (set! prev this)
+                        finished-slice)
+                      (begin
+                        (set! slice (cons this slice))
+                        (set! prev this)
+                        (loop)))))))))
+
   (define (genumerate gen)
     (let ((n -1))
       (lambda ()

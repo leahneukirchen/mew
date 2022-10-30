@@ -218,6 +218,12 @@ Generator yielding a sliding window of length {{<len>}} (as a list)
 over the values yielded by the generator {{<gen>}}.  Yields never if
 the generator yielded fewer than {{<len>}} elements.
 
+<procedure>(gslice-when <pred> <gen>)<procedure>
+
+Partition the elements yielded by the generator {{<gen>}} into lists:
+starts a new list when the predicate {{<pred>}} called with the
+previous and the current element of the generator returns true.
+
 <procedure>(genumerate <gen>)<procedure>
 
 Takes the values yielded by the generator {{<gen>}} and yields them as
