@@ -281,6 +281,13 @@ numbers.
 Returns an accumulator that stores all elements in lists in a hash-table,
 applying {{<f>}} to the element to compute the key.
 
+<procedure>(inject <f> [<init>])</procedure>
+
+Returns a procedure that takes an generator (or something convertible
+by {{gen}}) and folds the function {{<f>}} over its values.  If given,
+folding starts with {{<init>}}, else with the first element yielded by
+the generator.  If the generator is empty, return {{(<f>)}}.
+
 == Regular expressions
 
 <procedure>(?~ <str> <irx>)</procedure>

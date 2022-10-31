@@ -6,12 +6,12 @@
      empty? eof esc
      fin final for fun*
      gen generic-for-each genumerate get gfix giterate given gmatch group-by-accumulator gslice-when gsplit gwindow
-     inc into
+     inc inject into
      keys
      len loc
      mod
      negate nth
-     one-of op
+     one-of op op*
      per prn puts
      rep
      set str slurp
@@ -549,4 +549,15 @@
 
   (define (per . args)
     (apply comp (reverse args)))
+
+  (define inject
+    (case-lambda
+      ((f) (lambda (o)
+             (let* ((g (gen o))
+                    (v (g)))
+               (if (eof-object? v)
+                 (f)
+                 (generator-fold f v g)))))
+      ((f v) (lambda (o)
+               (generator-fold f v (gen o))))))
 )
