@@ -4,9 +4,8 @@
      comp
      dec def div
      empty? eof esc
-     fin final for generic-for-each
-     get gen genumerate gfix given giterate gmatch group-by-accumulator
-     gsplit gslice-when gwindow
+     fin final for
+     gen generic-for-each genumerate get gfix giterate given gmatch group-by-accumulator gslice-when gsplit gwindow
      inc into
      keys
      len loc
