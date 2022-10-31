@@ -112,6 +112,18 @@ If {{<form>>} is empty, behaves as {{values}}, i.e. the identity function.
 
 {{(op + 2 _)}} is the function that adds 2 to its argument.
 
+<procedure>(negate <fun>)</procedure>
+
+Alias for {{complement}}.
+
+<procedure>(comp <fun>...)</procedure>
+
+Alias for {{compose}}.
+
+<procedure>(per <fun>...)</procedure>
+
+Reverse function composition.
+
 <procedure>(str . <args>)</procedure>
 
 Returns a new string composed by concatenating the strings given by

@@ -1,6 +1,7 @@
 (module mew
   (export
      accumulate at
+     comp
      dec def div
      empty? eof esc
      fin final for generic-for-each
@@ -10,9 +11,9 @@
      keys
      len loc
      mod
-     nth
+     negate nth
      one-of op
-     prn puts
+     per prn puts
      rep
      set str slurp
      tally-accumulator tbl time
@@ -27,7 +28,9 @@
 
   (import scheme
           (rename (chicken base)
-             (print puts))
+             (print puts)
+             (complement negate)
+             (compose comp))
           (chicken module)
           (chicken syntax)
           (chicken port)
@@ -539,4 +542,7 @@
          (,(rename 'or) ,@(map (lambda (v)
                                  `(,(rename 'equal?) x ,v))
                                (cdr expr)))))))
+
+  (define (per . args)
+    (apply comp (reverse args)))
 )
