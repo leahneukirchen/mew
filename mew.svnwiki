@@ -117,6 +117,18 @@ If {{<form>>} is empty, behaves as {{values}}, i.e. the identity function.
 
 {{(op + 2 _)}} is the function that adds 2 to its argument.
 
+<syntax>(op* <form>)</syntax>
+
+Returns a procedure that evaluates {{<form>}} with {{...}} expanded
+to all its arguments.  {{...}} must only appear once and must not
+be nested further.  If {{...} does not appear in {{<form>}}, it's
+added implicitly at the end.
+
+{{(op* + 5)}} is the function that adds 5 and then all its arguments.
+
+{{(op* - 0 ... 2)}} is the function that subtracts all its arguments from 0
+and finally 2.
+
 <procedure>(negate <fun>)</procedure>
 
 Alias for {{complement}}.

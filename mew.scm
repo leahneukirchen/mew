@@ -23,6 +23,7 @@
      <>?
      ~?)
 
+  (import-for-syntax srfi-1)
   (import-for-syntax matchable)
 
   (import scheme
@@ -171,6 +172,20 @@
           ((_) (rename 'values))
           ((_ x) `(,(rename 'lambda) ... ,x))
           ((_ . rest) `(,(rename 'lambda) (_) ,rest))))))
+
+  (define-syntax op*
+    (er-macro-transformer
+     (lambda (expr rename compare)
+       (when (= 1 (length expr))
+         (syntax-error "op* needs at least one argument"))
+       `(,(rename 'lambda) ...
+         ,(receive (pre post) (break (lambda (x) (compare '... x)) (cdr expr))
+            (match post
+              (()      `(,(rename apply) ,@pre ...))
+              ((x)     `(,(rename apply) ,@pre ...))
+              ((x . y) `(,(rename apply) ,@pre
+                         (,(rename append) ... (,(rename list) ,@y))))
+              ))))))
 
   (define-syntax rep
     (syntax-rules ()
