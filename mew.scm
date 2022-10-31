@@ -14,7 +14,7 @@
      one-of op op*
      per prn puts
      rep
-     set str slurp
+     sing? set str slurp
      tally-accumulator tbl time
      while
      until
@@ -575,4 +575,9 @@
                  (generator-fold f v g)))))
       ((f v) (lambda (o)
                (generator-fold f v (gen o))))))
+
+  (define (sing? l)
+    (match l
+      ((_) #t)
+      (_   #f)))
 )
