@@ -269,6 +269,10 @@ Alias for {{make-range-generator}}.
 
 Generator returning {{<val>}}, {{(<fun> <val>)}}, {{(<fun> (<fun (<val>)))}}...
 
+<procedure>(ggflatten <gen>)</procedure>
+
+Generator yielding all values of the all generators yielded by {{<gen>}}.
+
 <procedure>(gwindow <gen> <len>)</procedure>
 
 Generator yielding a sliding window of length {{<len>}} (as a list)

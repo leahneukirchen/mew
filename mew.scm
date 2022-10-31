@@ -5,7 +5,8 @@
      dec def div
      empty? eof esc
      fin final for fun*
-     gen generic-for-each genumerate get gfix giterate gmatch group-by-accumulator gslice-when gsplit gwindow
+     gen generic-for-each genumerate get gfix ggflatten giterate gmatch
+     group-by-accumulator gslice-when gsplit gwindow
      inc inject into
      juxt
      keys
@@ -311,6 +312,21 @@
          ((generic-for-each o) (match-lambda (i body ...)) o)))))
 
   (define (eof) #!eof)
+
+  (define (ggflatten gen)
+    (let ((gen2 #f))
+      (lambda ()
+        (unless gen2
+          (set! gen2 (gen)))
+        (let loop ()
+          (if (eof-object? gen2)
+            gen2
+            (let ((v (gen2)))
+              (if (eof-object? v)
+                (begin
+                  (set! gen2 (gen))
+                  (loop))
+                v)))))))
 
   (define (gwindow gen n)
     (let ((window #f))
