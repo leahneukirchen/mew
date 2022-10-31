@@ -4,7 +4,7 @@
      comp
      dec def div
      empty? eof esc
-     fin final for
+     fin final for fun*
      gen generic-for-each genumerate get gfix giterate given gmatch group-by-accumulator gslice-when gsplit gwindow
      inc into
      keys
@@ -158,6 +158,11 @@
        (let () . rest))
       ((_ (x y . brest) . rest)
        (match-let ((x y)) (loc brest . rest)))))
+
+  (define-syntax fun*
+    (syntax-rules ()
+      ((_ args body rest ...)
+       (match-lambda* (args body rest ...)))))
 
   (define-syntax op
     (er-macro-transformer
