@@ -5,7 +5,7 @@
      dec def div
      empty? eof esc
      fin final for fun*
-     gen generic-for-each genumerate get gfix giterate given gmatch group-by-accumulator gslice-when gsplit gwindow
+     gen generic-for-each genumerate get gfix giterate gmatch group-by-accumulator gslice-when gsplit gwindow
      inc inject into
      keys
      len loc
@@ -19,7 +19,7 @@
      while
      until
      vals
-     -> ->> fun-> fun->> set-> set->>
+     -> fun-> fun->> set->
      <>?
      ~?)
 
@@ -357,22 +357,75 @@
   (define (final g)
     (generator-fold (lambda (x a) x) (if #f #f) g))
 
+  (define-syntax and-apply
+    (syntax-rules ()
+      ((_ x f args ...)
+       (let ((v x))
+         (if v
+           (f v args ...)
+           #f)))))
+
+  (define-syntax and-apply-last
+    (syntax-rules ()
+      ((_ x f args ...)
+       (let ((v x))
+         (if v
+           (f args ... v)
+           #f)))))
+
+  (define-syntax if-apply
+    (syntax-rules ()
+      ((_ expr bool (then . then-rest) (else . else-rest))
+       (let ((val expr))
+         (if bool
+           (then val . then-rest)
+           (else val . else-rest))))
+      ((_ expr bool (then . then-rest) else)
+       (if-apply expr bool (then . then-rest) (else)))
+      ((_ expr bool then (else . else-rest))
+       (if-apply expr bool (then) (else . else-rest)))
+      ((_ expr bool then else)
+       (if-apply expr bool (then) (else)))
+      ((_ expr bool then)
+       (if-apply expr bool then ((op))))
+      ))
+
+  (define-syntax if-apply-last
+    (syntax-rules ()
+      ((_ expr bool (then then-rest ...) (else else-rest ...))
+       (let ((val expr))
+         (if bool
+           (then then-rest ... val)
+           (else else-rest ... val))))
+      ((_ expr bool (then . then-rest) else)
+       (if-apply-last expr bool (then . then-rest) (else)))
+      ((_ expr bool then (else . else-rest))
+       (if-apply-last expr bool (then) (else . else-rest)))
+      ((_ expr bool then else)
+       (if-apply-last expr bool (then) (else)))
+      ((_ expr bool then)
+       (if-apply-last expr bool then ((op))))
+      ))
+
   (define-syntax ->
     (syntax-rules ()
       ((_ rest ...)
        (->chunk () () (rest ...)))))
 
-  (define-syntax ->>
-    (syntax-rules ()
-      ((_ rest ...)
-       (->chunk () () (rest ...)))))
-
   (define-syntax ->chunk
-    (syntax-rules (-> ->>)
+    (syntax-rules (-> ->> and-> and->> if-> if->>)
       ((_ (result ...) (current ...) (-> rest ...))
        (->chunk (result ... (current ...)) (->) (rest ...)))
       ((_ (result ...) (current ...) (->> rest ...))
        (->chunk (result ... (current ...)) (->>) (rest ...)))
+      ((_ (result ...) (current ...) (and-> rest ...))
+       (->chunk (result ... (current ...)) (-> and-apply) (rest ...)))
+      ((_ (result ...) (current ...) (and->> rest ...))
+       (->chunk (result ... (current ...)) (-> and-apply-last) (rest ...)))
+      ((_ (result ...) (current ...) (if-> rest ...))
+       (->chunk (result ... (current ...)) (-> if-apply) (rest ...)))
+      ((_ (result ...) (current ...) (if->> rest ...))
+       (->chunk (result ... (current ...)) (-> if-apply-last) (rest ...)))
       ((_ (result ...) (current ...) (a rest ...))
        (->chunk (result ...) (current ... a) (rest ...)))
       ((_ ((x) result ...) (current ...) ())
@@ -397,42 +450,24 @@
   (define-syntax fun->>
     (syntax-rules ()
       ((_ rest ...)
-       (lambda (x) (->> x ->> rest ...)))))
+       (lambda (x) (-> x ->> rest ...)))))
 
   (define-syntax set->
-    (syntax-rules (-> ->>)
+    (syntax-rules (-> ->> and-> and->> if-> if->>)
       ((_ location -> rest ...)
        (set! location (-> location -> rest ...)))
       ((_ location ->> rest ...)
        (set! location (-> location ->> rest ...)))
-      ((_ location rest ...)
+      ((_ location and-> rest ...)
+       (set! location (-> location and-> rest ...)))
+      ((_ location and->> rest ...)
+       (set! location (-> location and->> rest ...)))
+      ((_ location if-> rest ...)
+       (set! location (-> location if-> rest ...)))
+      ((_ location if->> rest ...)
+       (set! location (-> location if->> rest ...)))
+      ((_ location rest ...)            ; default to ->
        (set! location (-> location -> rest ...)))))
-
-  (define-syntax set->>
-    (syntax-rules (-> ->>)
-      ((_ location -> rest ...)
-       (set! location (->> location -> rest ...)))
-      ((_ location ->> rest ...)
-       (set! location (->> location ->> rest ...)))
-      ((_ location rest ...)
-       (set! location (->> location ->> rest ...)))))
-
-  (define-syntax given
-    (syntax-rules ()
-      ((_ expr bool (then . then-rest) (else . else-rest))
-       (let ((val expr))
-         (if bool
-           (then val . then-rest)
-           (else val . else-rest))))
-      ((_ expr bool (then . then-rest) else)
-       (given expr bool (then . then-rest) (else)))
-      ((_ expr bool then (else . else-rest))
-       (given expr bool (then) (else . else-rest)))
-      ((_ expr bool then else)
-       (given expr bool (then) (else)))
-      ((_ expr bool then)
-       (given expr bool then ((op))))
-      ))
 
   (define (~? str pat)
     (let ((data (irregex-search pat str)))

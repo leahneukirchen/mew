@@ -331,16 +331,18 @@ When the pattern {{<irx>}} uses match data, the result is unspecified.
 == Special syntax
 
 <syntax>(-> a -> b c -> d e f)</syntax>
-<syntax>(->> a ->> b c ->> d e f)</syntax>
+<syntax>(-> a ->> b c ->> d e f)</syntax>
 
 Nesting macros: {{->}} inserts the previous part as the second argument:
 {{(-> a -> b c -> d e f)}} expands to {{(d (b a c) e f)}}.
 
 {{->>}} inserts the previous part as the last argument:
-{{(->> a ->> b c ->> d e f)}} expands to {{(d e f (b c a))}}.
+{{(-> a ->> b c ->> d e f)}} expands to {{(d e f (b c a))}}.
 
 You can mix {{->}} and {{->>}} macros:
-{{(->> a -> b c ->> d e f)}} expands to {{(d e f (b a c))}}.
+{{(-> a -> b c ->> d e f)}} expands to {{(d e f (b a c))}}.
+
+Nesting macros must start off with a {{->}}.
 
 <syntax>(fun-> b c -> d e f)</syntax>
 <syntax>(fun->> b c ->> d e f)</syntax>
@@ -348,15 +350,20 @@ You can mix {{->}} and {{->>}} macros:
 Nesting lambdas: like {{->}} but the nesting starts with the argument
 of the lambda.
 {{(fun-> b c -> d e f)}} expands to {{(lambda (x) (-> x -> b c -> d e f))}}.
-{{(fun->> b c ->> d e f)}} expands to {{(lambda (x) (->> x ->> b c ->> d e f))}}.
+{{(fun->> b c ->> d e f)}} expands to {{(lambda (x) (-> x ->> b c ->> d e f))}}.
 
-<syntax>(set-> loc -> ...)</syntax>
-<syntax>(set->> loc ->> ...)</syntax>
+<syntax>(set-> loc ...)</syntax>
 
 Mutation with nesting macros: shortcut for {{(set loc (-> loc ...))}}.
 
-<syntax>(given <val> <cond> <then> <else>?)<syntax>
+<syntax>(-> ... if-> <val> <cond> <then> <else>?)<syntax>
 
 Evaluate {{<val>}}.  Then, when {{<cond>}} is not false, behaves like
 {{(-> <val> -> <then>}}, otherwise like {{(-> <val> -> <else>)}}
 (or just {{<val>}} if no {{<else>}} was passed).
+
+<syntax>(-> ... and-> ...)<syntax>
+<syntax>(-> ... and->> ...)<syntax>
+
+Like {{->}}/{{->>}} but skips nesting the code if the nested
+expression is false.
