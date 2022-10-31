@@ -142,6 +142,10 @@ Alias for {{compose}}.
 
 Reverse function composition.
 
+<procedure>(act <obj> <fun>...)</procedure>
+
+Reverse function compose all {{<fun>}}, then apply to {{<obj>}}.
+
 <procedure>(juxt <fun>...)</procedure>
 
 Returns a function that applies each {{<fun>}} to its arguments and

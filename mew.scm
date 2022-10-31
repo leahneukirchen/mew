@@ -1,6 +1,6 @@
 (module mew
   (export
-     accumulate at
+     act accumulate at
      comp
      dec def div
      empty? eof esc
@@ -654,4 +654,7 @@
   (define (juxt . fs)
     (lambda args
       (unlist (map (lambda (f) (apply f args)) fs))))
+
+  (define (act x . fs)
+    ((apply per fs) x))
 )
