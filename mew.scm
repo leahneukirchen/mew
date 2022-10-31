@@ -18,7 +18,7 @@
      sing? set str slurp
      tally-accumulator tbl time
      while
-     unlist until
+     uniq-accumulator unlist until
      vals
      -> fun-> fun->> set->
      <>?
@@ -610,6 +610,15 @@
         (if (eof-object? x)
             groups
             (hash-table-update!/default groups (f x) (op cons x _) '())))))
+
+  (define uniq-accumulator
+    (case-lambda
+      (() (uniq-accumulator (op)))
+      ((f) (let ((items (tbl)))
+             (lambda (x)
+               (if (eof-object? x)
+                 (hash-table-values items)
+                 (hash-table-update!/default items (f x) identity x)))))))
 
   (define-syntax one-of
     (er-macro-transformer

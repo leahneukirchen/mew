@@ -316,6 +316,12 @@ numbers.
 Returns an accumulator that stores all elements in lists in a hash-table,
 applying {{<f>}} to the element to compute the key.
 
+<procedure>(uniq-accumulator <f>?)</procedure>
+
+Returns an accumulator that returns a list of unique elements.
+Two elements are considered equal if their image under {{<f>}} is {{equal?}}.
+{{<f>}} defaults to the identity function.
+
 <procedure>(inject <f> <init>?)</procedure>
 
 Returns a procedure that takes an generator (or something convertible
