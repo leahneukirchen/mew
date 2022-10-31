@@ -86,8 +86,8 @@ Evaluate {{<expr>}} while {{<cond>}} is true/false.
 
 == Numeric helpers
 
-<procedure>(inc <num>)<procedure>
-<procedure>(dec <num>)<procedure>
+<procedure>(inc <num>)</procedure>
+<procedure>(dec <num>)</procedure>
 
 Increment or decrement the argument by 1.
 
@@ -142,20 +142,20 @@ Expands to a lambda expression that is true if its argument is
 
 == I/O helpers
 
-<procedure>(prn . <args>)<procedure>
+<procedure>(prn . <args>)</procedure>
 
 {{write}} all {{args}} separated by spaces and terminated by a newline
 to the current output stream.
 
-<procedure>(puts . <args>)<procedure>
+<procedure>(puts . <args>)</procedure>
 
 {{display}} all {{args}} terminated by a newline to the current output stream.
 
-<procedure>(eof)<procedure>
+<procedure>(eof)</procedure>
 
 Return an object for which {{eof-object?}} is true.
 
-<procedure>(slurp <obj>)<procedure>
+<procedure>(slurp <obj>)</procedure>
 
 If {{<obj>}} is an input-port, read all data into a string.
 If {{<obj>}} is a string, read all data from the file named {{<<obj>>}.
@@ -225,23 +225,23 @@ Alias for {{circular-generator}}.
 
 Alias for {{make-range-generator}}.
 
-<procedure>(giterate <fun> <val>)<procedure>
+<procedure>(giterate <fun> <val>)</procedure>
 
 Generator returning {{<val>}}, {{(<fun> <val>)}}, {{(<fun> (<fun (<val>)))}}...
 
-<procedure>(gwindow <gen> <len>)<procedure>
+<procedure>(gwindow <gen> <len>)</procedure>
 
 Generator yielding a sliding window of length {{<len>}} (as a list)
 over the values yielded by the generator {{<gen>}}.  Yields never if
 the generator yielded fewer than {{<len>}} elements.
 
-<procedure>(gslice-when <pred> <gen>)<procedure>
+<procedure>(gslice-when <pred> <gen>)</procedure>
 
 Partition the elements yielded by the generator {{<gen>}} into lists:
 starts a new list when the predicate {{<pred>}} called with the
 previous and the current element of the generator returns true.
 
-<procedure>(genumerate <gen>)<procedure>
+<procedure>(genumerate <gen>)</procedure>
 
 Takes the values yielded by the generator {{<gen>}} and yields them as
 a {{cons}} where the first cell is an index incremented on every
@@ -276,7 +276,7 @@ Returns an accumulator that counts how often each element was
 accumulated.  The accumulator results in a hash-table of objects to
 numbers.
 
-<procedure>(group-by-accumulator <f>)<procedure>
+<procedure>(group-by-accumulator <f>)</procedure>
 
 Returns an accumulator that stores all elements in lists in a hash-table,
 applying {{<f>}} to the element to compute the key.
