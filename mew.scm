@@ -7,6 +7,7 @@
      fin final for fun*
      gen generic-for-each genumerate get gfix giterate gmatch group-by-accumulator gslice-when gsplit gwindow
      inc inject into
+     juxt
      keys
      len loc
      mod
@@ -17,7 +18,7 @@
      sing? set str slurp
      tally-accumulator tbl time
      while
-     until
+     unlist until
      vals
      -> fun-> fun->> set->
      <>?
@@ -636,4 +637,11 @@
     (match l
       ((_) #t)
       (_   #f)))
+
+  (define (unlist args)
+    (apply values args))
+
+  (define (juxt . fs)
+    (lambda args
+      (unlist (map (lambda (f) (apply f args)) fs))))
 )

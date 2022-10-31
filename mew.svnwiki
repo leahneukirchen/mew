@@ -141,6 +141,15 @@ Alias for {{compose}}.
 
 Reverse function composition.
 
+<procedure>(juxt <fun>...)</procedure>
+
+Returns a function that applies each {{<fun>}} to its arguments and
+returns the results as multiple values.
+
+<procedure>(unlist <list>)</procedure>
+
+Returns the list {{<list>}} as multiple values.
+
 <procedure>(str . <args>)</procedure>
 
 Returns a new string composed by concatenating the strings given by
