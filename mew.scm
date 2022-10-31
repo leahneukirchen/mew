@@ -34,8 +34,9 @@
              (complement negate)
              (compose comp))
           (chicken module)
-          (chicken syntax)
           (chicken port)
+          (chicken repl)
+          (chicken syntax)
           srfi-17
           (rename (srfi-69)
              (hash-table-keys keys)
@@ -673,4 +674,11 @@
 
   (define (act x . fs)
     ((apply per fs) x))
+
+  (let ((old-repl-prompt (repl-prompt)))
+    (repl-prompt (lambda ()
+                   (let ((old-prompt (old-repl-prompt)))
+                     (str (substring old-prompt 0 2)
+                          "^_^;"
+                          (substring old-prompt 2))))))
 )
