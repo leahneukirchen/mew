@@ -11,6 +11,7 @@ SRFI-158 (Generators and Accumulators),
 {{(chicken io)}},
 {{(chicken irregex)}},
 {{(chicken pretty-print)}}},
+{{(chicken sort)}}},
 and {{matchable}}.
 
 

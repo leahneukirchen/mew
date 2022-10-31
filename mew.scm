@@ -57,6 +57,7 @@
   (reexport (chicken io))
   (reexport (chicken irregex))
   (reexport (chicken pretty-print))
+  (reexport (chicken sort))
 
   (reexport
     (only (chicken base)
