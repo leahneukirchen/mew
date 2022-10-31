@@ -78,6 +78,7 @@
       (lambda fun)
       (apply app)
       (equal? =?)
+      (ceiling ceil)
       ))
 
   (define (inc i)
