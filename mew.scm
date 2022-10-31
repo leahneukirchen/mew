@@ -157,14 +157,13 @@
       ((_ (x y . brest) . rest)
        (match-let ((x y)) (loc brest . rest)))))
 
-  ;; possible additions: multiple _, allow ... for rest
   (define-syntax op
     (er-macro-transformer
       (lambda (expr rename compare)
-        `(,(rename 'lambda) (_)
-           ,@(cond ((= 1 (length expr)) '(_))
-                   ((= 2 (length expr)) (cdr expr))
-                   (#t (list (cdr expr))))))))
+        (match expr
+          ((_) (rename 'values))
+          ((_ x) `(,(rename 'lambda) ... ,x))
+          ((_ . rest) `(,(rename 'lambda) (_) ,rest))))))
 
   (define-syntax rep
     (syntax-rules ()

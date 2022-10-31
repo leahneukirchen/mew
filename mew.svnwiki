@@ -106,7 +106,7 @@ Alias for {{apply}}.
 Returns a procedure that evaluates {{<form>}} with {{_}} bound to its
 only argument.
 
-If {{<form>>} is empty, behaves as {{(op _)}}, i.e. the identity function.
+If {{<form>>} is empty, behaves as {{values}}, i.e. the identity function.
 
 {{(op 5)}} is the function that always returns 5.
 
