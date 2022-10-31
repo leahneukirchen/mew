@@ -198,6 +198,16 @@ Return true if all values are pairwise different.
 Generalized accessor, supports indexing into lists, vectors,
 hash-tables, strings.
 
+<procedure>(set-at <obj> <key1> <val1>...)</procedure>
+
+Mutate the hash-table/vector/string {{<obj>}} by setting
+the key/index {{<key1>}} to {{<val1>}} etc.
+Returns {{<obj>}}.
+
+<procedure>(del-at <hash-table> <key>...)</procedure>
+
+Delete {{<key>}} from the hash-table, and return the hash-table.
+
 <procedure>(tbl <key1> <val1> ... <keyN> <valN>)</procedure>
 
 Construct a hash-table; using {{equal?}}.

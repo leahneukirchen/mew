@@ -243,7 +243,7 @@
           ((vector? o) (vector-set! o k v))
           ((hash-table? o) (hash-table-set! o k v))
           ((string? o) (string-set! o k v))
-          (#t (error "not set for at defined"))))
+          (#t (error "no set for at defined"))))
 
   (define at (getter-with-setter get get-setter))
 
@@ -256,6 +256,26 @@
 
   (define (tbl . kvs)
     (alist->hash-table (kvs->alist kvs)))
+
+  (define (set-at o . rest)
+    (cond ((hash-table? o) (for-each (lambda (kv)
+                                       (hash-table-set! o (car kv) (cdr kv)))
+                                     (kvs->alist rest)))
+          ((vector? o)     (for-each (lambda (kv)
+                                       (vector-set! o (car kv) (cdr kv)))
+                                     (kvs->alist rest)))
+          ((string? o)     (for-each (lambda (kv)
+                                       (string-set! o (car kv) (cdr kv)))
+                                     (kvs->alist rest)))
+          (else            (error "no set-at defined")))
+    o)
+
+  (define (del-at o . rest)
+    (cond ((hash-table? o) (for-each (lambda (k)
+                                       (hash-table-delete! o k))
+                                     rest))
+          (else            (error "no del-at defined")))
+    o)
 
   (define (empty? o)
     (or (null? o)
