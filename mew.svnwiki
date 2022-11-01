@@ -2,6 +2,34 @@ Mew is a library targetting R5RS/R7RS scheme, which provides some
 conveniences inspired from Goo, Clojure and Arc to allow writing more
 compact code.
 
+
+== Design goals
+
+Mew, in its current iteration, is designed as a Scheme library.  Even
+though a program written in Mew will look quite different to a plain
+Scheme program, code is compatible, and Scheme code can generally live
+inside a Mew program, and Mew can load Scheme libraries.  Extra care
+has been taken to not reuse identifiers found in important SRFIs.
+
+Mew code is tight code, commonly used Mew identifiers are short.
+
+Mew uses a few features of R7RS internally, but does not require using
+R7RS.
+
+Mew targets Chicken Scheme currently but should be easy to port to
+other Scheme implementations.
+
+Mew is multi-paradigm: it simplifies both writing imperative and
+functional code.
+
+Mew uses SRFI-158 (Generators and Accumulators) for generic functions
+on enumerable structures.
+
+Mew generally uses {{equal?}} as equality predicate.
+
+Mew never mutates lists.
+
+
 == Re-Exports
 
 Mew re-exports
