@@ -212,11 +212,11 @@
        (while (not cond) body ...))))
 
   (define (list-ref-default l i default)
-    (if (zero? i)
-        (if (null? l)
-            default
-            (car l))
-        (list-ref-default (cdr l) (- i 1) default)))
+    (if (null? l)
+      default
+      (if (zero? i)
+        (car l)
+        (list-ref-default (cdr l) (- i 1) default))))
 
   (define (vector-ref-default v i default)
     (if (< i (vector-length v))
