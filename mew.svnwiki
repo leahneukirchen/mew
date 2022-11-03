@@ -199,6 +199,14 @@ Expands to a lambda expression that is true if its argument is
 
 Return true iff {{<list>}} is a proper list of length 1.
 
+<procedure>(void <args>...)</procedure>
+
+Ignores all arguments and returns a value where {{void?}} is true.
+
+<procedure>(void? <val>)</procedure>
+
+Returns true if {{<va>}} is an unspecified value, else false.
+
 
 == I/O helpers
 

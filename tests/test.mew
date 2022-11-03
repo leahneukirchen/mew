@@ -285,7 +285,7 @@
 ; final
 (test-group "final"
   (test 3 (final (generator 1 2 3)))
-  (test #t (eq? (void) (final (generator)))))
+  (test #t (void? (final (generator)))))
 
 ; ->
 
@@ -377,5 +377,15 @@
   (test #f (act 40 inc even?))
   (test 43 (act '(6 7) (op apply * _) inc))
   (test 42 (act 42)))
+
+(test-group "void"
+  (test #t (void? (void)))
+  (test #t (void? (void 1 2 3))))
+
+(test-group "void?"
+  (test #f (void? 1))
+  (test #f (void? #f))
+  (test #t (void? (void)))
+  (test #t (void? (if #f #f))))
 
 (test-exit)

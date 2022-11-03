@@ -20,7 +20,7 @@
      tally-accumulator tbl time
      while
      uniq-accumulator unlist until
-     vals
+     vals void?
      -> fun-> fun->> set->
      <>?
      ~?
@@ -65,9 +65,10 @@
 
   (reexport
     (only (chicken base)
+      rec
       unless
-      when
-      rec))
+      void
+      when))
 
   (reexport
     (only (chicken time)
@@ -320,6 +321,9 @@
 
   (define (eof) #!eof)
 
+  (define (void? x)
+    (eq? x (void)))
+
   (define (gconcatenate gen)
     (let ((gen2 #f))
       (lambda ()
@@ -391,7 +395,7 @@
     (make-unfold-generator (op #f) (op) f x))
 
   (define (gfix g)
-    (let ((prev (if #f #f)))
+    (let ((prev (void)))
       (gmap (lambda (x)
               (if (equal? prev x)
                 (eof)
@@ -401,7 +405,7 @@
             g)))
 
   (define (final g)
-    (generator-fold (lambda (x a) x) (if #f #f) g))
+    (generator-fold (lambda (x a) x) (void) g))
 
   (define-syntax and-apply
     (syntax-rules ()
