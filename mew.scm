@@ -126,13 +126,17 @@
         (for-each display args))))
 
   (define (prn . args)
-    (if (null? args)
-      (newline)
-      (begin
-        (write (car args))
-        (unless (null? (cdr args))
-          (display " "))
-        (apply prn (cdr args)))))
+    (let loop ((args args)
+               (ret (void)))
+      (if (null? args)
+        (begin
+          (newline)
+          ret)
+        (begin
+          (write (car args))
+          (unless (null? (cdr args))
+            (display " "))
+          (loop (cdr args) (car args))))))
 
   (define-syntax def
     (syntax-rules ()

@@ -223,7 +223,7 @@ Returns true if {{<va>}} is an unspecified value, else false.
 <procedure>(prn . <args>)</procedure>
 
 {{write}} all {{args}} separated by spaces and terminated by a newline
-to the current output stream.
+to the current output stream.  Returns the value of the last argument.
 
 <procedure>(puts . <args>)</procedure>
 

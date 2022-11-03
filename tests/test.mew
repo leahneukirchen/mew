@@ -93,7 +93,8 @@
 (test-group "prn"
   (test "1 2 3\n" (with-output-to-string (fun () (prn 1 2 3))))
   (test "\"a\" b #t\n" (with-output-to-string (fun () (prn "a" 'b #t))))
-  (test "\n" (with-output-to-string (fun () (prn)))))
+  (test "\n" (with-output-to-string (fun () (prn))))
+  (test 3 (esc ret (with-output-to-string (fun () (ret (prn 1 2 3)))))))
 
 (test-group "def"
   (test "define variable"
