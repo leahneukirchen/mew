@@ -4,7 +4,7 @@
 (put 'fun 'scheme-indent-function 1)
 (put 'loc 'scheme-indent-function 1)
 (put 'rec 'scheme-indent-function 1)
-(put 'rep 'scheme-indent-function 'scheme-let-indent)
+(put 'rep 'scheme-indent-function 2)
 (put 'seq 'scheme-indent-function 0)
 
 (put 'if 'scheme-indent-function 1)

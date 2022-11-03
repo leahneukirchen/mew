@@ -94,9 +94,11 @@ used a non-local exit (as from {{esc}}).
 Returns value of {{<body>}}, so can also be used as a replacment
 for Common Lisp PROG1.
 
-<syntax>(rep <name> ((<var> <init>) ...) <body>)</syntax>
+<syntax>(rep <name> (<var1> <init1> ... <varN> <initN>) <body>...)</syntax>
 
-Explicit form of named let.
+Explicit form of named {{let}}, using {{loc}} binding syntax.
+
+Assignments cannot refer to previously assigned values of the {{rep}}.
 
 <syntax>(seq . <body>)</syntax>
 

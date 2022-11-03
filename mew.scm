@@ -191,10 +191,17 @@
                          (,(rename append) ... (,(rename list) ,@y))))
               ))))))
 
+  (define-syntax rep-internal
+    (syntax-rules ()
+      ((_ (bindings ...) name () (body ...))
+       (let name (bindings ...) body ...))
+      ((_ (bindings ...) name (x y brest ...) body)
+       (rep-internal (bindings ... (x y)) name (brest ...) body))))
+
   (define-syntax rep
     (syntax-rules ()
-      ((_ name ((var val) ...) body ...)
-       (let name ((var val) ...) body ...))))
+      ((_ name (bindings ...) body ...)
+       (rep-internal () name (bindings ...) (body ...)))))
 
   (define-syntax while
     (syntax-rules ()

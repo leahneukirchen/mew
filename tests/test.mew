@@ -167,7 +167,7 @@
   (test 42 ((op* * 2 ... 3) 7)))
 
 (test-group "rep"
-  (test 42 (rep loop ((x 27) (y 5))
+  (test 42 (rep loop (x 27 y 5)
               (if (> y 0)
                 (loop (+ x y) (- y 1))
                 x))))
