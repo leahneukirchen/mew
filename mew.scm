@@ -2,7 +2,7 @@
   (export
      act accumulate at
      comp
-     dec def div
+     dec def del-at div
      empty? eof esc
      fin final for fun*
      gen generic-for-each genumerate get gfix ggflatten giterate gmatch
@@ -16,7 +16,7 @@
      one-of op op*
      per prn puts
      rep
-     sing? set str slurp
+     sing? set set-at str slurp
      tally-accumulator tbl time
      while
      uniq-accumulator unlist until
