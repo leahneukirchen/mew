@@ -66,6 +66,12 @@ then {{pat2}} to {{val2}}, etc., then evaluates {{body}}.
 
 Assignments can refer to previously assigned values of the {{loc}}.
 
+<syntax>(andloc (<var1> <val1> ... <varN> <valN>) <body>)</syntax>
+
+Like {{loc}} (without pattern matching), but return false when one of
+the {{<valN>>}} evaluates to false.  If a {{<valN>}} is {{_}},
+only performs the check without binding a value.
+
 <syntax>(rec <name> <expression>)</syntax>
 <syntax>(rec (<name> <formals>) <expression>)</syntax>
 

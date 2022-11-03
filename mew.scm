@@ -1,6 +1,6 @@
 (module mew
   (export
-     act accumulate at
+     act accumulate andloc at
      comp
      dec def del-at div
      empty? eof esc
@@ -164,6 +164,15 @@
        (let () . rest))
       ((_ (x y . brest) . rest)
        (match-let ((x y)) (loc brest . rest)))))
+
+  (define-syntax andloc
+    (syntax-rules (_)
+      ((_ () . rest)
+       (let () . rest))
+      ((_ (_ y . brest) . rest)
+       (let ((unused y)) (and unused (andloc brest . rest))))
+      ((_ (x y . brest) . rest)
+       (let ((x y)) (and x (andloc brest . rest))))))
 
   (define-syntax fun*
     (syntax-rules ()
