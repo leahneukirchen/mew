@@ -297,7 +297,7 @@ Alias for {{make-range-generator}}.
 
 Generator returning {{<val>}}, {{(<fun> <val>)}}, {{(<fun> (<fun (<val>)))}}...
 
-<procedure>(ggflatten <gen>)</procedure>
+<procedure>(gconcatenate <gen>)</procedure>
 
 Generator yielding all values of the all generators yielded by {{<gen>}}.
 

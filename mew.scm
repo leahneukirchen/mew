@@ -5,7 +5,7 @@
      dec def del-at div
      empty? eof esc
      fin final for fun*
-     gen generic-for-each genumerate get gfix ggflatten giterate gmatch
+     gconcatenate gen generic-for-each genumerate get gfix giterate gmatch
      group-by-accumulator gslice-when gsplit gwindow
      inc inject into
      juxt
@@ -316,7 +316,7 @@
 
   (define (eof) #!eof)
 
-  (define (ggflatten gen)
+  (define (gconcatenate gen)
     (let ((gen2 #f))
       (lambda ()
         (unless gen2

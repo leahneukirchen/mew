@@ -270,7 +270,7 @@
 (test-group "eof"
   (test-assert (eof-object? (eof))))
 
-; ggflatten
+; gconcatenate
 
 ; gwindow
 
