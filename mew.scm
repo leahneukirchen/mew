@@ -16,7 +16,7 @@
      negate
      one-of op op*
      per prn puts
-     rep
+     range rep
      sing? set set-at str slurp
      tally-accumulator tbl time
      while
@@ -52,7 +52,6 @@
   (reexport srfi-158)
   (reexport
     (rename (srfi-158)
-      (make-range-generator range)
       (circular-generator cycle)))
   (reexport matchable)
   (reexport
@@ -336,6 +335,18 @@
 
   (define (void? x)
     (eq? x (void)))
+
+  (define range
+    (case-lambda
+      ((start)          (make-range-generator start +inf.0 1))
+      ((start end)      (make-range-generator start end 1))
+      ((start end step) (set! start (- (+ start step) step))
+                        (let ((cmp (if (>= step 0) < >)))
+                          (lambda () (if (cmp start end)
+                                       (let ((v start))
+                                         (set! start (+ start step))
+                                         v)
+                                       (eof)))))))
 
   (define (gconcatenate gen)
     (let ((gen2 #f))
