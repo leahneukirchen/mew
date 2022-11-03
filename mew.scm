@@ -23,7 +23,9 @@
      vals
      -> fun-> fun->> set->
      <>?
-     ~?)
+     ~?
+
+     generic-make-accumulator)
 
   (import-for-syntax srfi-1)
   (import-for-syntax matchable)
