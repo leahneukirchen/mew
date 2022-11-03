@@ -5,9 +5,5 @@
  (license "MIT")
  (author "Leah Neukirchen <leah@vuxu.org>")
  (synopsis "Convenience library for compact code")
- (dependencies
-  (matchable 1.1)
-  (srfi-1 0.5.1)
-  (srfi-69 0.4.3)
-  (srfi-158 0.1)
-  (r7rs 1.0.5)))
+ (dependencies matchable srfi-1 srfi-69 srfi-158 r7rs)
+ (test-dependencies test))

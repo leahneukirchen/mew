@@ -1,0 +1,381 @@
+(import mew
+        test
+        (chicken port))
+
+(test-group "negate"
+  (test #t ((negate not) #t))
+  (test #f ((negate not) #f))
+  (test #t ((negate even?) 5))
+  (test #f ((negate even?) 6))
+  (test #f ((negate (op)) 6))
+  (test #t ((negate (op)) #f)))
+
+(test-group "comp"
+  (test 42 ((comp inc inc) 40))
+  (test 43 ((comp inc *) 6 7))
+  (test 42 ((comp) 42)))
+
+(test-group "keys"
+  (test '(1 2 3) (sort (keys (tbl 1 11 2 22 3 33)) <))
+  (test-error (keys #(1 2 3))))
+
+(test-group "vals"
+  (test '(11 22 33) (sort (vals (tbl 1 11 2 22 3 33)) <))
+  (test-error (vals #(1 2 3))))
+
+(test-group "range"
+  (test '(1 2 3) (into '() (range 1 4)))
+  (test '() (into '() (range 4 1)))
+  (test '(1 3 5) (into '() (range 1 6 2)))
+  (test '(1 3 5) (into '() (range 1 7 2)))
+  (test '(2 3 4) (into '() (gtake (range 2) 3))))
+
+(test-group "cycle"
+  (test '(1 2 3 1 2 3) (into '() (gtake (cycle 1 2 3) 6)))
+  (test '(1 1 1 1 1 1) (into '() (gtake (cycle 1) 6)))
+  (test-error (into '() (cycle))))
+
+(test-group "div"
+  (test 4 (div 8 2))
+  (test 4 (div 9 2))
+  (test 4 (div -9 -2))
+  (test -5 (div -9 2))
+  (test -5 (div 9 -2)))
+
+(test-group "mod"
+  (test 0 (mod 8 2))
+  (test 1 (mod 9 2))
+  (test 2 (mod 16 7))
+  (test -5 (mod 16 -7))
+  (test 5 (mod -16 7))
+  (test -2 (mod -16 -7)))
+
+(test-group "inc"
+  (test 6 (inc 5))
+  (test 0 (inc -1))
+  (test 1.5 (inc 0.5))
+  (test 3/2 (inc 1/2))
+  (test-error (inc "foo")))
+
+(test-group "dec"
+  (test 4 (dec 5))
+  (test -2 (dec -1))
+  (test -0.5 (dec 0.5))
+  (test -1/2 (dec 1/2))
+  (test-error (dec "foo")))
+
+(test-group "<>?"
+  (test #t (<>? 4 5))
+  (test #t (<>? 4 5 6))
+  (test #t (<>? "foo" "bar"))
+  (test #t (<>? 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20))
+  (test #f (<>? 4 5 4))
+  (test #f (<>? "foo" "foo"))
+  (test #f (<>? 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 7))
+  (test-error "error with no arguments" (<>?))
+  (test-error "error with one argument" (<>? 42)))
+
+(test-group "str"
+  (test "456" (str 4 5 6))
+  (test "foo#tbar" (str "foo" #t 'bar))
+  (test "" (str)))
+
+(test-group "prn"
+  (test "1 2 3\n" (with-output-to-string (fun () (prn 1 2 3))))
+  (test "\"a\" b #t\n" (with-output-to-string (fun () (prn "a" 'b #t))))
+  (test "\n" (with-output-to-string (fun () (prn)))))
+
+(test-group "def"
+  (test "define variable"
+        42 (let ()
+             (def x (* 6 7))
+             x))
+  (test 42 (let ()
+             (def x 23)
+             (def x (* 6 7))
+             x))
+  (test "define lambda"
+        81 (let ()
+             (def (square x) (* x x))
+             (square 9))))
+
+(test-group "set"
+  (test 42 (let ()
+              (def x 6)
+              (set x (* x 7))
+              x))
+  (test "return value"
+        42 (let ()
+             (def x 6)
+             (set x (* x 7)))))
+
+(test-group "esc"
+  (test 42 (esc ret
+              (* 6 7)))
+  (test 42 (esc ret
+              (if #t
+                (ret (* 6 7)))
+              23))
+  (test 23 (esc ret
+              (if #f
+                (ret (* 6 7)))
+              23)))
+
+(test-group "fin"
+  (test 42 (fin 42
+                 23))
+  (test '(42 43) (loc (r 0
+                         s (fin (set r 43)
+                                (set r 42)))
+                     (list r s)))
+  (test '(42 43) (loc (r 0
+                         s (esc ret
+                             (fin (ret (set r 43))
+                                  (set r 42))))
+                     (list r s)))
+  (test 42 (loc (r 0)
+             (and (test-error (fin (error "oh no") ;XXX
+                                   (set r 42)))
+                   r))))
+
+(test-group "loc"
+  (test 42 (loc () 42))
+  (test 42 (loc (a (* 6 7))
+              a))
+  (test 42 (loc (a 6
+                  b (* a 7))
+              b))
+  (test 42 (loc ((a . b) '(42 2 3))
+              a)))
+
+(test-group "fun*"
+  (test 42 ((fun* ((a . b)) (* a b)) (cons 6 7))))
+
+(test-group "op"
+  (test 42 ((op) 42))
+  (test '(42 43) (let-values ((vs ((op) 42 43))) vs))
+  (test 42 ((op 42) 43))
+  (test 42 ((op * 6 _) 7))
+  (test 42 ((op * 2 _ 3) 7))
+  (test 42 ((op - _ 3) 45))
+  (test 42 ((op + _ _ _ (- _ _)) 14)))
+
+(test-group "op*"
+  (test 42 ((op* *) 6 7))
+  (test 42 ((op* * 6) 7))
+  (test 42 ((op* * 7) 2 3))
+  (test 42 ((op* * 2 ... 3) 7)))
+
+(test-group "rep"
+  (test 42 (rep loop ((x 27) (y 5))
+              (if (> y 0)
+                (loop (+ x y) (- y 1))
+                x))))
+
+(test-group "while"
+  (test 42 (loc (x 27 y 5)
+              (while (> y 0)
+                (set x (+ x y))
+                (set y (dec y)))
+              x)))
+
+(test-group "until"
+  (test 42 (loc (x 27 y 5)
+              (until (zero? y)
+                (set x (+ x y))
+                (set y (dec y)))
+              x)))
+
+(test-group "get"
+  (test 42 (get '(41 42 43) 1))
+  (test 42 (get #(41 42 43) 1))
+  (test 42 (get (tbl 41 42) 41))
+  (test #\o (get "foo" 1))
+
+  (test-error (get '(41 42 43) 5))
+  (test-error (get #(41 42 43) 5))
+  (test-error (get (tbl 41 42) 5))
+  (test-error (get "foo" 5))
+
+  (test 42 (get '(1 2 3) 5 42))
+  (test 42 (get #(1 2 3) 5 42))
+  (test 42 (get (tbl 1 2) 5 42))
+  (test #\o (get "foo" 5 #\o)))
+
+(test-group "at"
+  (test 42 (at '(41 42 43) 1))
+  (test 42 (at #(41 42 43) 1))
+  (test 42 (at (tbl 41 42) 41))
+  (test #\o (at "foo" 1))
+
+  (test-error (at '(41 42 43) 5))
+  (test-error (at #(41 42 43) 5))
+  (test-error (at (tbl 41 42) 5))
+  (test-error (at "foo" 5))
+
+  (test-group "setters"
+    (test 42 (loc (x #(1 2 3))
+                (set (at x 1) 42)
+                (at x 1)))
+    (test 42 (loc (x (tbl 1 2))
+                (set (at x 1) 42)
+                (at x 1)))
+    (test #\o (loc (x "fox")
+                  (set (at x 2) #\o)
+                  (at x 2)))))
+
+(test-group "tbl"
+  (test-assert (hash-table? (tbl 1 2 3 4)))
+  (test 0 (hash-table-size (tbl)))
+  (test 42 (get (tbl 1 2 3 42) 3))
+  (test-error (tbl 1 2 3)))
+
+(test-group "set-at"
+  (test #(0 42 0) (set-at #(0 0 0) 1 42))
+  (test '(42) (vals (set-at (tbl 1 11) 1 42)))
+  (test "fox" (set-at "foo" 2 #\x))
+  (test-error (set-at '(0 0 0) 1 42)))
+
+(test-group "del-at"
+  (test '(42) (vals (del-at (tbl 0 41 1 42 2 43) 0 2)))
+  (test-error (del-at "foo" 2)))
+
+(test-group "empty?"
+  (test-assert (empty? '()))
+  (test-assert (empty? #()))
+  (test-assert (empty? (tbl)))
+  (test-assert (empty? ""))
+  (test-assert (not (empty? #t)))
+  (test-assert (not (empty? #f)))
+  (test-assert (not (empty? '(1 2 3))))
+  (test-assert (not (empty? #(1 2 3))))
+  (test-assert (not (empty? "foo")))
+  (test-assert (not (empty? (tbl 1 2 3 4)))))
+
+(test-group "len"
+  (test 0 (len '()))
+  (test 0 (len #()))
+  (test 0 (len (tbl)))
+  (test 0 (len ""))
+  (test 0 (len (generator)))
+  (test 3 (len '(1 2 3)))
+  (test 3 (len #(1 2 3)))
+  (test 3 (len (tbl 1 11 2 22 3 33)))
+  (test 3 (len "foo"))
+  (test 3 (len (generator 5 6 7)))
+  (test-error (len #t)))
+
+; for
+
+(test-group "eof"
+  (test-assert (eof-object? (eof))))
+
+; ggflatten
+
+; gwindow
+
+; gslice-when
+
+; genumerate
+
+; giterate
+
+; gfix
+
+; final
+(test-group "final"
+  (test 3 (final (generator 1 2 3)))
+  (test #t (eq? (void) (final (generator)))))
+
+; ->
+
+; fun->
+
+; fun->>
+
+; set->
+
+; ~?
+(test-group "~?"
+  (test '("o") (~? "foo" "o"))
+  (test '("oo") (~? "foo" "o+"))
+  (test #f (~? "bling" "o+"))
+  (test #f (~? "foo" "^o"))
+  (test-error (~? "bling" "+"))
+  (test '("1,22" "1" "22") (~? "x1,22z" "([0-9]+),([0-9]+)")))
+
+; gmatch
+
+; gsplit
+
+(test-group "slurp"
+  (test #t (string? (slurp "/usr/bin/chicken-status")))
+  (test-error (string? (slurp "/dev/null/noexist"))))
+
+(test-group "gen"
+  (test '(1 2 3) (into '() (gen '(1 2 3))))
+  (test '(1 2 3) (into '() (gen (gen '(1 2 3)))))
+  (test '(1 2 3) (into '() (gen #(1 2 3))))
+  (test '(#\1 #\2 #\3) (into '() (gen "123")))
+  (test '((1 . 2)) (into '() (tbl 1 2)))
+  (test-error (gen #t)))
+
+(test-group "into"
+  (test '(1 2 3) (into '() (generator 1 2 3)))
+  (test '(4 1 2 3) (into '(4) (generator 1 2 3)))
+  (test #(1 2 3) (into #() (generator 1 2 3)))
+  (test #(4 1 2 3) (into #(4) (generator 1 2 3)))
+  (test "fox" (into "f" (generator #\o #\x)))
+  (test 10 (into (sum-accumulator) (generator 1 2 3 4))))
+
+(test-group "accumulate"
+  (test 10 (accumulate (add (sum-accumulator))
+             (add 1)
+             (add 2)
+             (add 3)
+             (add 4))))
+
+; tally-accumulator
+
+; group-by-accumulator
+
+; uniq-accumulator
+
+(test-group "one-of"
+  (test #t ((one-of 1 2 3) 1))
+  (test #f ((one-of 1 2 3) 4))
+  (test #f ((one-of) 4)))
+
+(test-group "per"
+  (test 42 ((per inc inc) 40))
+  (test #f ((per inc even?) 40))
+  (test 43 ((per * inc) 6 7))
+  (test 42 ((per) 42)))
+
+(test-group "inject"
+  (test 10 ((inject +) (generator 1 2 3 4)))
+  (test 0 ((inject +) (generator)))
+  (test 20 ((inject + 10) (generator 1 2 3 4)))
+  (test 10 ((inject + 10) (generator)))
+  (test '((1 . 2) . 3) ((inject xcons) (generator 1 2 3))))
+
+(test-group "sing?"
+  (test #f (sing? '()))
+  (test #t (sing? '(1)))
+  (test #f (sing? '(1 2 3)))
+  (test #f (sing? #(1))))
+
+(test-group "unlist"
+  (test 43 (act '(6 7) unlist * inc)))
+
+(test-group "juxt"
+  (test 42 (act 13/2 (juxt ceil floor) *))
+  (test #t (act 13/2 (juxt) list empty?)))
+
+(test-group "act"
+  (test 42 (act 40 inc inc))
+  (test #f (act 40 inc even?))
+  (test 43 (act '(6 7) (op apply * _) inc))
+  (test 42 (act 42)))
+
+(test-exit)
