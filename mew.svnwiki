@@ -166,6 +166,10 @@ added implicitly at the end.
 {{(op* - 0 ... 2)}} is the function that subtracts all its arguments from 0
 and finally 2.
 
+<procedure>(boolean <obj>)</procedure>
+
+Return false if {{<obj>}} is {{#f}}, and true else.
+
 <procedure>(negate <fun>)</procedure>
 
 Alias for {{complement}}.

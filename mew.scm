@@ -1,6 +1,7 @@
 (module mew
   (export
      act accumulate andloc at
+     boolean
      comp
      dec def del-at div
      empty? eof esc
@@ -93,6 +94,9 @@
 
   (define (dec i)
     (- i 1))
+
+  (define (boolean x)
+    (not (not x)))
 
   (define <>?
     (case-lambda

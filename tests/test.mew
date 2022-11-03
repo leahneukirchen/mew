@@ -64,6 +64,13 @@
   (test -1/2 (dec 1/2))
   (test-error (dec "foo")))
 
+(test-group "boolean"
+  (test #f (boolean #f))
+  (test #t (boolean #t))
+  (test #t (boolean 1))
+  (test #t (boolean "foo"))
+  (test #t (boolean (void))))
+
 (test-group "<>?"
   (test #t (<>? 4 5))
   (test #t (<>? 4 5 6))
