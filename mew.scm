@@ -12,7 +12,7 @@
      keys
      len loc
      mod
-     negate nth
+     negate
      one-of op op*
      per prn puts
      rep
@@ -92,9 +92,6 @@
 
   (define (dec i)
     (- i 1))
-
-  (define (nth n lst)
-    (list-ref lst n))
 
   (define <>?
     (case-lambda
