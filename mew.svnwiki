@@ -244,7 +244,8 @@ If {{<obj>}} is false, read all data from {{*current-input-port*}}.
 
 <procedure>(=? <val>...)</procedure>
 
-Alias for {{equal?}}.
+Return true if all values are {{equal?}} or hash-tables with same
+set of keys and {{equal?}} values.
 
 <procedure>(<>? <val1> <val2> ...)</procedure>
 

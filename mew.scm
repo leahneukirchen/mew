@@ -23,7 +23,7 @@
      uniq-accumulator unlist until
      vals void?
      -> fun-> fun->> set->
-     <>?
+     =? <>?
      ~?
 
      generic-make-accumulator)
@@ -84,7 +84,6 @@
       (begin seq)
       (lambda fun)
       (apply app)
-      (equal? =?)
       (ceiling ceil)
       ))
 
@@ -97,18 +96,40 @@
   (define (boolean x)
     (not (not x)))
 
+  (define (tbl=? a b)
+    (and (hash-table? a)
+         (hash-table? b)
+         (= (hash-table-size a) (hash-table-size b))
+         (call-with-current-continuation
+          (lambda (ret)
+            (hash-table-for-each
+             a
+             (lambda (k v)
+               ;; n.b. nan is never equal to anything
+               (unless (=? (hash-table-ref/default b k +nan.0) v)
+                 (ret #f))))
+            #t))))
+
+  (define =?
+    (case-lambda
+      (()  #t)
+      ((_) #t)
+      ((x y) (or (equal? x y)
+                 (tbl=? x y)))
+      ((x . rest) (every (lambda (y) (=? x y)) rest))))
+
   (define <>?
     (case-lambda
-      ((a b) (not (equal? a b)))
-      ((a b c) (and (not (equal? a b))
-                    (not (equal? b c))
-                    (not (equal? c a))))
-      ((a b c d) (and (not (equal? a b))
-                      (not (equal? a c))
-                      (not (equal? a d))
-                      (not (equal? b c))
-                      (not (equal? b d))
-                      (not (equal? c d))))
+      ((a b) (not (=? a b)))
+      ((a b c) (and (not (=? a b))
+                    (not (=? b c))
+                    (not (=? c a))))
+      ((a b c d) (and (not (=? a b))
+                      (not (=? a c))
+                      (not (=? a d))
+                      (not (=? b c))
+                      (not (=? b d))
+                      (not (=? c d))))
       ((a b c d . rest)
        (call-with-current-continuation
         (lambda (return)

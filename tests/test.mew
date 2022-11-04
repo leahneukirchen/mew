@@ -74,6 +74,19 @@
   (test #t (boolean "foo"))
   (test #t (boolean (void))))
 
+(test-group "=?"
+  (test #t (=?))
+  (test #t (=? 1))
+  (test #t (=? "foo" "foo"))
+  (test #t (=? 1 1 1))
+  (test #t (=? #(1 2 3) #(1 2 3)))
+  (test #t (=? (tbl 1 2 3 4) (tbl 3 4 1 2)))
+  (test #f (=? 4 5))
+  (test #f (=? 4 5 6))
+  (test #f (=? "foo" "bar"))
+  (test #f (=? 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20))
+  (test #f (=? 4 5 4)))
+
 (test-group "<>?"
   (test #t (<>? 4 5))
   (test #t (<>? 4 5 6))
@@ -82,6 +95,8 @@
   (test #f (<>? 4 5 4))
   (test #f (<>? "foo" "foo"))
   (test #f (<>? 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 7))
+  (test #t (<>? (tbl 1 2 3 4) (tbl 3 4 1 22)))
+  (test #t (<>? (tbl 1 2 3 4) (tbl 3 4)))
   (test-error "error with no arguments" (<>?))
   (test-error "error with one argument" (<>? 42)))
 
@@ -259,12 +274,12 @@
 
 (test-group "set-at"
   (test #(0 42 0) (set-at #(0 0 0) 1 42))
-  (test '(42) (vals (set-at (tbl 1 11) 1 42)))
+  (test #t (=? (tbl 1 42) (set-at (tbl 1 11) 1 42)))
   (test "fox" (set-at "foo" 2 #\x))
   (test-error (set-at '(0 0 0) 1 42)))
 
 (test-group "del-at"
-  (test '(42) (vals (del-at (tbl 0 41 1 42 2 43) 0 2)))
+  (test #t (=? (tbl 1 42) (del-at (tbl 0 41 1 42 2 43) 0 2)))
   (test-error (del-at "foo" 2)))
 
 (test-group "empty?"
