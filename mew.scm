@@ -17,7 +17,7 @@
      one-of op op*
      per prn puts
      range rep
-     sing? set set-at str slurp
+     sing? seq set set-at str slurp
      tally-accumulator tbl time
      while
      uniq-accumulator unlist until
@@ -81,7 +81,6 @@
 
   (reexport
     (rename (scheme)
-      (begin seq)
       (lambda fun)
       (apply app)
       (ceiling ceil)
@@ -159,6 +158,13 @@
             (display " "))
           (loop (cdr args) (car args))))))
 
+  (define-syntax seq
+    (syntax-rules ()
+      ((_)
+       (void))
+      ((_ . rest)
+       (begin . rest))))
+
   (define-syntax def
     (syntax-rules ()
       ((_ . rest)
@@ -176,7 +182,7 @@
       ((_ return body ...)
        (call-with-current-continuation
          (lambda (return)
-           body ...)))))
+           (seq body ...))))))
 
   (define-syntax fin
     (syntax-rules ()
@@ -184,19 +190,19 @@
        (dynamic-wind
          (lambda () (begin))
          (lambda () form)
-         (lambda () rest ...)))))
+         (lambda () (seq rest ...))))))
 
   (define-syntax loc
     (syntax-rules ()
-      ((_ () . rest)
-       (let () . rest))
+      ((_ () rest ...)
+       (let () (seq rest ...)))
       ((_ (x y . brest) . rest)
        (match-let ((x y)) (loc brest . rest)))))
 
   (define-syntax andloc
     (syntax-rules (_)
-      ((_ () . rest)
-       (let () . rest))
+      ((_ () rest ...)
+       (let () (seq rest ...)))
       ((_ (_ y . brest) . rest)
        (let ((unused y)) (and unused (andloc brest . rest))))
       ((_ (x y . brest) . rest)
@@ -232,7 +238,7 @@
   (define-syntax rep-internal
     (syntax-rules ()
       ((_ (bindings ...) name () (body ...))
-       (let name (bindings ...) body ...))
+       (let name (bindings ...) (seq body ...)))
       ((_ (bindings ...) name (x y brest ...) body)
        (rep-internal (bindings ... (x y)) name (brest ...) body))))
 

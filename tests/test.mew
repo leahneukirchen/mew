@@ -111,6 +111,15 @@
   (test "\n" (with-output-to-string (fun () (prn))))
   (test 3 (esc ret (with-output-to-string (fun () (ret (prn 1 2 3)))))))
 
+(test-group "seq"
+  (test #t (void? (seq)))
+  (test 1 (seq 1))
+  (test 2 (seq 1 2))
+  (test 3 (seq (def x 1)
+               (set x (inc x))
+               (set x (inc x))
+               x)))
+
 (test-group "def"
   (test "define variable"
         42 (let ()
@@ -136,6 +145,7 @@
              (set x (* x 7)))))
 
 (test-group "esc"
+  (test #t (void? (esc ret)))
   (test 42 (esc ret
               (* 6 7)))
   (test 42 (esc ret
@@ -148,6 +158,7 @@
               23)))
 
 (test-group "fin"
+  (test 42 (fin 42))
   (test 42 (fin 42
                  23))
   (test '(42 43) (loc (r 0
@@ -165,6 +176,7 @@
                    r))))
 
 (test-group "loc"
+  (test #t (void? (loc ())))
   (test 42 (loc () 42))
   (test 42 (loc (a (* 6 7))
              a))
@@ -175,6 +187,7 @@
              a)))
 
 (test-group "andloc"
+  (test #t (void? (andloc ())))
   (test 42 (andloc () 42))
   (test 42 (andloc (a (* 6 7))
              a))
@@ -209,6 +222,7 @@
   (test 42 ((op* * 2 ... 3) 7)))
 
 (test-group "rep"
+  (test #t (void? (rep loop ())))
   (test 42 (rep loop (x 27 y 5)
               (if (> y 0)
                 (loop (+ x y) (- y 1))

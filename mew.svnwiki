@@ -108,7 +108,8 @@ Assignments cannot refer to previously assigned values of the {{rep}}.
 
 <syntax>(seq . <body>)</syntax>
 
-Alias for {{begin}}.
+Like {{begin}}, but allows {{<body>}} to be empty and returns a value
+which is {{void?}} then.
 
 <syntax>(unless <cond> <expr>...)</syntax>
 <syntax>(when <cond> <expr>...)</syntax>
