@@ -124,6 +124,10 @@ As in R7RS-small.
 
 Evaluate {{<expr>}} while {{<cond>}} is true/false.
 
+<syntax>(xcond <cases>...)<syntax>
+
+Like {{cond}}, but raise error if no case matched.
+
 
 == Numeric helpers
 

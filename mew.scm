@@ -22,6 +22,7 @@
      while
      uniq-accumulator unlist until
      vals void?
+     xcond
      -> fun-> fun->> set->
      =? <>?
      ~?
@@ -269,6 +270,11 @@
     (syntax-rules ()
       ((_ cond body ...)
        (while (not cond) body ...))))
+
+  (define-syntax xcond
+    (syntax-rules ()
+      ((_ rest ...)
+       (cond rest ... (else (error "missing case in xcond"))))))
 
   (define (list-ref-default l i default)
     (if (null? l)
