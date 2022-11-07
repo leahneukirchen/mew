@@ -128,6 +128,12 @@ Evaluate {{<expr>}} while {{<cond>}} is true/false.
 
 Like {{cond}}, but raise error if no case matched.
 
+<syntax>(fail <type>? <message> <args>...)</syntax>
+
+Create and signal a condition of {{<type>}} (default: {{(exn)}})
+with a {{'message}} of {{<message>}} passed through {{format}} with
+{{<args>}}.
+
 
 == Numeric helpers
 

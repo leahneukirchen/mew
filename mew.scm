@@ -5,7 +5,7 @@
      comp
      dec def del-at div
      empty? eof esc
-     fin final for fun*
+     fail fin final for fun*
      gconcatenate gen generic-for-each genumerate get gfix giterate gmatch
      gpick group-by-accumulator gslice-when gsplit gwindow
      inc inject into
@@ -38,6 +38,7 @@
              (print puts)
              (complement negate)
              (compose comp))
+          (chicken condition)
           (chicken module)
           (chicken port)
           (chicken repl)
@@ -787,6 +788,13 @@
       ((_ 2) (lambda (a b c . args) c))
       ((_ 3) (lambda (a b c d . args) d))
       ((_ n) (lambda args (list-ref args n)))))
+
+  (define (fail exn . args)
+    (if (list? exn)
+      (signal (apply condition
+                     (list (car exn) 'message (apply format args))
+                     (map list (cdr exn))))
+      (apply fail '(exn) exn args)))
 
   (let ((old-repl-prompt (repl-prompt)))
     (repl-prompt (lambda ()

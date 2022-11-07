@@ -1,6 +1,7 @@
 (import mew
         test
-        (chicken port))
+        (chicken port)
+        (chicken condition))
 
 (test-group "negate"
   (test #t ((negate not) #t))
@@ -476,5 +477,18 @@
   (test 2 ((proj 1) 1 2 3))
   (test 3 ((proj 2) 1 2 3))
   (test-error ((proj 4) 1 2 3)))
+
+(test-group "fail"
+  (test #t (condition-case (fail "foo")
+             ((exn) #t)
+             (() #f)))
+  (test #t (condition-case (fail '(florp) "foo")
+             ((florp) #t)
+             (() #f)))
+  (test #t (condition-case (fail '(florp flurp) "foo")
+             ((florp flurp) #t)
+             (() #f)))
+  (test "foo 1 2" (condition-case (fail "foo ~a ~a" 1 2)
+                    (e (exn) (get-condition-property e 'exn 'message)))))
 
 (test-exit)
