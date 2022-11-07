@@ -577,8 +577,8 @@
   (define (~? str pat)
     (let ((data (irregex-search pat str)))
       (if data
-        (map (op irregex-match-substring data _)
-             (iota (inc (irregex-match-num-submatches data))))
+        (list-tabulate (inc (irregex-match-num-submatches data))
+                       (op irregex-match-substring data _))
         #f)))
 
   (define (gmatch pat str)
@@ -593,8 +593,8 @@
                          (irregex-match-end-index data 0))
                   (set! start (inc start)))
                 (if (> (irregex-match-num-submatches data) 0)
-                  (map (op irregex-match-substring data _)
-                       (iota (inc (irregex-match-num-submatches data))))
+                  (list-tabulate (inc (irregex-match-num-submatches data))
+                                 (op irregex-match-substring data _))
                   (irregex-match-substring data 0)))
               (begin
                 (set! start -1)
