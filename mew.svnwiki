@@ -167,6 +167,10 @@ added implicitly at the end.
 {{(op* - 0 ... 2)}} is the function that subtracts all its arguments from 0
 and finally 2.
 
+<syntax>(proj <N>)</syntax>
+
+Expands to a function that returns its {{<N>}}th argument.
+
 <procedure>(boolean <obj>)</procedure>
 
 Return false if {{<obj>}} is {{#f}}, and true else.

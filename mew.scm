@@ -15,7 +15,7 @@
      mod
      negate
      one-of op op*
-     per prn puts
+     per prn proj puts
      range rep
      sing? seq set set-at str slurp
      tally-accumulator tbl time
@@ -739,6 +739,14 @@
 
   (define (act x . fs)
     ((apply per fs) x))
+
+  (define-syntax proj
+    (syntax-rules ()
+      ((_ 0) (lambda (a . args) a))
+      ((_ 1) (lambda (a b . args) b))
+      ((_ 2) (lambda (a b c . args) c))
+      ((_ 3) (lambda (a b c d . args) d))
+      ((_ n) (lambda args (list-ref args n)))))
 
   (let ((old-repl-prompt (repl-prompt)))
     (repl-prompt (lambda ()
