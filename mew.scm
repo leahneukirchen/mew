@@ -25,6 +25,7 @@
      -> fun-> fun->> set->
      =? <>?
      ~?
+     => and=> set=>
 
      generic-make-accumulator)
 
@@ -718,9 +719,6 @@
                                  `(,(rename 'equal?) x ,v))
                                (cdr expr)))))))
 
-  (define (per . args)
-    (apply comp (reverse args)))
-
   (define inject
     (case-lambda
       ((f) (lambda (o)
@@ -744,8 +742,26 @@
     (lambda args
       (unlist (map (lambda (f) (apply f args)) fs))))
 
+  (define (per . args)
+    (apply comp (reverse args)))
+
   (define (act x . fs)
     ((apply per fs) x))
+
+  (define => act)
+
+  (define-syntax set=>
+    (syntax-rules ()
+      ((_ location . fs)
+       (set location (=> location . fs)))))
+
+  (define (and=> x . fs)
+    (and x
+         (if (null? fs)
+           x
+           (let ((result ((car fs) x)))
+             (and result
+                  (apply and=> result (cdr fs)))))))
 
   (define-syntax proj
     (syntax-rules ()

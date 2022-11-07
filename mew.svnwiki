@@ -194,6 +194,19 @@ Reverse function composition.
 
 Reverse function compose all {{<fun>}}, then apply to {{<obj>}}.
 
+<procedure>(=> <obj> <fun>...)</procedure>
+
+Alias for {{act}}.
+
+<syntax>(set=> <loc> <fun>...)</set>
+
+Shortcut for {{(set <loc> (=> <loc> <fun>...))}}.
+
+<procedure>(and=> <obj> <fun>...)</procedure>
+
+Apply the first function in {{<fun>}} to {{<obj>}}, then the second to
+the result, etc.  Stop if any value is false.
+
 <procedure>(juxt <fun>...)</procedure>
 
 Returns a function that applies each {{<fun>}} to its arguments and

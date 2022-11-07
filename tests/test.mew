@@ -434,6 +434,28 @@
   (test 43 (act '(6 7) (op apply * _) inc))
   (test 42 (act 42)))
 
+(test-group "=>"
+  (test 42 (=> 40 inc inc))
+  (test #f (=> 40 inc even?))
+  (test 43 (=> '(6 7) (op apply * _) inc))
+  (test 42 (=> 42)))
+
+(test-group "set=>"
+  (test 42 (seq
+             (def x 40)
+             (set=> x inc inc)
+             x))
+  (test 42 (seq
+             (def x #(13/2 2 3))
+             (set=> (at x 0) (juxt ceil floor) *)
+             (at x 0))))
+
+(test-group "and=>"
+  (test #t (and=> 42 even?))
+  (test #f (and=> #f even?))
+  (test 42 (and=> 40 inc inc))
+  (test #f (and=> 40 odd? inc)))
+
 (test-group "void"
   (test #t (void? (void)))
   (test #t (void? (void 1 2 3))))
