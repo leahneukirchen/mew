@@ -136,11 +136,11 @@ Like {{cond}}, but raise error if no case matched.
 
 Increment or decrement the argument by 1.
 
-<procedure>(div . <num>)</procedure>
+<procedure>(div <num> <num>)</procedure>
 
 Alias for {{floor-quotient}}.
 
-<procedure>(mod . <num>)</procedure>
+<procedure>(mod <num> <num>)</procedure>
 
 Alias for {{floor-remainder}}.
 
