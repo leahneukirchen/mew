@@ -1,5 +1,5 @@
 Mew is a library targetting R5RS/R7RS scheme, which provides some
-conveniences inspired from Goo, Clojure and Arc to allow writing more
+conveniences inspired from Goo, Clojure, T and Arc to allow writing more
 compact code.
 
 
@@ -13,8 +13,8 @@ has been taken to not reuse identifiers found in important SRFIs.
 
 Mew code is tight code, commonly used Mew identifiers are short.
 
-Mew uses a few features of R7RS internally, but does not require using
-R7RS.
+Mew uses a few features provided by R7RS internally, but does not
+require using R7RS.
 
 Mew targets Chicken Scheme currently but should be easy to port to
 other Scheme implementations.
@@ -28,6 +28,9 @@ on enumerable structures.
 Mew generally uses {{equal?}} as equality predicate.
 
 Mew never mutates lists.
+
+Except for few shortcut macros ({{op}} and {{op*}),
+Mew endorses macro hygiene.
 
 
 == Re-Exports
