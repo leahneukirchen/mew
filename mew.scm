@@ -92,6 +92,7 @@
       (lambda fun)
       (apply app)
       (ceiling ceil)
+      (truncate trunc)
       ))
 
   (define (inc i)
