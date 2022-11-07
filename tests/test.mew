@@ -328,6 +328,11 @@
 
 ; gconcatenate
 
+(test-group "gpick"
+  (test '(2 4 6) (into '() (gpick (fun (x) (if (even? x) x (eof)))
+                                  (generator 1 2 3 4 5 6))))
+  (test '(0 "" #f ()) (into '() (gpick (op) (generator 0 "" #f '())))))
+
 ; gwindow
 
 ; gslice-when

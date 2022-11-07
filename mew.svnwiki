@@ -343,6 +343,12 @@ Generator returning {{<val>}}, {{(<fun> <val>)}}, {{(<fun> (<fun (<val>)))}}...
 
 Generator yielding all values of the all generators yielded by {{<gen>}}.
 
+<procedure>(gpick <function> <gen>)<procedure>
+
+Like {{gmap}}, apply {{<function>}} to all values yielded by
+the generator {{<gen>}}, but skip values when {{<function>}} returns
+an eof object.
+
 <procedure>(gwindow <gen> <len>)</procedure>
 
 Generator yielding a sliding window of length {{<len>}} (as a list)

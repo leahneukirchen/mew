@@ -7,7 +7,7 @@
      empty? eof esc
      fin final for fun*
      gconcatenate gen generic-for-each genumerate get gfix giterate gmatch
-     group-by-accumulator gslice-when gsplit gwindow
+     gpick group-by-accumulator gslice-when gsplit gwindow
      inc inject into
      juxt
      keys
@@ -402,6 +402,16 @@
                   (set! gen2 (gen))
                   (loop))
                 v)))))))
+
+  (define (gpick f gen)
+    (lambda ()
+      (let loop ((item (gen)))
+        (if (eof-object? item)
+          item
+          (let ((v (f item)))
+            (if (eof-object? v)
+              (loop (gen))
+              v))))))
 
   (define (gwindow gen n)
     (let ((window #f))
