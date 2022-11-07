@@ -62,6 +62,13 @@
   (reexport (chicken irregex))
   (reexport (chicken pretty-print))
   (reexport (chicken sort))
+  (reexport
+    (only (r7rs)
+      list->vector
+      vector-map))
+  (reexport
+    (only (chicken format)
+      format))
 
   (reexport
     (only (chicken base)
