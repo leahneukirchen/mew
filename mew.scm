@@ -72,6 +72,7 @@
   (reexport
     (only (chicken format)
       format))
+  (reexport utf8-srfi-13)
 
   (reexport
     (only (chicken base)

@@ -37,6 +37,7 @@ Mew endorses macro hygiene.
 
 Mew re-exports
 SRFI-1 (List library),
+SRFI-13 (String Libraries) (from {{utf8-srfi-13}}),
 SRFI-69 (Basic hash tables),
 SRFI-158 (Generators and Accumulators),
 {{(chicken io)}},
