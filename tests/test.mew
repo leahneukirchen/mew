@@ -234,6 +234,12 @@
               (while (> y 0)
                 (set x (+ x y))
                 (set y (dec y)))
+              x))
+  (test 42 (loc (x 27 y 5)
+              (while (> y 0)
+                (def z (+ x y))
+                (set x z)
+                (set y (dec y)))
               x)))
 
 (test-group "until"
