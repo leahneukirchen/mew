@@ -191,9 +191,12 @@
   (define-syntax esc
     (syntax-rules ()
       ((_ return body ...)
-       (call-with-current-continuation
-         (lambda (return)
-           (seq body ...))))))
+       (receive vals (call-with-current-continuation
+                      (lambda (return)
+                        (seq body ...)))
+         (if (null? vals)
+           (void)
+           (car vals))))))         
 
   (define-syntax fin
     (syntax-rules ()

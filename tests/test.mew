@@ -147,6 +147,7 @@
 
 (test-group "esc"
   (test #t (void? (esc ret)))
+  (test #t (void? (esc ret (ret))))
   (test 42 (esc ret
               (* 6 7)))
   (test 42 (esc ret
