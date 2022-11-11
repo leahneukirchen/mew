@@ -210,7 +210,7 @@
 
 (test-group "op"
   (test 42 ((op) 42))
-  (test '(42 43) (let-values ((vs ((op) 42 43))) vs))
+  (test '(42 43) (receive ((op) 42 43)))
   (test 42 ((op 42) 43))
   (test 42 ((op * 6 _) 7))
   (test 42 ((op * 2 _ 3) 7))
