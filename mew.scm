@@ -17,7 +17,7 @@
      one-of op op*
      per prn proj puts
      range rep
-     sing? seq set set-at str slurp
+     sing? search seq set set-at str slurp
      tally-accumulator tbl time
      while
      uniq-accumulator unlist until
@@ -799,6 +799,33 @@
                      (list (car exn) 'message (apply format args))
                      (map list (cdr exn))))
       (apply fail '(exn) exn args)))
+
+  ;; The QuickSearch algorithm, for generic sequences
+  ;; http://www-igm.univ-mlv.fr/~lecroq/string/node19.html#SECTION00190
+  (define search
+    (case-lambda
+      ((needle haystack) (search needle haystack 0))
+      ((needle haystack start)
+       (let* ((lh (len haystack))
+              (ln (len needle))
+              (t  (into (tbl) (gmap (lambda (c i)
+                                      (cons c (- ln i)))
+                                    (gen needle)
+                                    (range 0)))))
+         (def (match? offset)
+           (let loop ((i (dec ln)))
+             (and (=? (at haystack (+ i offset)) (at needle i))
+                  (or (zero? i)
+                      (loop (dec i))))))
+
+         (if (zero? ln)
+           start
+           (let loop ((i start))
+             (if (<= i (- lh ln))
+               (if (match? i)
+                 i
+                 (loop (+ i (get t (get haystack (+ i ln) #f) (inc ln)))))
+               #f)))))))
 
   (let ((old-repl-prompt (repl-prompt)))
     (repl-prompt (lambda ()

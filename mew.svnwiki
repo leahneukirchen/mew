@@ -331,6 +331,13 @@ If {{<obj>}} is a procedure, consider it a SRFI-158 generator
 and iterate over its values.
 If {{<obj>}} is a hash-table, iterate over its keys and values.
 
+<procedure>(search <needle> <haystack> <offset>?)</procedure>
+
+Returns the offset of the sequence (string/list/vector) {{<needle>}}
+in the sequence {{<haystack>}},
+starting no earlier than {{<offset>>}} (default: 0).
+Returns false if the sequence cannot be found.
+
 
 == Generators and Accumulators
 

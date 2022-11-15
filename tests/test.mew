@@ -498,4 +498,22 @@
   (test "foo 1 2" (condition-case (fail "foo ~a ~a" 1 2)
                     (e (exn) (get-condition-property e 'exn 'message)))))
 
+(test-group "search"
+  (test #f (search "foozing" "fooz00000fggg00foozixngbar"))
+  (test 7 (search "foozing" "foodingfoozingbar"))
+  (test 15 (search "foozing" "fooz00000fggg00foozingbar"))
+  (test 16 (search "foozinggg" "foozinggfoozinggfoozingggfoozingg"))
+  (test 0 (search "foobar" "foobar"))
+  (test #f (search "foobar" "foobax"))
+  (test #f (search "foobar" "000000"))
+  (test #f (search "foobar" "fooba"))
+  (test 4 (search "fofofox" "fofofofofox"))
+  (test #f (search "fofofox" ""))
+  (test 0 (search "" "fofofox"))
+  (test 6 (search "x" "fofofox"))
+  (test 4 (search "foo" "fooxfoo" 3))
+  (test #f (search "foo" "fooxfoo" 5))
+  (test 1 (search #(1 2 3) #(0 1 2 3 4)))
+  (test 1 (search '(1 2 3) '(0 1 2 3 4))))
+
 (test-exit)
