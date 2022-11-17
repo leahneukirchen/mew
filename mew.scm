@@ -17,7 +17,7 @@
      one-of op op*
      per prn proj puts
      range rep
-     sing? search seq set set-at str slurp
+     scan scan-right sing? search seq set set-at str slurp
      tally-accumulator tbl time
      while
      uniq-accumulator unlist until
@@ -827,6 +827,19 @@
                  i
                  (loop (+ i (get t (get haystack (+ i ln) #f) (inc ln)))))
                #f)))))))
+
+  (define (scan kons knil . lists)
+    (reverse (apply fold (lambda (elt acc)
+                           (cons (kons elt (car acc)) acc))
+                    (list knil)
+                    lists)))
+
+  (define (scan-right kons knil . lists)
+    (apply fold-right (lambda (elt acc)
+                        (cons (kons elt (car acc)) acc))
+           (list knil)
+           lists))
+
 
   (let ((old-repl-prompt (repl-prompt)))
     (repl-prompt (lambda ()

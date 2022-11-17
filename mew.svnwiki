@@ -249,6 +249,11 @@ Ignores all arguments and returns a value where {{void?}} is true.
 
 Returns true if {{<va>}} is an unspecified value, else false.
 
+<procedure>(scan <kons> <knil> <lists>...)</procedure>
+<procedure>(scan-right <kons> <knil> <lists>...)</procedure>
+
+Like {{fold}}/{{fold-right}}, but collects all accumulator values.
+
 
 == I/O helpers
 

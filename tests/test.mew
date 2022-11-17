@@ -517,4 +517,12 @@
   (test 1 (search #(1 2 3) #(0 1 2 3 4)))
   (test 1 (search '(1 2 3) '(0 1 2 3 4))))
 
+(test-group "scan"
+  (test '(0 -4 -9 -15) (scan (flip -) 0 '(4 5 6)))
+  (test '(42) (scan * 42 '())))
+
+(test-group "scan-right"
+  (test '(5 -1 6 0)    (scan-right - 0 '(4 5 6)))
+  (test '(42) (scan-right * 42 '())))
+
 (test-exit)
