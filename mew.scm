@@ -2,7 +2,7 @@
   (export
      act accumulate andloc at
      boolean
-     comp
+     comp cross-product
      dec def del-at div
      empty? eof esc
      fail fin final for fun*
@@ -14,7 +14,7 @@
      len loc
      mod
      negate
-     one-of op op*
+     odometer one-of op op*
      per prn proj puts
      range rep
      scan scan-right sing? search seq set set-at str slurp
@@ -492,6 +492,22 @@
 
   (define (final g)
     (generator-fold (lambda (x a) x) (void) g))
+
+  (define (odometer . wheels)
+    (define (grepeat rep gen)
+      (gconcatenate (gmap (lambda (item)
+                            (gtake (cycle item) rep))
+                          gen)))
+    (if (null? wheels)
+      (generator)
+      (match-let (((total . parts) (scan-right * 1 wheels)))
+        (gtake (apply gmap list (map (lambda (r i)
+                                       (grepeat r (gmap (op mod _ i) (range 0))))
+                                     parts wheels))
+               total))))
+
+  (define (cross-product . xs)
+    (gmap (op map get xs _) (apply odometer (map len xs))))
 
   (define-syntax and-apply
     (syntax-rules ()

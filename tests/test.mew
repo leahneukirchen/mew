@@ -357,6 +357,19 @@
   (test 3 (final (generator 1 2 3)))
   (test #t (void? (final (generator)))))
 
+(test-group "odometer"
+  (test '((0 0) (0 1) (0 2) (1 0) (1 1) (1 2)) (into '() (odometer 2 3)))
+  (test '((0) (1) (2)) (into '() (odometer 3)))
+  (test '() (into '() (odometer)))
+  (test 1365 (len (odometer 3 5 7 13))))
+
+(test-group "cross-product"
+  (test '((a X) (a Y) (b X) (b Y) (c X) (c Y))
+        (into '() (cross-product '(a b c) '(X Y))))
+  (test '((a) (b) (c))
+        (into '() (cross-product '(a b c))))
+  (test '() (into '() (cross-product))))
+
 ; ->
 
 ; fun->

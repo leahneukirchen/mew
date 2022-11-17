@@ -446,6 +446,17 @@ by {{gen}}) and folds the function {{<f>}} over its values.  If given,
 folding starts with {{<init>}}, else with the first element yielded by
 the generator.  If the generator is empty, return {{(<f>)}}.
 
+<procedure>(odometer <wheels>...)</procedure>
+
+Returns a generator that takes a list of numbers and yields all
+combinations of numbers such that each is below it's wheel.  The
+rightmost number changes most quickly.
+
+<procedure>(cross-product <obj>...)</procedure>
+
+Returns a generator that takes multiple lists/vectors/strings and
+yields all elements of their cartesian product (as lists).
+
 
 == Regular expressions
 
