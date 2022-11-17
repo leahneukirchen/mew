@@ -349,9 +349,12 @@ Generic generator for list/vector/string/hash-table/generator.
 
 Alias for {{circular-generator}}.
 
-<procedure>(range <start> <end>? <step>?)</procedure>
+<procedure>(range <start>? <end>? <step>?)</procedure>
 
-A variant of {{make-range-generator}} that also allows negative {{step}}.
+A variant of {{make-range-generator}} that also allows negative {{<step>}}.
+{{<start>}} defaults to zero.
+{{<end>}} defaults to infinity.
+{{<step>}} defaults to 1.
 
 <procedure>(giterate <fun> <val>)</procedure>
 

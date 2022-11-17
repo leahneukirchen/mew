@@ -389,6 +389,7 @@
 
   (define range
     (case-lambda
+      (()               (make-range-generator 0 +inf.0 1))
       ((start)          (make-range-generator start +inf.0 1))
       ((start end)      (make-range-generator start end 1))
       ((start end step) (set! start (- (+ start step) step))
