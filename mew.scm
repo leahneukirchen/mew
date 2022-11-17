@@ -8,7 +8,7 @@
      fail fin final for fun*
      gconcatenate gen generic-for-each genumerate get gfix giterate gmatch
      gpick group-by-accumulator gslice-when gsplit gwindow
-     inc inject into
+     imp inc inject into
      juxt
      keys
      len loc
@@ -839,6 +839,13 @@
                         (cons (kons elt (car acc)) acc))
            (list knil)
            lists))
+
+  (define-syntax imp
+    (syntax-rules ()
+      ((_ a b)
+       (or (not a) b))
+      ((_ a b c ...)
+       (or (not a) (imp b c ...)))))
 
 
   (let ((old-repl-prompt (repl-prompt)))

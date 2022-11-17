@@ -254,6 +254,12 @@ Returns true if {{<va>}} is an unspecified value, else false.
 
 Like {{fold}}/{{fold-right}}, but collects all accumulator values.
 
+<syntax>(imp <antedecent>... <consequent>)<syntax>
+
+Material implication: evaluate {{<antedecent>...}} until one is false,
+then shortcut and return true.  If all {{<antedecent>...}} are true,
+evaluate {{<consequent>}}.
+
 
 == I/O helpers
 

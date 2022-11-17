@@ -525,4 +525,17 @@
   (test '(5 -1 6 0)    (scan-right - 0 '(4 5 6)))
   (test '(42) (scan-right * 42 '())))
 
+(test-group "imp"
+  (test #t (imp #t #t))
+  (test #f (imp #t #f))
+  (test #t (imp #f #t))
+  (test #t (imp #f #f))
+
+  (test #t (imp #f (error "not reached")))
+  (test #t (imp #t #t #f (error "not reached")))
+  (test 42 (imp #t #t #t 42))
+  (test 42 (imp 39 40 41 42))
+  (test #t (imp 39 #f 41 42)))
+
+
 (test-exit)
