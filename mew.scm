@@ -773,9 +773,11 @@
                     (v (g)))
                (if (eof-object? v)
                  (f)
-                 (generator-fold f v g)))))
+                 (generator-xfold f v g)))))
       ((f v) (lambda (o)
-               (generator-fold f v (gen o))))))
+               (generator-xfold f v (gen o))))
+      ((f v g)
+       ((inject f v) (gen g)))))
 
   (define (sing? l)
     (match l

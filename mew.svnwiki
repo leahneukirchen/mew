@@ -458,12 +458,13 @@ Like {{generator-fold}}, but {{<f>}} always takes the accumulator as
 first arguments, and the items after.  This is more practical when
 multiple {{<generators>}} are passed.
 
-<procedure>(inject <f> <init>?)</procedure>
+<procedure>(inject <f> <init>? <g>?)</procedure>
 
 Returns a procedure that takes an generator (or something convertible
-by {{gen}}) and folds the function {{<f>}} over its values.  If given,
+by {{gen}}) and xfolds the function {{<f>}} over its values.  If given,
 folding starts with {{<init>}}, else with the first element yielded by
 the generator.  If the generator is empty, return {{(<f>)}}.
+If {{<g>}} is passed, immediately fold over the generator {{<g>}}.
 
 <procedure>(odometer <wheels>...)</procedure>
 
