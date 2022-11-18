@@ -452,6 +452,12 @@ Returns an accumulator that returns a list of unique elements.
 Two elements are considered equal if their image under {{<f>}} is {{equal?}}.
 {{<f>}} defaults to the identity function.
 
+<procedure>(generator-xfold <f> <seed> <generators>...)</procedure>
+
+Like {{generator-fold}}, but {{<f>}} always takes the accumulator as
+first arguments, and the items after.  This is more practical when
+multiple {{<generators>}} are passed.
+
 <procedure>(inject <f> <init>?)</procedure>
 
 Returns a procedure that takes an generator (or something convertible

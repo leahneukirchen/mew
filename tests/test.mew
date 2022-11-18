@@ -435,6 +435,10 @@
   (test 43 ((per * inc) 6 7))
   (test 42 ((per) 42)))
 
+(test-group "generator-xfold"
+  (test -10 (generator-xfold - 0 (generator 1 2 3 4)))
+  (test '((((() 1 5) 2 6) 3 7) 4 8) (generator-xfold list '() (generator 1 2 3 4) (generator 5 6 7 8))))
+
 (test-group "inject"
   (test 10 ((inject +) (generator 1 2 3 4)))
   (test 0 ((inject +) (generator)))

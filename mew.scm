@@ -6,8 +6,8 @@
      dec def del-at div
      empty? eof esc
      fail fin final for fun*
-     gconcatenate gen generic-for-each genumerate get gfix giterate gmatch
-     gpick group-by-accumulator gslice-when gsplit gwindow
+     gconcatenate gen generator-xfold generic-for-each genumerate get
+     gfix giterate gmatch gpick group-by-accumulator gslice-when gsplit gwindow
      imp inc inject into
      juxt
      keys
@@ -749,6 +749,14 @@
                (if (eof-object? x)
                  (hash-table-values items)
                  (hash-table-update!/default items (f x) identity x)))))))
+
+  (define (generator-xfold f seed . gs)
+    (define (inner-xfold seed)
+      (let ((vs (map (lambda (g) (g)) gs)))
+        (if (any eof-object? vs)
+          seed
+          (inner-xfold (apply f seed vs)))))
+    (inner-xfold seed))
 
   (define-syntax one-of
     (er-macro-transformer
