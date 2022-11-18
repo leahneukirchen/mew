@@ -253,6 +253,19 @@ Returns true if {{<va>}} is an unspecified value, else false.
 <procedure>(scan-right <kons> <knil> <lists>...)</procedure>
 
 Like {{fold}}/{{fold-right}}, but collects all accumulator values.
+Prefer {{xscan}}/{{xscan-right}}.
+
+<procedure>(xfold <kons> <knil> <lists>...)</procedure>
+<procedure>(xfold-right <kons> <knil> <lists>...)</procedure>
+<procedure>(xreduce <kons> <knil> <lists>...)</procedure>
+<procedure>(xreduce-right <kons> <knil> <lists>...)</procedure>
+<procedure>(xscan <kons> <knil> <lists>...)</procedure>
+<procedure>(xscan-right <kons> <knil> <lists>...)</procedure>
+
+Like {{fold}}/{{fold-right}}/{{reduce}}/{{reduce-right}}/{{scan}}/{{scan-right}},
+but {{<kons>}} always takes the accumulator as first arguments,
+and the items after.  This is more practical when multiple {{lists}}
+are passed.
 
 <syntax>(imp <antedecent>... <consequent>)<syntax>
 

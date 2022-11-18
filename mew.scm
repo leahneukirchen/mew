@@ -22,7 +22,7 @@
      while
      uniq-accumulator unlist until
      vals void?
-     xcond
+     xcond xfold xfold-right xreduce xreduce-right xscan xscan-right
      -> fun-> fun->> set->
      =? <>?
      ~?
@@ -197,7 +197,7 @@
                         (seq body ...)))
          (if (null? vals)
            (void)
-           (car vals))))))         
+           (car vals))))))
 
   (define-syntax fin
     (syntax-rules ()
@@ -844,18 +844,6 @@
                  (loop (+ i (get t (get haystack (+ i ln) #f) (inc ln)))))
                #f)))))))
 
-  (define (scan kons knil . lists)
-    (reverse (apply fold (lambda (elt acc)
-                           (cons (kons elt (car acc)) acc))
-                    (list knil)
-                    lists)))
-
-  (define (scan-right kons knil . lists)
-    (apply fold-right (lambda (elt acc)
-                        (cons (kons elt (car acc)) acc))
-           (list knil)
-           lists))
-
   (define-syntax imp
     (syntax-rules ()
       ((_ a b)
@@ -863,6 +851,95 @@
       ((_ a b c ...)
        (or (not a) (imp b c ...)))))
 
+  ;; adapted from https://code.call-cc.org/svn/chicken-eggs/release/5/srfi-1/trunk/srfi-1.scm ------------------------------
+  (define (##srfi1#cars+cdrs lists)
+    (##sys#call-with-current-continuation
+     (lambda (abort)
+       (let recur ((lists lists))
+         (if (pair? lists)
+	   (receive (list other-lists) (car+cdr lists)
+	     (if (null-list? list)
+               (abort '() '()) ; LIST is empty -- bail out
+	       (receive (a d) (car+cdr list)
+		 (receive (cars cdrs) (recur other-lists)
+		   (values (cons a cars) (cons d cdrs))))))
+	   (values '() '()))))))
+
+  (define (##srfi1#cdrs lists)
+    (##sys#call-with-current-continuation
+     (lambda (abort)
+       (let recur ((lists lists))
+	 (if (pair? lists)
+	   (let ((lis (car lists)))
+	     (if (null-list? lis)
+               (abort '())
+	       (cons (cdr lis) (recur (cdr lists)))))
+	   '())))))
+
+  (define (xfold kons knil lis1 . lists)
+    (if (pair? lists)
+      (let lp ((lists (cons lis1 lists)) (ans knil))	; N-ary case
+	(receive (cars cdrs) (##srfi1#cars+cdrs lists)
+	  (if (null? cars)
+            ans ; Done.
+	    (lp cdrs (apply kons ans cars)))))
+
+      (let lp ((lis lis1) (ans knil))			; Fast path
+	(if (null-list? lis)
+          ans
+	  (lp (cdr lis) (kons ans (car lis)))))))
+
+  (define (xfold-right kons knil lis1 . lists)
+    (if (pair? lists)
+      (let recur ((lists (cons lis1 lists)))		; N-ary case
+        (let ((cdrs (##srfi1#cdrs lists)))
+	  (if (null? cdrs)
+            knil
+	    (apply kons (recur cdrs) (map car lists)))))
+
+      (let recur ((lis lis1))				; Fast path
+	(if (null-list? lis)
+          knil
+	  (let ((head (car lis)))
+	    (kons (recur (cdr lis)) head))))))
+
+  (define (xreduce f ridentity lis)
+    (if (null-list? lis)
+      ridentity
+      (xfold f (car lis) (cdr lis))))
+
+  (define (xreduce-right f ridentity lis)
+    (if (null-list? lis)
+      ridentity
+      (let recur ((head (car lis)) (lis (cdr lis)))
+	(if (pair? lis)
+	  (f (recur (car lis) (cdr lis)) head)
+	  head))))
+  ;; end of code lifted from srfi-1.scm ------------------------------
+
+  (define (scan kons knil . lists)
+    (reverse (apply xfold (lambda (acc . elts)
+                            (cons (apply kons (append elts (list (car acc)))) acc))
+                    (list knil)
+                    lists)))
+
+  (define (scan-right kons knil . lists)
+    (apply xfold-right (lambda (acc . elts)
+                         (cons (apply kons (append elts (list (car acc)))) acc))
+           (list knil)
+           lists))
+
+  (define (xscan kons knil . lists)
+    (reverse (apply xfold (lambda (acc . elts)
+                           (cons (apply kons (car acc) elts) acc))
+                    (list knil)
+                    lists)))
+
+  (define (xscan-right kons knil . lists)
+    (apply xfold-right (lambda (acc . elts)
+                         (cons (apply kons (car acc) elts) acc))
+           (list knil)
+           lists))
 
   (let ((old-repl-prompt (repl-prompt)))
     (repl-prompt (lambda ()

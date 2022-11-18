@@ -532,11 +532,37 @@
 
 (test-group "scan"
   (test '(0 -4 -9 -15) (scan (flip -) 0 '(4 5 6)))
-  (test '(42) (scan * 42 '())))
+  (test '(42) (scan * 42 '()))
+  (test '(0 6 14 24 36) (scan + 0 '(1 2 3 4) '(5 6 7 8)))
+  (test '(0 -4 0 -4 0) (scan - 0 '(1 2 3 4) '(5 6 7 8))))
+
+(test-group "xscan"
+  (test '(0 6 14 24 36) (xscan + 0 '(1 2 3 4) '(5 6 7 8)))
+  (test '(0 -6 -14 -24 -36) (xscan - 0 '(1 2 3 4) '(5 6 7 8))))
 
 (test-group "scan-right"
   (test '(5 -1 6 0)    (scan-right - 0 '(4 5 6)))
-  (test '(42) (scan-right * 42 '())))
+  (test '(42) (scan-right * 42 '()))
+  (test '(36 30 22 12 0) (scan-right + 0 '(1 2 3 4) '(5 6 7 8))))
+
+(test-group "xscan-right"
+  (test '(36 30 22 12 0) (xscan-right + 0 '(1 2 3 4) '(5 6 7 8))))
+
+(test-group "xfold"
+  (test -10 (xfold - 0 '(1 2 3 4)))
+  (test '((((() 1 5) 2 6) 3 7) 4 8) (xfold list '() '(1 2 3 4) '(5 6 7 8))))
+
+(test-group "xfold-right"
+  (test '((((() 4 8) 3 7) 2 6) 1 5) (xfold-right list '() '(1 2 3 4) '(5 6 7 8)))
+  (test -10 (xfold-right - 0 '(1 2 3 4))))
+
+(test-group "xreduce"
+  (test -8 (xreduce - 0 '(1 2 3 4)))
+  (test #f (xreduce - #f '())))
+
+(test-group "xreduce-right"
+  (test -2 (xreduce-right - 0 '(1 2 3 4)))
+  (test #f (xreduce-right - #f '())))
 
 (test-group "imp"
   (test #t (imp #t #t))
