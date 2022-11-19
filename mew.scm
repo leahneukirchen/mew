@@ -48,7 +48,7 @@
              (hash-table-keys keys)
              (hash-table-values vals))
           srfi-158
-          matchable)
+          err)
 
   (reexport srfi-1)
   (reexport srfi-69)
@@ -99,6 +99,7 @@
       ))
 
   (reexport err)
+
 
   (define (inc i)
     (+ i 1))
@@ -561,13 +562,45 @@
        (if-apply-last expr bool then ((op))))
       ))
 
+  (define-syntax ok-apply
+    (syntax-rules ()
+      ((_ x f args ...)
+       (let ((v x))
+         (if (ok? v)
+           (f v args ...)
+           v)))))
+
+  (define-syntax ok-apply-last
+    (syntax-rules ()
+      ((_ x f args ...)
+       (let ((v x))
+         (if (ok? v)
+           (f args ... v)
+           v)))))
+
+  (define-syntax err-apply
+    (syntax-rules ()
+      ((_ x f args ...)
+       (let ((v x))
+         (if (err? v)
+           (f (unerr v) args ...)
+           v)))))
+
+  (define-syntax err-apply-last
+    (syntax-rules ()
+      ((_ x f args ...)
+       (let ((v x))
+         (if (err? v)
+           (f args ... (unerr v))
+           v)))))
+
   (define-syntax ->
     (syntax-rules ()
       ((_ rest ...)
        (->chunk () () (rest ...)))))
 
   (define-syntax ->chunk
-    (syntax-rules (-> ->> and-> and->> if-> if->>)
+    (syntax-rules (-> ->> and-> and->> if-> if->> ok-> ok->> err-> err->>)
       ((_ (result ...) (current ...) (-> rest ...))
        (->chunk (result ... (current ...)) (->) (rest ...)))
       ((_ (result ...) (current ...) (->> rest ...))
@@ -580,6 +613,14 @@
        (->chunk (result ... (current ...)) (-> if-apply) (rest ...)))
       ((_ (result ...) (current ...) (if->> rest ...))
        (->chunk (result ... (current ...)) (-> if-apply-last) (rest ...)))
+      ((_ (result ...) (current ...) (ok-> rest ...))
+       (->chunk (result ... (current ...)) (-> ok-apply) (rest ...)))
+      ((_ (result ...) (current ...) (ok->> rest ...))
+       (->chunk (result ... (current ...)) (-> ok-apply-last) (rest ...)))
+      ((_ (result ...) (current ...) (err-> rest ...))
+       (->chunk (result ... (current ...)) (-> err-apply) (rest ...)))
+      ((_ (result ...) (current ...) (err->> rest ...))
+       (->chunk (result ... (current ...)) (-> err-apply-last) (rest ...)))
       ((_ (result ...) (current ...) (a rest ...))
        (->chunk (result ...) (current ... a) (rest ...)))
       ((_ ((x) result ...) (current ...) ())
@@ -607,7 +648,7 @@
        (lambda (x) (-> x ->> rest ...)))))
 
   (define-syntax set->
-    (syntax-rules (-> ->> and-> and->> if-> if->>)
+    (syntax-rules (-> ->> and-> and->> if-> if->> ok ok->> err-> err->>)
       ((_ location -> rest ...)
        (set! location (-> location -> rest ...)))
       ((_ location ->> rest ...)
@@ -620,6 +661,14 @@
        (set! location (-> location if-> rest ...)))
       ((_ location if->> rest ...)
        (set! location (-> location if->> rest ...)))
+      ((_ location ok-> rest ...)
+       (set! location (-> location ok-> rest ...)))
+      ((_ location ok->> rest ...)
+       (set! location (-> location ok->> rest ...)))
+      ((_ location err-> rest ...)
+       (set! location (-> location err-> rest ...)))
+      ((_ location err->> rest ...)
+       (set! location (-> location err->> rest ...)))
       ((_ location rest ...)            ; default to ->
        (set! location (-> location -> rest ...)))))
 

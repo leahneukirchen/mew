@@ -370,7 +370,13 @@
         (into '() (cross-product '(a b c))))
   (test '() (into '() (cross-product))))
 
-; ->
+(test-group "->"
+  (test 6 (-> 3 -> inc -> + 2))
+  (test 9 (-> #f -> or 7 -> + 2))
+  (test 9 (-> 6 ->> or 7 -> + 2))
+  (test 7 (-> 5 ok-> inc ok-> + 1))
+  (test (err 7) (-> (err 7) ok-> inc ok-> + 1))
+  (test 7 (-> (err 6) err-> + 1)))
 
 ; fun->
 

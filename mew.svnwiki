@@ -44,7 +44,8 @@ SRFI-158 (Generators and Accumulators),
 {{(chicken irregex)}},
 {{(chicken pretty-print)}}},
 {{(chicken sort)}}},
-and {{matchable}}.
+{{matchable}},
+and {{err}} (see {{err.svnwiki}}).
 
 
 == Definitions, bindings and assignments
@@ -540,3 +541,15 @@ Evaluate {{<val>}}.  Then, when {{<cond>}} is not false, behaves like
 
 Like {{->}}/{{->>}} but skips nesting the code if the nested
 expression is false.
+
+<syntax>(-> ... ok-> ...)<syntax>
+<syntax>(-> ... ok->> ...)<syntax>
+
+Like {{->}}/{{->>}} but skips nesting the code if the nested
+expression is {{err?}}.
+
+<syntax>(-> ... err-> ...)<syntax>
+<syntax>(-> ... err->> ...)<syntax>
+
+Like {{->}}/{{->>}} but skips nesting the code if the nested
+expression is {{ok?}}.  The unwrapped value is inserted into the nesting.
