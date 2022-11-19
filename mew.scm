@@ -98,6 +98,8 @@
       (truncate trunc)
       ))
 
+  (reexport err)
+
   (define (inc i)
     (+ i 1))
 
