@@ -1,0 +1,91 @@
+= Err, a scheme library for reasoning with results
+
+{{err}} provides a disjoint error data type, and helper functions to
+conveniently work with them.
+
+
+== Design
+
+{{err}} distinguishes two types of values:
+{{err}} objects, for which {{err?}} returns true,
+and all others (so called {{ok}} objects).
+
+This means that existing code can be incorporated very easily as ok
+values do not need to be wrapped.
+Likewise, passing errors to existing code will trigger type errors quickly.
+(Note that the empty list, the false value, and the unspecified
+values are all considered {{ok}}.)
+
+For integrating with code which uses exceptions for error handling,
+{{err}} provides the {{guard-err}} macro and the {{ok}} procedure to convert
+between the two mechanisms.
+
+If you prefer explicit container types, you may like
+SRFI 189 ("Maybe and Either").
+
+If you need to deal with {{err}} values in a transparent way,
+you can use SRFI 111 ("Boxes") to contain them as {{ok}} values.
+
+
+== Core functions
+
+<procedure>(err <obj>)</procedure>
+
+Returns an err object that contains {{<obj>}}.
+If {{<obj>}} already is an err object, just returns {{<obj>}}.
+
+<procedure>(unerr <obj>)</procedure>
+
+Returns the object wrapped in the {{err}} object {{<obj>}}.
+Returns an unspecified value if {{<obj>}} is not an {{err}} object.
+
+<procedure>(err? <obj>)</procedure>
+
+Returns true if {{<obj>}} is an {{err}} object, false otherwise.
+
+<procedure>(ok? <obj>)</procedure>
+
+Returns true if {{<obj>}} is not an {{err}} object, false otherwise.
+
+
+== Helpers
+
+<procedure>(ok/if <obj> <case-ok> [<case-err>])</procedure>
+
+If {{<obj>}} is not an {{err}} object, calls {{<case-ok>}} with {{<obj>}}
+as argument.  If {{<obj>}} is an {{err}} object, and {{<case-err>}}
+is given, calls {{<case-err>}} with the value that was wrapped in {{<obj>}};
+if {{<case-err>}} is not given, returns {{<obj>}} as is.
+
+<procedure>(ok=> <obj> <fun>...)</procedure>
+
+Successively applies functions {{<fun>}} to the value {{<obj>}}
+(and then its return value etc.) as long as {{<obj>}} is {{ok?}}.
+
+<procedure>(err=> <obj> <fun>...)</procedure>
+
+If {{<obj>}} is an {{err}} object, unwrap it and successively
+apply the functions {{<fun>}}, else just return {{<obj>}}.
+(NB: this is not the dual to {{ok=>}}, as immediate values
+can be {{ok}} objects but function application continues.)
+
+<syntax>(ok/or <expr>...)</syntax>
+
+Evaluate the expressions {{<expr>...}} from left to right,
+stop and return as soon one is {{ok}}.
+
+<syntax>(ok/and <expr>...)</syntax>
+
+Evaluate the expressions {{<expr>...}} from left to right,
+stop and return as soon one is not {{ok}}.
+
+<syntax>(guard-err [(<exn>...)] <expr>)</syntax>
+
+Evaluate {{<expr>}} and when an exception is raised which is listed in
+{{<exn>...}} (or, by default, any exception), return the condition
+object wrapped as an {{err}} object.
+
+<syntax>(ok <obj>)</syntax>
+
+If {{<obj>>}} is an {{err}} object, raise it as an error (or re-raise
+if it wrapped a condition).  Else, return {{<obj>}}.

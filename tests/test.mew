@@ -580,6 +580,3 @@
   (test 42 (imp #t #t #t 42))
   (test 42 (imp 39 40 41 42))
   (test #t (imp 39 #f 41 42)))
-
-
-(test-exit)

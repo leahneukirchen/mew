@@ -1,6 +1,8 @@
 ;;; mew.egg -*- Scheme -*- vim: ft=scheme:
 
-((components (extension mew))
+((components
+   (extension mew)
+   (extension err))
  (version 0.0.1)
  (license "MIT")
  (author "Leah Neukirchen <leah@vuxu.org>")

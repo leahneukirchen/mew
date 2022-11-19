@@ -1,2 +1,2 @@
 #!/bin/sh
-exec csi -keyword-style prefix -R mew "$@"
+exec csi -keyword-style prefix -R mew -R err "$@"
