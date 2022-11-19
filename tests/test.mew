@@ -508,6 +508,8 @@
   (test 1 ((proj 0) 1 2 3))
   (test 2 ((proj 1) 1 2 3))
   (test 3 ((proj 2) 1 2 3))
+  (test '(3 2) (receive ((proj 2 1) 1 2 3)))
+  (test '() (receive ((proj) 1 2 3)))
   (test-error ((proj 4) 1 2 3)))
 
 (test-group "fail"

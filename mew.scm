@@ -864,12 +864,17 @@
                   (apply and=> result (cdr fs)))))))
 
   (define-syntax proj
-    (syntax-rules ()
-      ((_ 0) (lambda (a . args) a))
-      ((_ 1) (lambda (a b . args) b))
-      ((_ 2) (lambda (a b c . args) c))
-      ((_ 3) (lambda (a b c d . args) d))
-      ((_ n) (lambda args (list-ref args n)))))
+    (er-macro-transformer
+      (lambda (expr rename compare)
+        (let* ((items (cdr expr))
+               (max-n (if (null? items) 0 (+ 1 (apply max items))))
+               (args (list-tabulate max-n
+                                    (lambda (n)
+                                      (string->symbol
+                                       (string-append "x"
+                                                      (number->string n)))))))
+          `(,(rename 'lambda) (,@args . rest)
+            (,(rename 'values) ,@(map (lambda (n) (list-ref args n)) items)))))))
 
   (define (fail exn . args)
     (if (list? exn)
