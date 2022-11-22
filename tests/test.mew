@@ -478,6 +478,11 @@
   (test 43 (=> '(6 7) (op apply * _) inc))
   (test 42 (=> 42)))
 
+(test-group "=>*"
+  (test 42 (=>* (values 6 7) * dec inc))
+  (test '(6 7) (receive (=>* (values 6 7))))
+  (test '(7 6) (receive (=>* (values 6 7) (proj 1 0)))))
+
 (test-group "set=>"
   (test 42 (seq
              (def x 40)

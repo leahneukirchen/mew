@@ -26,7 +26,7 @@
      -> fun-> fun->> set->
      =? <>?
      ~?
-     => and=> set=>
+     => =>* and=> set=>
 
      generic-make-accumulator)
 
@@ -849,6 +849,12 @@
     ((apply per fs) x))
 
   (define => act)
+
+  (define-syntax =>*
+    (syntax-rules ()
+      ((_ expr . fs)
+       (receive args expr
+         (apply (per . fs) args)))))
 
   (define-syntax set=>
     (syntax-rules ()

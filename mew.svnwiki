@@ -211,6 +211,10 @@ Reverse function compose all {{<fun>}}, then apply to {{<obj>}}.
 
 Alias for {{act}}.
 
+<syntax>(=>* <form> <fun>...)</syntax>
+
+Like {{=>}}, but {{<form>}} may return multiple values.
+
 <syntax>(set=> <loc> <fun>...)</set>
 
 Shortcut for {{(set <loc> (=> <loc> <fun>...))}}.
