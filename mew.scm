@@ -325,26 +325,30 @@
 
   (define at (getter-with-setter get get-setter))
 
-  (define (kvs->alist kvs)
-    (let loop ((kvs kvs))
-      (match kvs
-        ((k v . kvs2) (cons (cons k v) (loop kvs2)))
-        (()           '())
-        (_            (error "odd key value list")))))
+  (define (plist-generator l)
+    (lambda ()
+      (cond ((null? l)        (eof))
+            ((pair? (cdr l))  (let ((p (cons (car l) (cadr l))))
+                                (set! l (cddr l))
+                                p))
+            (else
+             (error "odd number of elements in key value list")))))
 
-  (define (tbl . kvs)
-    (alist->hash-table (kvs->alist kvs)))
+  (define tbl
+    (case-lambda
+      (()   (make-hash-table))
+      (kvs  (into (tbl) (plist-generator kvs)))))
 
   (define (set-at o . rest)
-    (cond ((hash-table? o) (for-each (lambda (kv)
-                                       (hash-table-set! o (car kv) (cdr kv)))
-                                     (kvs->alist rest)))
-          ((vector? o)     (for-each (lambda (kv)
-                                       (vector-set! o (car kv) (cdr kv)))
-                                     (kvs->alist rest)))
-          ((string? o)     (for-each (lambda (kv)
-                                       (string-set! o (car kv) (cdr kv)))
-                                     (kvs->alist rest)))
+    (cond ((hash-table? o) (generator-for-each
+                            (lambda (kv) (hash-table-set! o (car kv) (cdr kv)))
+                            (plist-generator rest)))
+          ((vector? o)     (generator-for-each
+                            (lambda (kv) (vector-set! o (car kv) (cdr kv)))
+                            (plist-generator rest)))
+          ((string? o)     (generator-for-each
+                            (lambda (kv) (string-set! o (car kv) (cdr kv)))
+                            (plist-generator rest)))
           (else            (error "no set-at defined")))
     o)
 
