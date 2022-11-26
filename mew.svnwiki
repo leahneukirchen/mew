@@ -525,6 +525,10 @@ Returns a random integer such that N <= {{(rand <M>)}} < {{<M>}}.
 
 <procedure>(shuffle <vector>)</procedure>
 
+Returns a copy of the vector {{<vector>}} with the entries in randomized order.
+
+<procedure>(shuffle! <vector>)</procedure>
+
 Shuffles the vector {{<vector>}} randomly in-place using a Fisher-Yates shuffle.
 
 <procedure>(sample <obj>)</procedure>

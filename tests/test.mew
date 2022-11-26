@@ -35,6 +35,12 @@
   (test #f (=? (shuffle #(1 2 3 4 5 6 7 8 9 0))
                (shuffle #(1 2 3 4 5 6 7 8 9 0)))))
 
+(test-group "shuffle!"
+  (test #t (loc (v #(1 2 3)) (eq? v (shuffle! v))))
+  (test #(1 2 3) (sort (shuffle! #(3 2 1)) <))
+  (test #f (=? (shuffle! #(1 2 3 4 5 6 7 8 9 0))
+               (shuffle! #(1 2 3 4 5 6 7 8 9 0)))))
+
 (test-group "sample"
   (test #t ((one-of 1 2 3) (sample '(1 2 3))))
   (test #t ((one-of 1 2 3) (sample #(1 2 3))))
