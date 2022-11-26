@@ -51,7 +51,6 @@
           srfi-158
           err)
 
-  (reexport srfi-1)
   (reexport srfi-69)
   (reexport srfi-158)
   (reexport
@@ -92,12 +91,16 @@
       (floor-remainder mod)))
 
   (reexport
-    (rename (scheme)
+    (rename (except (scheme)
+               assoc
+               member)
       (lambda fun)
       (apply app)
       (ceiling ceil)
       (truncate trunc)
       ))
+
+  (reexport srfi-1)
 
   (reexport err)
 
