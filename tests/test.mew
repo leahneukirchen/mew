@@ -35,6 +35,11 @@
   (test #f (=? (shuffle #(1 2 3 4 5 6 7 8 9 0))
                (shuffle #(1 2 3 4 5 6 7 8 9 0)))))
 
+(test-group "sample"
+  (test #t ((one-of 1 2 3) (sample '(1 2 3))))
+  (test #t ((one-of 1 2 3) (sample #(1 2 3))))
+  (test #t ((one-of '(1 . 2) '(3 . 4)) (sample (tbl 1 2 3 4)))))
+
 (test-group "range"
   (test '(1 2 3) (into '() (range 1 4)))
   (test '() (into '() (range 4 1)))

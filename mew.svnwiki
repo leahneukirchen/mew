@@ -527,6 +527,11 @@ Returns a random integer such that N <= {{(rand <M>)}} < {{<M>}}.
 
 Shuffles the vector {{<vector>}} randomly in-place using a Fisher-Yates shuffle.
 
+<procedure>(sample <obj>)</procedure>
+
+Returns a random element of the list/vector/string {{<obj>}}.
+Returns a random key/value pair of the hash-table {{<obj>}}.
+
 
 == Special syntax
 
