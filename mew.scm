@@ -17,7 +17,7 @@
      odometer one-of op op*
      per prn proj puts
      rand range rep
-     scan scan-right sing? search seq set set-at str slurp
+     scan scan-right sing? search seq set set-at shuffle str slurp
      tally-accumulator tbl time
      while
      uniq-accumulator unlist until
@@ -400,6 +400,17 @@
       (()    (pseudo-random-real))
       ((n)   (pseudo-random-integer n))
       ((n m) (+ n (pseudo-random-integer (- m n))))))
+
+  (define (shuffle v)
+    (let loop ((i (- (vector-length v) 1)))
+      (when (positive? i)
+        (let* ((j (rand (+ i 1)))
+               (vi (vector-ref v i))
+               (vj (vector-ref v j)))
+          (vector-set! v i vj)
+          (vector-set! v j vi)
+          (loop (dec i)))))
+    v)
 
   (define range
     (case-lambda

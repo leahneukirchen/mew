@@ -511,17 +511,21 @@ When the pattern {{<irx>}} uses match data, the result is unspecified.
 
 Mew initializes the {{(chicken random)}} generator from a high entropy source.
 
-<procedure>(rand)<procedure>
+<procedure>(rand)</procedure>
 
 Returns a random real between 0 and 1.
 
-<procedure>(rand N)<procedure>
+<procedure>(rand <N>)</procedure>
 
-Returns a random integer such that 0 <= {{(rand N)}} < {{N}}.
+Returns a random integer such that 0 <= {{(rand <N>)}} < {{<N>}}.
 
-<procedure>(rand N M)<procedure>
+<procedure>(rand <N> <M>)</procedure>
 
-Returns a random integer such that N <= {{(rand M)}} < {{M}}.
+Returns a random integer such that N <= {{(rand <M>)}} < {{<M>}}.
+
+<procedure>(shuffle <vector>)</procedure>
+
+Shuffles the vector {{<vector>}} randomly in-place using a Fisher-Yates shuffle.
 
 
 == Special syntax

@@ -30,6 +30,11 @@
   (test #t (<= 2 (rand 2 6)))
   (test #t (< (rand 2 6) 6)))
 
+(test-group "shuffle"
+  (test #(1 2 3) (sort (shuffle #(3 2 1)) <))
+  (test #f (=? (shuffle #(1 2 3 4 5 6 7 8 9 0))
+               (shuffle #(1 2 3 4 5 6 7 8 9 0)))))
+
 (test-group "range"
   (test '(1 2 3) (into '() (range 1 4)))
   (test '() (into '() (range 4 1)))
