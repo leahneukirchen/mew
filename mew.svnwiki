@@ -507,6 +507,23 @@ irregex {{<irx>}} in the string {{<str>}}, at most {{<max>>} times
 When the pattern {{<irx>}} uses match data, the result is unspecified.
 
 
+== Random numbers
+
+Mew initializes the {{(chicken random)}} generator from a high entropy source.
+
+<procedure>(rand)<procedure>
+
+Returns a random real between 0 and 1.
+
+<procedure>(rand N)<procedure>
+
+Returns a random integer such that 0 <= {{(rand N)}} < {{N}}.
+
+<procedure>(rand N M)<procedure>
+
+Returns a random integer such that N <= {{(rand M)}} < {{M}}.
+
+
 == Special syntax
 
 <syntax>(-> a -> b c -> d e f)</syntax>

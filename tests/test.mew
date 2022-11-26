@@ -24,6 +24,12 @@
   (test '(11 22 33) (sort (vals (tbl 1 11 2 22 3 33)) <))
   (test-error (vals #(1 2 3))))
 
+(test-group "rand"
+  (test #f (integer? (rand)))
+  (test #t (integer? (rand 6)))
+  (test #t (<= 2 (rand 2 6)))
+  (test #t (< (rand 2 6) 6)))
+
 (test-group "range"
   (test '(1 2 3) (into '() (range 1 4)))
   (test '() (into '() (range 4 1)))

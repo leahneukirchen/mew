@@ -16,7 +16,7 @@
      negate
      odometer one-of op op*
      per prn proj puts
-     range rep
+     rand range rep
      scan scan-right sing? search seq set set-at str slurp
      tally-accumulator tbl time
      while
@@ -41,6 +41,7 @@
           (chicken condition)
           (chicken module)
           (chicken port)
+          (chicken random)
           (chicken repl)
           (chicken syntax)
           srfi-17
@@ -393,6 +394,12 @@
 
   (define (void? x)
     (eq? x (void)))
+
+  (define rand
+    (case-lambda
+      (()    (pseudo-random-real))
+      ((n)   (pseudo-random-integer n))
+      ((n m) (+ n (pseudo-random-integer (- m n))))))
 
   (define range
     (case-lambda
@@ -1023,4 +1030,6 @@
                      (str (substring old-prompt 0 2)
                           "^_^;"
                           (substring old-prompt 2))))))
+
+  (set-pseudo-random-seed! (random-bytes))
 )
