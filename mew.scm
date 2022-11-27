@@ -371,6 +371,13 @@
         (and (hash-table? o)
              (zero? (hash-table-size o)))))
 
+  (define (empty o)
+    (cond ((list? o) '())
+          ((string? o) "")
+          ((vector? o) #())
+          ((hash-table? o) (tbl))
+          (else "no empty defined")))
+
   (define (len o)
     (cond ((list? o) (length o))
           ((string? o) (string-length o))
@@ -426,17 +433,46 @@
             (vector-set! res i (vector-ref res j)))
           (vector-set! res j (vector-ref v i))))))
 
-  (define (sample o)
-    (if (hash-table? o)
-      (esc ret
-        (let ((n (rand (hash-table-size o)))
-              (i 0))
-          (hash-table-for-each o
-                               (lambda (k v)
-                                 (if (= i n)
-                                   (ret (cons k v))
-                                   (set! i (inc i)))))))
-      (get o (rand (len o)))))
+  (define sample
+    (let ((gen-get (lambda (o)
+                     (if (hash-table? o)
+                       (lambda (n)
+                         (esc ret
+                           (let ((i 0))
+                             (hash-table-for-each o
+                                                  (lambda (k v)
+                                                    (if (= i n)
+                                                      (ret (cons k v))
+                                                      (set! i (inc i))))))))
+                       (lambda (n)
+                         (get o n))))))
+      (case-lambda
+        ((o)
+         ((gen-get o) (rand (len o))))
+        ((o k)
+         (if (or (<= k 0) (< (len o) k))
+           #()
+           ;; Algorithm L with additional shuffle at the end.
+           ;; https://dl.acm.org/doi/pdf/10.1145/198429.198435
+           (let ((geto (gen-get o))
+                 (r (make-vector k))
+                 (w (exp (/ (log (rand)) k)))
+                 (n (len o))
+                 (i 0))
+             (while (< i k)
+               (vector-set! r i (geto i))
+               (set! i (inc i)))
+             (while (< i n)
+               (set! i (+ i 1 (inexact->exact (floor (/ (log (rand))
+                                                        (log (- 1 w)))))))
+               (when (< i n)
+                 (vector-set! r (rand k) (geto i))
+                 (set! w (* w (exp (/ (log (rand)) k))))))
+             (shuffle! r)
+             (if (vector? o)
+               r
+               (into (empty o) r)))))
+         )))
 
   (define range
     (case-lambda

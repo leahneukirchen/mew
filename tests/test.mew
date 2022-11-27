@@ -44,7 +44,11 @@
 (test-group "sample"
   (test #t ((one-of 1 2 3) (sample '(1 2 3))))
   (test #t ((one-of 1 2 3) (sample #(1 2 3))))
-  (test #t ((one-of '(1 . 2) '(3 . 4)) (sample (tbl 1 2 3 4)))))
+  (test #t ((one-of '(1 . 2) '(3 . 4)) (sample (tbl 1 2 3 4))))
+  (test #t (string? (sample "foobar" 3)))
+  (test 3 (len (sample "foobar" 3)))
+  (test "ooo" (sample "ooooo" 3))
+  (test #(1 2 3) (sort (sample #(1 2 3) 3) <)))
 
 (test-group "range"
   (test '(1 2 3) (into '() (range 1 4)))
