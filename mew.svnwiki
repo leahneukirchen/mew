@@ -170,6 +170,9 @@ If {{<form>>} is empty, behaves as {{values}}, i.e. the identity function.
 
 {{(op + 2 _)}} is the function that adds 2 to its argument.
 
+Note that {{(op (expr))}} can be used as a generator that infinintely
+often evaluates {{(expr)}} anew.
+
 <syntax>(op* <form>)</syntax>
 
 Returns a procedure that evaluates {{<form>}} with {{...}} expanded
