@@ -450,8 +450,14 @@
         ((o)
          ((gen-get o) (rand (len o))))
         ((o k)
-         (if (or (<= k 0) (< (len o) k))
-           #()
+         (cond
+          ((= k 0)        (empty o))
+          ((<= (len o) k) (let ((r (into #() o)))
+                            (shuffle! r)
+                            (if (vector? o)
+                              r
+                              (into (empty o) r))))
+          (else
            ;; Algorithm L with additional shuffle at the end.
            ;; https://dl.acm.org/doi/pdf/10.1145/198429.198435
            (let ((geto (gen-get o))
@@ -472,7 +478,7 @@
              (if (vector? o)
                r
                (into (empty o) r)))))
-         )))
+         ))))
 
   (define range
     (case-lambda

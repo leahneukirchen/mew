@@ -47,6 +47,8 @@
   (test #t ((one-of '(1 . 2) '(3 . 4)) (sample (tbl 1 2 3 4))))
   (test #t (string? (sample "foobar" 3)))
   (test 3 (len (sample "foobar" 3)))
+  (test 2 (len (sample "fb" 3)))
+  (test "" (sample "foobar" 0))
   (test "ooo" (sample "ooooo" 3))
   (test #(1 2 3) (sort (sample #(1 2 3) 3) <)))
 

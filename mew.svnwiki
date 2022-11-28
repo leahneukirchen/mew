@@ -541,11 +541,11 @@ Returns a random key/value pair of the hash-table {{<obj>}}.
 
 <procedure>(sample <obj> <N>)</procedure>
 
-Returns a random list/vector/string consisting of {{<N>}} elements of
-the list/vector/string {{<obj>}}, without replacement.
+Returns a random list/vector/string consisting of up to {{<N>}}
+elements of the list/vector/string {{<obj>}}, without replacement.
 
-Returns a random hash-table consisting of {{<N>}} key/value pairs of
-the hash-table {{<obj>}}, without replacement.
+Returns a random hash-table consisting of up to {{<N>}} key/value
+pairs of the hash-table {{<obj>}}, without replacement.
 
 
 == Special syntax
