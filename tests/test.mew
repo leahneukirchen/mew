@@ -531,6 +531,18 @@
   (test 42 (and=> 40 inc inc))
   (test #f (and=> 40 odd? inc)))
 
+(test-group "op=>"
+  (test 42 (op=> 40 (+ _ 1) inc))
+  (test #f (op=> 40 inc even?))
+  (test 43 (op=> '(6 7) (apply * _) inc))
+  (test 42 (op=> 42)))
+
+(test-group "fun=>"
+  (test 42 ((fun=> (+ _ 1) inc) 40))
+  (test #f ((fun=> inc even?) 40))
+  (test 43 ((fun=> * inc) 6 7))
+  (test 42 ((fun=>) 42)))
+
 (test-group "void"
   (test #t (void? (void)))
   (test #t (void? (void 1 2 3))))

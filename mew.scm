@@ -27,7 +27,7 @@
      -> fun-> fun->> set->
      =? <>?
      ~?
-     => =>* and=> set=>
+     => =>* and=> fun=> op=> set=>
 
      generic-make-accumulator)
 
@@ -974,6 +974,28 @@
            (let ((result ((car fs) x)))
              (and result
                   (apply and=> result (cdr fs)))))))
+
+  (define-syntax fun=>-inner
+    (syntax-rules ()
+      ((_ (acc ...))
+       (compose acc ...))
+      ((_ (acc ...) ,arg args ...)
+       (fun=>-inner (arg acc ...) args ...))
+      ((_ (acc ...) (arg ...) args ...)
+       (fun=>-inner ((op arg ...) acc ...) args ...))
+      ((_ (acc ...) arg args ...)
+       (fun=>-inner (arg acc ...) args ...))
+      ))
+
+  (define-syntax fun=>
+    (syntax-rules ()
+      ((fun=> . args)
+       (fun=>-inner () . args))))
+
+  (define-syntax op=>
+    (syntax-rules (_)
+      ((op=> init . args)
+       ((fun=> . args) init))))
 
   (define-syntax proj
     (er-macro-transformer
