@@ -428,6 +428,13 @@ Generator yielding a sliding window of length {{<len>}} (as a list)
 over the values yielded by the generator {{<gen>}}.  Yields never if
 the generator yielded fewer than {{<len>}} elements.
 
+<procedure>(gsplit-on <pred> <gen>)</procedure>
+
+Partition the elements yielded by the generator {{<gen>}} into lists:
+starts a new empty list when the predicate {{<pred>}} called with the
+current element of the generator returns true.
+In this case, the element is discarded.
+
 <procedure>(gslice-when <pred> <gen>)</procedure>
 
 Partition the elements yielded by the generator {{<gen>}} into lists:

@@ -7,7 +7,8 @@
      empty? eof esc
      fail fin final for fun*
      gconcatenate gen generator-xfold generic-for-each genumerate get
-     gfix giterate gmatch gpick group-by-accumulator gslice-when gsplit gwindow
+     gfix giterate gmatch gpick group-by-accumulator gslice-when
+     gsplit gsplit-on gwindow
      imp inc inject into
      juxt
      keys
@@ -534,6 +535,26 @@
                 (set! window (append (cdr window) (list next)))
                 window)))))))
 
+  (define (gsplit-on pred gen)
+    (let ((slice '())
+          (this #f))
+      (lambda ()
+        (if (eof-object? this)
+          this
+          (let loop ()
+            (set! this (gen))
+            (if (eof-object? this)
+              (if (null? slice)
+                (eof)
+                (reverse slice))
+              (if (pred this)
+                (let ((finished-slice (reverse slice)))
+                  (set! slice '())
+                  finished-slice)
+                (begin
+                  (set! slice (cons this slice))
+                  (loop)))))))))
+
   (define (gslice-when pred gen)
     (let ((slice #f)
           (prev #f)
@@ -545,20 +566,20 @@
             (set! this (eof)))
           (set! slice (list prev)))
         (if (eof-object? this)
-            this
-            (let loop ()
-              (set! this (gen))
-              (if (eof-object? this)
-                  (reverse slice)
-                  (if (pred prev this)
-                      (let ((finished-slice (reverse slice)))
-                        (set! slice (list this))
-                        (set! prev this)
-                        finished-slice)
-                      (begin
-                        (set! slice (cons this slice))
-                        (set! prev this)
-                        (loop)))))))))
+          this
+          (let loop ()
+            (set! this (gen))
+            (if (eof-object? this)
+              (reverse slice)
+              (if (pred prev this)
+                (let ((finished-slice (reverse slice)))
+                  (set! slice (list this))
+                  (set! prev this)
+                  finished-slice)
+                (begin
+                  (set! slice (cons this slice))
+                  (set! prev this)
+                  (loop)))))))))
 
   (define (genumerate gen)
     (let ((n -1))
