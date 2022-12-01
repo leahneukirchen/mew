@@ -427,7 +427,11 @@
 
 (test-group "slurp"
   (test #t (string? (slurp "/usr/bin/chicken-status")))
-  (test-error (string? (slurp "/dev/null/noexist"))))
+  (test-error (slurp "/dev/null/noexist")))
+
+(test-group "lines"
+  (test #t (string? ((lines "/usr/bin/chicken-status"))))
+  (test-error (lines "/dev/null/noexist")))
 
 (test-group "gen"
   (test '(1 2 3) (into '() (gen '(1 2 3))))

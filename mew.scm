@@ -11,7 +11,7 @@
      imp inc inject into
      juxt
      keys
-     len loc
+     len lines loc
      mod
      negate
      odometer one-of op op*
@@ -822,6 +822,22 @@
                                (lambda ()
                                  (read-string #f (current-input-port)))))
           (else              (error "no slurp defined"))))
+
+  (define lines
+    (case-lambda
+      (() read-line)
+      ((x) (cond ((input-port? x)
+                  (lambda ()
+                    (read-line x)))
+                 ((string? x)
+                  (let ((file (open-input-file x)))
+                    (lambda ()
+                      (let ((line (read-line file)))
+                        (when (eof-object? line)
+                          (close-input-port file))
+                        line))))
+                 (else
+                  (error "can't read lines"))))))
 
   (define (hash-table->generator h)
     (make-for-each-generator (lambda (f t)

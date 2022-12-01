@@ -304,6 +304,15 @@ If {{<obj>}} is an input-port, read all data into a string.
 If {{<obj>}} is a string, read all data from the file named {{<<obj>>}.
 If {{<obj>}} is false, read all data from {{*current-input-port*}}.
 
+<procedure>(lines [<obj>])</procedure>
+
+If {{<obj>}} is missing, return {{read-line}} (a generator that
+reads lines from {{*current-input-port*}}).
+If {{<obj>}} is an input-port, return a generator that reads lines
+from {{<obj>}}.
+If {{<obj>}} is a string, return a generator that reads lines
+from the file named {{<<obj>>} and closes it on EOF.
+
 
 == Equality
 
