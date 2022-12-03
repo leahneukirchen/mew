@@ -25,6 +25,8 @@ functional code.
 Mew uses SRFI-158 (Generators and Accumulators) for generic functions
 on enumerable structures.
 
+Mew endorses use of SRFI-171 (Transducers).
+
 Mew generally uses {{equal?}} as equality predicate.
 
 Mew never mutates lists.
@@ -40,6 +42,7 @@ SRFI-1 (List library),
 SRFI-13 (String Libraries) (from {{utf8-srfi-13}}),
 SRFI-69 (Basic hash tables),
 SRFI-158 (Generators and Accumulators),
+SRFI-171 (Transducers),
 {{(chicken io)}},
 {{(chicken irregex)}},
 {{(chicken pretty-print)}}},
@@ -511,6 +514,87 @@ rightmost number changes most quickly.
 
 Returns a generator that takes multiple lists/vectors/strings and
 yields all elements of their cartesian product (as lists).
+
+
+== Reducers and Transducers
+
+<procedure>(transduce <xf> <f> [<init>] <obj>)<procedure>
+
+Generic transduce procedure supporting
+list/vector/hash-table/string/generator {{<obj>}}.
+
+<procedure>(into <r> [<xf>] <obj>)</procedure>
+
+Feed all elements of {{<obj>}}, which may be a
+list/vector/hash-table/string/generator into the reducer {{<r>}},
+applying the transducer {{<xf>}} if given.
+
+If {{<r>}} is a list/vector/hash-table/string, reduce into a
+corresponding reducer initialized to {{<r>}}.
+
+<syntax>(reduction (<var> <red>) <body> ...)</syntax>
+
+Bind {{<var>}} to the reducer {{<red>}} and run {{body}}.
+Finally, return the result of reduction.
+
+If {{<red>}} is a list/vector/hash-table/string, reduce into
+a corresponding reducer initialized to {{<red>}}.
+
+<procedure>rfinal</procedure>
+
+Reducer that returns the last value reduced, or an unspecified value if
+nothing was reduced.
+
+<procedure>rtbl</procedure>
+
+Reducer that creates a hash-table from {{(key . value)}} objects.
+
+<procedure>rtally</procedure>
+
+Reducer that counts how often each element was reduced.  The reduction
+results in a hash-table of objects to numbers.
+
+<procedure>(rgroup-by <f>)</procedure>
+
+Returns an reducer that stores all elements in lists in a hash-table,
+applying {{<f>}} to the element to compute the key.
+
+<procedure>(runiq [<f>])</procedure>
+
+Returns an reducer that returns a list of unique elements.
+Two elements are considered equal if their image under {{<f>}} is {{equal?}}.
+{{<f>}} defaults to the identity function.
+
+<procedure>(rinject <f> [<init>])</procedure>
+
+Returns a reducer that xfolds the function {{<f>}} over its values.
+If given, folding starts with {{<init>}}, else with the first element
+passed to the reducer.
+
+<procedure>(raccumulator <acc>)</procedure>
+
+Returns a reducer that puts all values into the SRFI-158 accumulator
+{{<acc>}} and returns its result.
+
+<procedure>(eduction <xf>... <obj>)</procedure>
+
+Returns an object that can be passed to {{for}} or {{into}} and
+then applies the transducers {{<xf>}} to the elements of {{<obj>}}.
+
+<procedure>(eduction? <obj>)</procedure>
+
+Returns true if {{<obj>}} is an eduction, and false otherwise.
+
+<procedure>(twindow <len>)</procedure>
+
+Transducer yielding a sliding window of length {{<len>}} (as a list)
+over the values transduced.  If fewer than {{<len>}} elements are
+transduced, doesn't generate values.
+
+<procedure>(tfold <f> [<init>])</procedure>
+
+Stateful transducer that xfolds the function {{<f>}} over its values.
+Folding starts with {{<init>}} if given, or {{(f)}} else.
 
 
 == Regular expressions

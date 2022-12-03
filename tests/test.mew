@@ -356,6 +356,7 @@
   (test 3 (len (tbl 1 11 2 22 3 33)))
   (test 3 (len "foo"))
   (test 3 (len (generator 5 6 7)))
+  (test 3 (len (eduction (ttake 3) (cycle 5 6 7 8))))
   (test-error (len #t)))
 
 ; for
@@ -447,16 +448,33 @@
   (test '((1 . 2)) (into '() (tbl 1 2)))
   (test-error (gen #t)))
 
+(test-group "transduce"
+  (test 4 (transduce (tfilter odd?) + '(1 2 3 4)))
+  (test 4 (transduce (tfilter odd?) + #(1 2 3 4)))
+  (test 4 (transduce (tfilter odd?) + (generator 1 2 3 4)))
+  (test 14 (transduce (tfilter odd?) + 10 (generator 1 2 3 4))))
+
 (test-group "into"
   (test '(1 2 3) (into '() (generator 1 2 3)))
   (test '(4 1 2 3) (into '(4) (generator 1 2 3)))
   (test #(1 2 3) (into #() (generator 1 2 3)))
   (test #(4 1 2 3) (into #(4) (generator 1 2 3)))
   (test "fox" (into "f" (generator #\o #\x)))
-  (test 10 (into (sum-accumulator) (generator 1 2 3 4))))
+  (test "fox" (into "f" #(#\o #\x)))
+  (test '(1 3 5) (into '() (tfilter odd?) (range 1 6)))
+  (test '(2 6 10) (into '() (comp (tfilter odd?) (tmap (op * 2 _))) (range 1 6)))
+  (test 10 (into + (generator 1 2 3 4)))
+  (test 10 (into (raccumulator (sum-accumulator)) (generator 1 2 3 4))))
 
 (test-group "accumulate"
   (test 10 (accumulate (add (sum-accumulator))
+             (add 1)
+             (add 2)
+             (add 3)
+             (add 4))))
+
+(test-group "reduction"
+  (test 10 (reduction (add +)
              (add 1)
              (add 2)
              (add 3)
@@ -467,6 +485,50 @@
 ; group-by-accumulator
 
 ; uniq-accumulator
+
+(test-group "rtally"
+  (test #t (hash-table? (into rtally '(a b c a b a a))))
+  (test 4 (get (into rtally '(a b c a b a a)) 'a)))
+
+(test-group "rgroup-by"
+  (test '(-2 2) (get (into (rgroup-by abs) '(1 -2 2 3)) 2)))
+
+(test-group "runiq"
+  (test '(-2) (into (runiq abs) '(-2 2 -2))))
+
+(test-group "rtbl"
+  (test 7 (get (into rtbl '((4 . 6) (5 . 7))) 5)))
+
+(test-group "rinject"
+  (test 10 (into (rinject +) (generator 1 2 3 4)))
+  (test 0 (into (rinject +) (generator)))
+  (test 20 (into (rinject + 10) (generator 1 2 3 4)))
+  (test 10 (into (rinject + 10) (generator)))
+  (test '((1 . 2) . 3) (into (rinject cons) (generator 1 2 3)))
+  (test (- 1 2 3 4) (into (rinject -) '(1 2 3 4)))
+  (test-error (into (rinject -) '())))
+
+(test-group "rfinal"
+  (test #t (void? (into rfinal '())))
+  (test 7 (into rfinal #(5 6 7))))
+
+(test-group "raccumulator"
+  (test 720 (into (raccumulator (product-accumulator)) (range 1 7))))
+
+(test-group "twindow"
+  (test '((1 2 3) (2 3 4) (3 4 5)) (into '() (twindow 3) (range 1 6)))
+  (test '() (into '() (twindow 3) (range 1 3))))
+
+(test-group "tfold"
+  (test '(1 3 6 10 15) (into '() (tfold +) '(1 2 3 4 5))))
+
+(test-group "eduction"
+  (test #t (eduction? (eduction '(1 2 3))))
+  (test #t (eduction? (eduction (ttake 2) '(1 2 3))))
+  (test '(1 3 5) (into '() (eduction (tfilter odd?) '(1 2 3 4 5))))
+  (test #(10 14 18) (let ((double (lambda (x) (* x 2))))
+                      (into #() (comp (tmap inc) (tmap double))
+                            (eduction (tmap inc) (tmap double) '(1 2 3))))))
 
 (test-group "one-of"
   (test #t ((one-of 1 2 3) 1))

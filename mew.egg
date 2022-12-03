@@ -7,5 +7,5 @@
  (license "MIT")
  (author "Leah Neukirchen <leah@vuxu.org>")
  (synopsis "Convenience library for compact code")
- (dependencies matchable srfi-1 srfi-69 srfi-158 r7rs utf8)
+ (dependencies matchable srfi-1 srfi-69 srfi-158 srfi-171 r7rs utf8)
  (test-dependencies test))

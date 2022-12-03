@@ -4,7 +4,7 @@
      boolean
      comp cross-product
      dec def del-at div
-     empty? eof esc
+     eduction eduction? empty? eof esc
      fail fin final for fun*
      gconcatenate gen generator-xfold generic-for-each genumerate get
      gfix giterate gmatch gpick group-by-accumulator gslice-when
@@ -17,10 +17,11 @@
      negate
      odometer one-of op op*
      per prn proj puts
-     rand range rep
+     raccumulator rand range reduction rep rfinal rinject
+     rtally rtbl rgroup-by runiq
      sample scan scan-right sing? search seq set set-at
      shuffle shuffle! str slurp
-     tally-accumulator tbl time
+     tally-accumulator tbl tfold time transduce twindow
      while
      uniq-accumulator unlist until
      vals void?
@@ -30,7 +31,7 @@
      ~?
      => =>* and=> fun=> op=> set=>
 
-     generic-make-accumulator)
+     generic-make-accumulator generic-make-reducer)
 
   (import-for-syntax srfi-1)
   (import-for-syntax matchable)
@@ -51,6 +52,7 @@
              (hash-table-keys keys)
              (hash-table-values vals))
           srfi-158
+          srfi-171
           err)
 
   (reexport srfi-69)
@@ -58,6 +60,7 @@
   (reexport
     (rename (srfi-158)
       (circular-generator cycle)))
+  (reexport (srfi-171))
   (reexport matchable)
   (reexport
     (rename (matchable)
@@ -385,6 +388,7 @@
           ((vector? o) (vector-length o))
           ((hash-table? o) (hash-table-size o))
           ((procedure? o) (generator-count (op #t) o))
+          ((eduction? o) (transduce (op) rcount o))
           (#t (error "no len defined"))))
 
   (define (generic-for-each obj)
@@ -394,6 +398,7 @@
                                (hash-table-for-each h (lambda (k v)
                                                         (f (cons k v))))))
           ((procedure? obj) generator-for-each)
+          ((eduction? obj) eduction-for-each)
           (#t (error "no generic-for-each defined"))))
 
   (define-syntax for
@@ -889,15 +894,6 @@
                                              (lambda (lst) (list->string (reverse lst)))))
           (else            (error "no make-accumulator defined"))))
 
-  (def (into acc . generators)
-    (let ((acc (generic-make-accumulator acc))
-          (gen (apply gappend (map gen generators))))
-      (let loop ((val (gen)))
-        (acc val)
-        (if (not (eof-object? val))
-          (loop (gen))
-          (acc val)))))
-
   (define-syntax accumulate
     (syntax-rules ()
       ((_ (var init) body ...)
@@ -956,6 +952,177 @@
                (generator-xfold f v (gen o))))
       ((f v g)
        ((inject f v) (gen g)))))
+
+  (define transduce
+    (case-lambda
+      ((xf f o)
+       (transduce xf f (f) o))
+      ((xf f init o)
+       (cond ((list? o)       (list-transduce xf f init o))
+             ((vector? o)     (vector-transduce xf f init o))
+             ((string? o)     (string-transduce xf f init o))
+             ((hash-table? o) (generator-transduce xf f init
+                                                   (hash-table->generator o)))
+             ((procedure? o)  (generator-transduce xf f init o))
+             ((eduction? o)   (transduce (comp (%eduction-xf o) xf)
+                                         f init (%eduction-obj o)))
+             (else            (error "no transduce defined"))))))
+
+  (define (generic-make-reducer o)
+    (cond ((list? o) (rcons-prepend o))
+          ((vector? o) (rvector-prepend o))
+          ((string? o) (rstring-prepend o))
+          ((hash-table? o) (rhash-table-merge o))
+          ((procedure? o) o)
+          (else (error "no make-generic-reducer defined"))))
+
+  (define-syntax reduction
+    (syntax-rules ()
+      ((_ (f acc) body ...)
+       (let* ((red (generic-make-reducer acc))
+              (state (red))
+              (f (lambda (x) (set! state (red state x)))))
+         body ...
+         (red state)))))
+
+  (define into
+    (case-lambda
+      (() '())
+      ((acc) acc)
+      ((acc o) (into acc (op) o))
+      ((acc xf o) (transduce xf (generic-make-reducer acc) o))))
+
+  (define (rcons-prepend prefix)
+    (case-lambda
+      (() '())
+      ((lst) (append prefix (reverse! lst)))
+      ((lst x) (cons x lst))))
+
+  (define (rvector-prepend prefix)
+    (case-lambda
+      (() '())
+      ((lst) (vector-append prefix (list->vector (reverse! lst))))
+      ((lst x) (cons x lst))))
+
+  (define (rstring-prepend prefix)
+    (case-lambda
+      (() '())
+      ((lst) (string-append prefix (list->string (reverse! lst))))
+      ((lst x) (cons x lst))))
+
+  (define (rhash-table-merge defaults)
+    (case-lambda
+      (() defaults)
+      ((h) h)
+      ((h x) (hash-table-set! h (car x) (cdr x)) h)))
+
+  (define rtbl
+    (case-lambda
+      (() (tbl))
+      ((h) h)
+      ((h x) (hash-table-set! h (car x) (cdr x)) h)))
+
+  (define rfinal
+    (case-lambda
+      (() (void))
+      ((x) x)
+      ((y x) x)))
+
+  (define rtally
+    (case-lambda
+      (() (tbl))
+      ((acc) acc)
+      ((acc x) (hash-table-update!/default acc x inc 0) acc)))
+
+  (define (hash-table-map! h f)
+    (hash-table-for-each h (lambda (k _)
+                             (hash-table-update! h k f))))
+
+  (define (rgroup-by f)
+    (case-lambda
+      (() (tbl))
+      ((acc) (hash-table-map! acc reverse!) acc)
+      ((acc x) (hash-table-update!/default acc (f x) (op cons x _) '()) acc)))
+
+  (define runiq
+    (case-lambda
+      (() (runiq identity))
+      ((f) (case-lambda
+             (() (tbl))
+             ((acc) (hash-table-values acc))
+             ((acc x) (hash-table-update!/default acc (f x) identity x) acc)))))
+
+  (define (raccumulator initial)
+    (case-lambda
+      (() initial)
+      ((acc) (acc #!eof))
+      ((acc x) (acc x) acc)))
+
+  (define (twindow n)
+    (lambda (reducer)
+      (let ((window '()))
+        (case-lambda
+          (() (reducer))
+          ((result) (reducer result))
+          ((result input)
+           (if (< (len window) n)
+             (begin
+               (set! window (append window (list input)))
+               (if (= (len window) n)
+                 (reducer result window)
+                 result))
+             (begin
+               (set! window (append (cdr window) (list input)))
+               (reducer result window))))))))
+
+  (define tfold
+    (case-lambda
+      ((f) (tfold f (f)))
+      ((f init)
+       (lambda (reducer)
+         (let ((state init))
+           (case-lambda
+             (() (reducer))
+             ((result) (reducer result))
+             ((result input)
+              (set! state (f state input))
+              (reducer result state))))))))
+
+  (define rinject
+    (case-lambda
+      ((f)
+       (let ((initial? #t))
+         (case-lambda
+           (() (void))
+           ((acc) (if initial? (f) acc))
+           ((acc input) (if initial?
+                          (begin
+                            (set initial? #f)
+                            input)
+                          (f acc input))))))
+       ((f init)
+        (case-lambda
+          (() init)
+          ((acc) acc)
+          ((acc input) (f acc input))))))
+
+  (define-record-type <eduction>
+    (%make-eduction xf obj)
+    eduction?
+    (xf %eduction-xf)
+    (obj %eduction-obj))
+
+  (define (eduction . xfs)
+    (%make-eduction (apply comp (butlast xfs)) (last xfs)))
+
+  (define (eduction-for-each ed f)
+    (transduce (%eduction-xf ed)
+               (case-lambda
+                 (() (void))
+                 ((acc) (void))
+                 ((acc x) (f x)))
+               (void)
+               (%eduction-obj ed)))
 
   (define (sing? l)
     (match l
