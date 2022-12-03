@@ -21,7 +21,7 @@
      rtally rtbl rgroup-by runiq
      sample scan scan-right sing? search seq set set-at
      shuffle shuffle! str slurp
-     tally-accumulator tbl tfold time transduce twindow
+     tally-accumulator tbl tfold time transduce tsplit-on twindow
      while
      uniq-accumulator unlist until
      vals void?
@@ -1057,6 +1057,27 @@
       (() initial)
       ((acc) (acc #!eof))
       ((acc x) (acc x) acc)))
+
+  (define (tsplit-on pred)
+    (lambda (reducer)
+      (let ((slice '()))
+        (case-lambda
+          (() (reducer))
+          ((result)
+           (if (null? slice)
+             (reducer result)
+             (begin
+               (let ((v (reducer result (reverse slice))))
+                 (set! slice '())
+                 (reducer v)))))
+          ((result input)
+           (if (pred input)
+             (let ((v (reducer result (reverse slice))))
+               (set! slice '())
+               v)
+             (begin
+               (set! slice (cons input slice))
+               result)))))))
 
   (define (twindow n)
     (lambda (reducer)

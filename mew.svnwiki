@@ -596,6 +596,11 @@ transduced, doesn't generate values.
 Stateful transducer that xfolds the function {{<f>}} over its values.
 Folding starts with {{<init>}} if given, or {{(f)}} else.
 
+<procedure>(tsplit-on <pred>)</procedure>
+
+Stateful transducer that partition the elements into lists:
+starts a new empty list when the predicate {{<pred>}} called with the
+current element returns true.  In this case, the element is discarded.
 
 == Regular expressions
 
