@@ -1,6 +1,6 @@
 (module mew
   (export
-     act accumulate andloc at
+     act accumulate andloc app at
      boolean
      comp cross-product
      dec def del-at div
@@ -97,7 +97,6 @@
                assoc
                member)
       (lambda fun)
-      (apply app)
       (ceiling ceil)
       (truncate trunc)
       ))
@@ -178,6 +177,11 @@
           (unless (null? (cdr args))
             (display " "))
           (loop (cdr args) (car args))))))
+
+  (define (app f . args)
+    (if (null? args)
+      (f)
+      (apply apply f args)))
 
   (define-syntax seq
     (syntax-rules ()

@@ -157,7 +157,7 @@ Alias for {{floor-remainder}}.
 
 <procedure>(app <proc> . <args>)</procedure>
 
-Alias for {{apply}}.
+Like {{apply}}, but supports empty {{<args>}}.
 
 <syntax>(op <form>)</syntax>
 
