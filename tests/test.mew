@@ -141,6 +141,12 @@
   (test "\n" (with-output-to-string (fun () (prn))))
   (test 3 (esc ret (with-output-to-string (fun () (ret (prn 1 2 3)))))))
 
+(test-group "app"
+  (test 15 (app + '(4 5 6)))
+  (test 15 (app + 4 5 '(6)))
+  (test 15 (app + 4 5 6 '()))
+  (test 0 (app +)))
+
 (test-group "seq"
   (test #t (void? (seq)))
   (test 1 (seq 1))
