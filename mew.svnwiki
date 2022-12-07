@@ -230,7 +230,8 @@ the result, etc.  Stop if any value is false.
 <procedure>(op=> <obj> <form>...)</procedure>
 
 Like {{=>}}, but all {{<form>}} which are lists implicitly use {{op}}.
-If {{<form>}} is not a list, or an unquoted {{,}} list, it is used as is.
+If {{<form>}} is not a list, an unquoted {{,}} list, or a list not containing
+{{_}} directly, it is used as is.
 
 <procedure>(fun=> <form>...)</procedure>
 

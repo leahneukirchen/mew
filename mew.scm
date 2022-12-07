@@ -1000,6 +1000,16 @@
              (and result
                   (apply and=> result (cdr fs)))))))
 
+  ;; search for _ in arguments, then call op
+  (define-syntax maybe-op
+    (syntax-rules (_)
+      ((_ (all ...) (_ rest ...))
+       (op all ...))
+      ((_ all (x rest ...))
+       (maybe-op all (rest ...)))
+      ((_ (all ...) ())
+       (all ...))))
+
   (define-syntax fun=>-inner
     (syntax-rules (unquote)
       ((_ (acc ...))
@@ -1007,10 +1017,9 @@
       ((_ (acc ...) (unquote arg) args ...)
        (fun=>-inner (arg acc ...) args ...))
       ((_ (acc ...) (arg ...) args ...)
-       (fun=>-inner ((op arg ...) acc ...) args ...))
+       (fun=>-inner ((maybe-op (arg ...) (arg ...)) acc ...) args ...))
       ((_ (acc ...) arg args ...)
-       (fun=>-inner (arg acc ...) args ...))
-      ))
+       (fun=>-inner (arg acc ...) args ...))))
 
   (define-syntax fun=>
     (syntax-rules ()
