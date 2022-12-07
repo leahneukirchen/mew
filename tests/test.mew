@@ -547,6 +547,8 @@
 
 (test-group "op=>"
   (test 42 (op=> 40 (+ _ 1) inc))
+  (test 42 (op=> 40 (inc _) inc))
+  (test 42 (op=> 40 ,(op inc _) inc))
   (test #f (op=> 40 inc even?))
   (test 43 (op=> '(6 7) (apply * _) inc))
   (test 42 (op=> 42)))

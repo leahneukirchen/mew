@@ -1001,10 +1001,10 @@
                   (apply and=> result (cdr fs)))))))
 
   (define-syntax fun=>-inner
-    (syntax-rules ()
+    (syntax-rules (unquote)
       ((_ (acc ...))
        (compose acc ...))
-      ((_ (acc ...) ,arg args ...)
+      ((_ (acc ...) (unquote arg) args ...)
        (fun=>-inner (arg acc ...) args ...))
       ((_ (acc ...) (arg ...) args ...)
        (fun=>-inner ((op arg ...) acc ...) args ...))
