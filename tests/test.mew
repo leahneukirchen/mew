@@ -329,7 +329,10 @@
   (test-assert (hash-table? (tbl 1 2 3 4)))
   (test 0 (hash-table-size (tbl)))
   (test 42 (get (tbl 1 2 3 42) 3))
-  (test-error (tbl 1 2 3)))
+  (test-error (tbl 1 2 3))
+
+  (test "#<hash-table (0)>" (format "~a" (tbl)))
+  (test "#<hash-table (42 . \"foo\")>" (format "~a" (tbl 42 "foo"))))
 
 (test-group "set-at"
   (test #(0 42 0) (set-at #(0 0 0) 1 42))

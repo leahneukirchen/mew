@@ -1181,6 +1181,14 @@
                      (str (substring old-prompt 0 2)
                           "^_^;"
                           (substring old-prompt 2))))))
+  (set-record-printer! 'hash-table
+    (lambda (h out)
+      (format out "#<hash-table")
+      (if (< 0 (hash-table-size h) 100)
+        (hash-table-for-each h (lambda (k v)
+                                 (format out " (~s . ~s)" k v)))
+        (format out " (~a)" (hash-table-size h)))
+      (format out ">")))
 
   (set-pseudo-random-seed! (random-bytes))
 )
