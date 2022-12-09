@@ -83,6 +83,13 @@
   (test 5 (mod -16 7))
   (test -2 (mod -16 -7)))
 
+(test-group "sgn"
+  (test -1 (sgn -42))
+  (test 0 (sgn 0))
+  (test #t (eq? 0 (sgn 0.0)))
+  (test #t (eq? 0 (sgn -0.0)))
+  (test 1 (sgn 42)))
+
 (test-group "inc"
   (test 6 (inc 5))
   (test 0 (inc -1))

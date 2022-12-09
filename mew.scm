@@ -18,7 +18,7 @@
      odometer one-of op op*
      per prn proj puts
      rand range rep
-     sample scan scan-right sing? search seq set set-at
+     sample scan scan-right sing? search seq set set-at sgn
      shuffle shuffle! str slurp
      tally-accumulator tbl time
      while
@@ -105,6 +105,10 @@
 
   (reexport err)
 
+  (define (sgn n)
+    (cond ((< n 0) -1)
+          ((> n 0)  1)
+          (else     0)))                ; always return an integer 0, not n
 
   (define (inc i)
     (+ i 1))
