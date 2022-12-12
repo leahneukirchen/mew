@@ -14,7 +14,7 @@
      keys
      len lines loc
      mod
-     negate
+     negate nth-accumulator
      odometer one-of op op*
      per prn proj puts
      rand range rep
@@ -935,6 +935,16 @@
                (if (eof-object? x)
                  (hash-table-values items)
                  (hash-table-update!/default items (f x) identity x)))))))
+
+  (define (nth-accumulator n)
+    (let ((n n) (state (void)))
+      (lambda (x)
+        (if (eof-object? x) 
+           state
+           (begin
+             (when (zero? n)
+               (set! state x))
+             (set! n (dec n)))))))
 
   (define (generator-xfold f seed . gs)
     (define (inner-xfold seed)

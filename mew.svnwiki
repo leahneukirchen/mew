@@ -492,6 +492,11 @@ Returns an accumulator that returns a list of unique elements.
 Two elements are considered equal if their image under {{<f>}} is {{equal?}}.
 {{<f>}} defaults to the identity function.
 
+<procedure>(nth-accumulator <n>)</procedure>
+
+Returns an accumulator that saves the {{<n>}}-th element, or
+an void value else.
+
 <procedure>(generator-xfold <f> <seed> <generators>...)</procedure>
 
 Like {{generator-fold}}, but {{<f>}} always takes the accumulator as

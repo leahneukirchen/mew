@@ -486,6 +486,11 @@
 
 ; uniq-accumulator
 
+(test-group "nth-accumulator"
+  (test 6 (into (nth-accumulator 2) '(4 5 6 7)))
+  (test #t (void? (into (nth-accumulator 8) '(4 5 6 7))))
+  (test #t (void? (into (nth-accumulator 8) '()))))
+
 (test-group "one-of"
   (test #t ((one-of 1 2 3) 1))
   (test #f ((one-of 1 2 3) 4))
