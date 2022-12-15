@@ -12,6 +12,8 @@
 (put 'until 'scheme-indent-function 1)
 
 (put 'if 'scheme-indent-function 1)
+(put 'for 'scheme-indent-function 1)
+(put 'for/into 'scheme-indent-function 2)
 (put 'match 'scheme-indent-function 1)
 (put 'accumulate 'scheme-indent-function 1)
 

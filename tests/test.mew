@@ -395,6 +395,12 @@
                   y (vector 6 7))
               (c x)))))
 
+(test-group "for/into"
+  (test '(4 5 6) (for/into '() (x (vector 3 4 5))
+                   (inc x)))
+  (test '#(#(3 6) #(4 7)) (for/into #() (x (vector 3 4 5)
+                                         y (vector 6 7))
+                            (vector x y))))
 
 (test-group "eof"
   (test-assert (eof-object? (eof))))

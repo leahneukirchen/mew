@@ -388,6 +388,7 @@ up to a level of {{<depth>}}, or infinitely by default.
 
 <syntax>(for (<var> <obj> ...) <body>...)</syntax>
 <syntax>(for ((<key> . <val>) <tbl> ...) <body>...)</syntax>
+<syntax>(for/into <acc> (<var> <obj> ...) <body>...)</syntax>
 
 If {{<obj>}} is a list or a vector, iterate over its elements.
 If {{<obj>}} is a procedure, consider it a SRFI-158 generator
@@ -396,6 +397,9 @@ If {{<obj>}} is a hash-table, iterate over its keys and values.
 
 Multiple {{<var> <obj>}}-pairs may be specified, then {{for}}
 iterates over these in *parallel*, stopping after the shortest ends.
+
+The variant {{for/into}} accumulates the values of the {{<body>}}
+and returns the result of the accumulation.
 
 <procedure>(search <needle> <haystack> <offset>?)</procedure>
 

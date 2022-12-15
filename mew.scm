@@ -5,7 +5,7 @@
      comp cross-product
      dec def del-at div dup
      empty? eof esc
-     fail fin final for fun*
+     fail fin final for for/into fun*
      gconcatenate gen generator-xfold generic-for-each genumerate get
      gfix giterate gmatch gpick group-by-accumulator gslice-when
      gsplit gsplit-on gwindow
@@ -434,6 +434,18 @@
       ((_ (i obj) body ...)
        (let ((o obj))
          ((generic-for-each o) (match-lambda (i body ...)) o)))))
+
+  (define-syntax for-into-regroup
+    (syntax-rules ()
+      ((_ acc () ((i obj) ...) body ...)
+       (into acc (gmap (match-lambda* ((i ...) body ...)) (gen obj) ...)))
+      ((_ acc (i obj rest ...) (j ...) body ...)
+       (for-into-regroup acc (rest ...) (j ... (i obj)) body ...))))
+
+  (define-syntax for/into
+    (syntax-rules ()
+      ((_ acc (rest ...) body ...)
+       (for-into-regroup acc (rest ...) () body ...))))
 
   (define (eof) #!eof)
 
