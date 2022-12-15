@@ -9,7 +9,7 @@
      gconcatenate gen generator-xfold generic-for-each genumerate get
      gfix giterate gmatch gpick group-by-accumulator gslice-when
      gsplit gsplit-on gwindow
-     imp inc inject into
+     imp inc inject inject-accumulator into
      juxt
      keys
      len lines loc
@@ -961,6 +961,26 @@
              (when (zero? n)
                (set! state x))
              (set! n (dec n)))))))
+
+  (define inject-accumulator
+    (case-lambda
+      ((f) (let ((first #t)
+                 (state (void)))
+             (lambda (x)
+               (if (eof-object? x)
+                 (if first
+                   (f)
+                   state)
+                 (if first
+                   (begin
+                     (set! state x)
+                     (set! first #f))
+                   (set! state (f state x)))))))
+      ((f init) (let ((state init))
+                  (lambda (x)
+                    (if (eof-object? x)
+                      state
+                      (set! state (f state x))))))))
 
   (define (generator-xfold f seed . gs)
     (define (inner-xfold seed)

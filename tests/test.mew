@@ -501,6 +501,13 @@
   (test #t (void? (into (nth-accumulator 8) '(4 5 6 7))))
   (test #t (void? (into (nth-accumulator 8) '()))))
 
+(test-group "inject-accumulator"
+  (test 10 (into (inject-accumulator +) (generator 1 2 3 4)))
+  (test 0 (into (inject-accumulator +) (generator)))
+  (test 20 (into (inject-accumulator + 10) (generator 1 2 3 4)))
+  (test 10 (into (inject-accumulator + 10) (generator)))
+  (test '((1 . 2) . 3) (into (inject-accumulator cons) (generator 1 2 3))))
+
 (test-group "one-of"
   (test #t ((one-of 1 2 3) 1))
   (test #f ((one-of 1 2 3) 4))

@@ -503,6 +503,12 @@ Two elements are considered equal if their image under {{<f>}} is {{equal?}}.
 Returns an accumulator that saves the {{<n>}}-th element, or
 an void value else.
 
+<procedure>(inject-accumulator <f> [<init>])</procedure>
+
+Returns an accumulator that xfolds {{<f>}} over the elements.
+If given, folding starts with {{<init>}}, else with the first element
+received.
+
 <procedure>(generator-xfold <f> <seed> <generators>...)</procedure>
 
 Like {{generator-fold}}, but {{<f>}} always takes the accumulator as
