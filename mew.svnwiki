@@ -380,6 +380,12 @@ Test if {{<obj>}} is an empty list/string/vector/hash-table.
 
 Return the length of the list/vector/string/hash-table/generator {{<obj>}}.
 
+<procedure>(dup <obj> [<depth>])<procedure>
+
+Return a duplicate of the nested datastructure {{<obj>}}, consisting
+of lists, vectors, hash-tables and strings.  Create copies of values
+up to a level of {{<depth>}}, or infinitely by default.
+
 <syntax>(for (<var> <obj>) <body>...)</syntax>
 <syntax>(for ((<key> . <val>) <tbl>) <body>...)</syntax>
 

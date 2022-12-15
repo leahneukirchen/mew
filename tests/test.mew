@@ -377,6 +377,16 @@
   (test-error (len #t)))
 
 ; for
+(test-group "dup"
+  (let* ((x (list (list "foo") "bar"))
+         (y1 (dup x))
+         (y2 (dup x 1))
+         (y3 (dup x 2)))
+    (test #f (eq? (car x) (car y1)))
+    (test #t (eq? (car x) (car y2)))
+    (test #f (eq? (car x) (car y3)))
+    (test #t (eq? (caar x) (caar y3)))))
+
 
 (test-group "eof"
   (test-assert (eof-object? (eof))))

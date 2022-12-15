@@ -3,7 +3,7 @@
      act accumulate andloc app at
      boolean
      comp cross-product
-     dec def del-at div
+     dec def del-at div dup
      empty? eof esc
      fail fin final for fun*
      gconcatenate gen generator-xfold generic-for-each genumerate get
@@ -394,6 +394,22 @@
           ((hash-table? o) (hash-table-size o))
           ((procedure? o) (generator-count (op #t) o))
           (#t (error "no len defined"))))
+
+  (define dup
+    (case-lambda
+      ((o) (dup o #t))
+      ((o depth)
+       (if (or (eq? depth #t) (positive? depth))
+         (let ((sub-depth (or (eq? depth #t) (- depth 1))))
+           (cond ((list? o) (map (lambda (oo) (dup oo sub-depth)) o))
+                 ((vector? o) (vector-map (lambda (oo) (dup oo sub-depth)) o))
+                 ((hash-table? o)
+                  (alist->hash-table (dup (hash-table->alist o) sub-depth)
+                                     (hash-table-equivalence-function o)
+                                     (hash-table-hash-function o)))
+                 ((string? o) (string-copy o))
+                 (else o)))
+         o))))
 
   (define (generic-for-each obj)
     (cond ((list? obj) for-each)
