@@ -420,8 +420,17 @@
           ((procedure? obj) generator-for-each)
           (#t (error "no generic-for-each defined"))))
 
+  (define-syntax for-regroup
+    (syntax-rules ()
+      ((_ () ((i obj) ...) body ...)
+       (void (final (gmap (match-lambda* ((i ...) body ...)) (gen obj) ...))))
+      ((_ (i obj rest ...) (j ...) body ...)
+       (for-regroup (rest ...) (j ... (i obj)) body ...))))
+
   (define-syntax for
     (syntax-rules ()
+      ((_ (i obj j obj2 rest ...) body ...)
+       (for-regroup (i obj j obj2 rest ...) () body ...))
       ((_ (i obj) body ...)
        (let ((o obj))
          ((generic-for-each o) (match-lambda (i body ...)) o)))))

@@ -386,13 +386,16 @@ Return a duplicate of the nested datastructure {{<obj>}}, consisting
 of lists, vectors, hash-tables and strings.  Create copies of values
 up to a level of {{<depth>}}, or infinitely by default.
 
-<syntax>(for (<var> <obj>) <body>...)</syntax>
-<syntax>(for ((<key> . <val>) <tbl>) <body>...)</syntax>
+<syntax>(for (<var> <obj> ...) <body>...)</syntax>
+<syntax>(for ((<key> . <val>) <tbl> ...) <body>...)</syntax>
 
 If {{<obj>}} is a list or a vector, iterate over its elements.
 If {{<obj>}} is a procedure, consider it a SRFI-158 generator
 and iterate over its values.
 If {{<obj>}} is a hash-table, iterate over its keys and values.
+
+Multiple {{<var> <obj>}}-pairs may be specified, then {{for}}
+iterates over these in *parallel*, stopping after the shortest ends.
 
 <procedure>(search <needle> <haystack> <offset>?)</procedure>
 

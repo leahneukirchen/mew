@@ -376,7 +376,6 @@
   (test 3 (len (generator 5 6 7)))
   (test-error (len #t)))
 
-; for
 (test-group "dup"
   (let* ((x (list (list "foo") "bar"))
          (y1 (dup x))
@@ -386,6 +385,15 @@
     (test #t (eq? (car x) (car y2)))
     (test #f (eq? (car x) (car y3)))
     (test #t (eq? (caar x) (caar y3)))))
+
+(test-group "for"
+  (test 3 (accumulate (c (count-accumulator))
+            (for (x (vector 3 4 5))
+              (c x))))
+  (test 2 (accumulate (c (count-accumulator))
+            (for (x (vector 3 4 5)
+                  y (vector 6 7))
+              (c x)))))
 
 
 (test-group "eof"
