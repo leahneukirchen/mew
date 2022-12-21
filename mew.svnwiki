@@ -291,10 +291,10 @@ but {{<kons>}} always takes the accumulator as first arguments,
 and the items after.  This is more practical when multiple {{lists}}
 are passed.
 
-<syntax>(imp <antedecent>... <consequent>)<syntax>
+<syntax>(imp <antecedent>... <consequent>)<syntax>
 
-Material implication: evaluate {{<antedecent>...}} until one is false,
-then shortcut and return true.  If all {{<antedecent>...}} are true,
+Material implication: evaluate {{<antecedent>...}} until one is false,
+then shortcut and return true.  If all {{<antecedent>...}} are true,
 evaluate {{<consequent>}}.
 
 
