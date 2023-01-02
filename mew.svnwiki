@@ -43,7 +43,6 @@ SRFI-158 (Generators and Accumulators),
 {{(chicken io)}},
 {{(chicken irregex)}},
 {{(chicken pretty-print)}}},
-{{(chicken sort)}}},
 {{matchable}},
 and {{err}} (see {{err.svnwiki}}).
 
@@ -379,6 +378,19 @@ monotonically non-increasing according to {{cmp}}, and false
 otherwise.
 
 It is an error to compare uncomparable values.
+
+
+== Sorting
+
+<procedure>(sort <obj> [<less?>])</procedure>
+
+Sort the list/vector {{<obj>}} according to the relation {{less?}}
+(by default: {{<?}}).
+
+<procedure>(sort! <obj> [<less?>])</procedure>
+
+Sort the vector {{<obj>}} destructively according to the relation
+{{less?}} (by default: {{<?}}).
 
 
 == Data types

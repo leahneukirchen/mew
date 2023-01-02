@@ -19,7 +19,7 @@
      per pop! prn proj push! puts
      rand range rep repeat
      sample scan scan-right sing? search seq set set-at sgn
-     shuffle shuffle! str slurp
+     shuffle shuffle! sort sort! str slurp
      tally-accumulator tbl time
      while
      uniq-accumulator unlist until
@@ -46,6 +46,9 @@
           (chicken port)
           (chicken random)
           (chicken repl)
+          (rename (chicken sort)
+            (sort chicken-sort)
+            (sort! chicken-sort!))
           (chicken syntax)
           utf8-srfi-13
           srfi-17
@@ -68,7 +71,6 @@
   (reexport (chicken io))
   (reexport (chicken irregex))
   (reexport (chicken pretty-print))
-  (reexport (chicken sort))
   (reexport
     (only (r7rs)
       list->vector
@@ -1346,6 +1348,18 @@
   (define <=? (cmp-op (negate positive?)))
   (define >? (cmp-op positive?))
   (define >=? (cmp-op (negate negative?)))
+
+  (define sort
+    (case-lambda
+      ((xs) (sort xs <?))
+      ((xs less?) (chicken-sort xs less?))))
+
+  (define sort!
+    (case-lambda
+      ((xs) (sort! xs <?))
+      ((xs less?) (if (vector? xs)
+                    (chicken-sort! xs less?)
+                    (error "can only sort! vectors")))))
 
   (let ((old-repl-prompt (repl-prompt)))
     (repl-prompt (lambda ()
