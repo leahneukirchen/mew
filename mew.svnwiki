@@ -422,6 +422,10 @@ in the sequence {{<haystack>}},
 starting no earlier than {{<offset>>}} (default: 0).
 Returns false if the sequence cannot be found.
 
+<procedure>(repeat <val> <n>)</procedure>
+
+Repeat the list/vector/string/char {{<val>}} {{<n>}} times.
+
 
 == Generators and Accumulators
 

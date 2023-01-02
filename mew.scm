@@ -17,7 +17,7 @@
      negate nth-accumulator
      odometer one-of op op*
      per pop! prn proj push! puts
-     rand range rep
+     rand range rep repeat
      sample scan scan-right sing? search seq set set-at sgn
      shuffle shuffle! str slurp
      tally-accumulator tbl time
@@ -46,6 +46,7 @@
           (chicken random)
           (chicken repl)
           (chicken syntax)
+          utf8-srfi-13
           srfi-17
           (rename (srfi-69)
              (hash-table-keys keys)
@@ -1279,6 +1280,20 @@
                          (cons (apply kons (car acc) elts) acc))
            (list knil)
            lists))
+
+  (define (repeat o n)
+    (cond ((list? o) (concatenate (make-list n o)))
+          ((vector? o) (let* ((l (vector-length o))
+                              (size (* l n))
+                              (v (make-vector size)))
+                         (let loop ((i 0))
+                           (when (< i size)
+                             (vector-set! v i (vector-ref o (mod i l)))
+                             (loop (+ i 1))))
+                         v))
+          ((string? o) (string-concatenate (repeat (list o) n)))
+          ((char? o) (make-string n o))
+          (#t (error "no repeat defined"))))
 
   (let ((old-repl-prompt (repl-prompt)))
     (repl-prompt (lambda ()

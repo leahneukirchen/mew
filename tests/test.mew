@@ -718,3 +718,14 @@
   (test 42 (imp #t #t #t 42))
   (test 42 (imp 39 40 41 42))
   (test #t (imp 39 #f 41 42)))
+
+(test-group "repeat"
+  (test '(1 2 3 1 2 3 1 2 3 1 2 3) (repeat '(1 2 3) 4))
+  (test #(1 2 3 1 2 3 1 2 3 1 2 3) (repeat #(1 2 3) 4))
+  (test "123123123123" (repeat "123" 4))
+  (test "xxxx" (repeat #\x 4))
+
+  (test '() (repeat '(1 2 3) 0))
+  (test #() (repeat #(1 2 3) 0))
+  (test "" (repeat "123" 0))
+  (test "" (repeat #\x 0)))
