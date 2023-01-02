@@ -144,6 +144,11 @@ with a {{'message}} of {{<message>}} passed through {{format}} with
 
 Increment or decrement the argument by 1.
 
+<procedure>(inc! <loc> [<n>])</procedure>
+<procedure>(dec! <loc> [<n>])</procedure>
+
+Increment or decrement the location {{<loc>}} by {{<n>}} (default: 1).
+
 <procedure>(div <num> <num>)</procedure>
 
 Alias for {{floor-quotient}}.

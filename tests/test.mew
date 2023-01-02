@@ -97,12 +97,22 @@
   (test 3/2 (inc 1/2))
   (test-error (inc "foo")))
 
+(test-group "inc!"
+  (test 7 (loc (x 5) (inc! x) (inc! x) x))
+  (test 6 (loc (x 5) (inc! x)))
+  (test 7 (loc (x 5) (inc! x 2))))
+
 (test-group "dec"
   (test 4 (dec 5))
   (test -2 (dec -1))
   (test -0.5 (dec 0.5))
   (test -1/2 (dec 1/2))
   (test-error (dec "foo")))
+
+(test-group "dec!"
+  (test 5 (loc (x 7) (dec! x) (dec! x) x))
+  (test 5 (loc (x 6) (dec! x)))
+  (test 5 (loc (x 7) (dec! x 2))))
 
 (test-group "boolean"
   (test #f (boolean #f))

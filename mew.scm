@@ -3,13 +3,13 @@
      act accumulate andloc app at
      boolean
      comp cross-product
-     dec def del-at div dup
+     dec dec! def del-at div dup
      empty? eof esc
      fail fin final for for/into fun*
      gconcatenate gen generator-xfold generic-for-each genumerate get
      gfix giterate gmatch gpick group-by-accumulator gslice-when
      gsplit gsplit-on gwindow
-     imp inc inject inject-accumulator into
+     imp inc inc! inject inject-accumulator into
      juxt
      keys
      len lines loc
@@ -1062,6 +1062,20 @@
     (syntax-rules ()
       ((_ location . fs)
        (set location (=> location . fs)))))
+
+  (define-syntax inc!
+    (syntax-rules ()
+      ((_ location)
+       (inc! location 1))
+      ((_ location n)
+       (set location (+ location n)))))
+
+  (define-syntax dec!
+    (syntax-rules ()
+      ((_ location)
+       (dec! location 1))
+      ((_ location n)
+       (set location (- location n)))))
 
   (define (and=> x . fs)
     (and x
