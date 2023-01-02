@@ -355,6 +355,32 @@ set of keys and {{equal?}} values.
 Return true if all values are pairwise different.
 
 
+== Generic comparison
+
+<procedure>(cmp <a> <b>)</procedure>
+
+Compare the real/char/string/list/vector {{<a>}} to {{<b>}} and
+return -1 if {{<a>}} is less than {{<b>}},
+0 if {{<a>}} is equal to {{<b>}}
+1 if {{<a>}} is greater than {{<b>}}.
+Return false if {{<a>}} and {{<b>}} cannot be compared.
+
+Lists and vectors are compared in lexicographic order using {{cmp}}
+recursively.
+
+<procedure>(<? <a> <b> ...)</procedure>
+<procedure>(>? <a> <b> ...)</procedure>
+<procedure>(<=? <a> <b> ...)</procedure>
+<procedure>(>=? <a> <b> ...)</procedure>
+
+Return true if all arguments are monotonically increasing,
+monotonically decreasing, monotonically non-decreasing, or
+monotonically non-increasing according to {{cmp}}, and false
+otherwise.
+
+It is an error to compare uncomparable values.
+
+
 == Data types
 
 <procedure>(get <obj> <idx>)</procedure>

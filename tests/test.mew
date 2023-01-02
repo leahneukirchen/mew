@@ -729,3 +729,66 @@
   (test #() (repeat #(1 2 3) 0))
   (test "" (repeat "123" 0))
   (test "" (repeat #\x 0)))
+
+(test-group "cmp"
+  (test -1 (cmp 4 5))
+  (test -1 (cmp -4 5))
+  (test -1 (cmp -5 -4))
+  (test -1 (cmp 4 5.5))
+  (test 0 (cmp 4 4.0))
+  (test 0 (cmp -0.0 0.0))
+  (test 1 (cmp 1/4 1/5))
+  (test 1 (cmp 5 4))
+
+  (test -1 (cmp "bar" "foo"))
+  (test 1 (cmp "foo" "bar"))
+  (test 0 (cmp "foo" "foo"))
+  (test -1 (cmp "foo" "foox"))
+  (test -1 (cmp "fo" "foo"))
+
+  (test -1 (cmp #\a #\z))
+  (test 0 (cmp #\a #\a))
+  (test 1 (cmp #\z #\a))
+
+  (test -1 (cmp '(1 2 3) '(1 2 4)))
+  (test 0 (cmp '(1 2 3) '(1 2 3)))
+  (test 1 (cmp '(1 2 5) '(1 2 3)))
+  (test 1 (cmp '(1 2 3) '(1 2)))
+
+  (test -1 (cmp #(1 2 3) #(1 2 4)))
+  (test 0 (cmp #(1 2 3) #(1 2 3)))
+  (test 1 (cmp #(1 2 5) #(1 2 3)))
+  (test 1 (cmp #(1 2 3) #(1 2)))
+
+  (test #f (cmp 42 "foo")))
+
+(test-group "<?"
+  (test #t (<? 1 2 3))
+  (test #f (<? 3 2 1))
+  (test #f (<? 1 1 2))
+
+  (test-error (<?))
+  (test-error (<? 1))
+
+  (test-error (<? "foo" 2 #(6 7 8))))
+
+(test-group "<=?"
+  (test #t (<=? 1 2 3))
+  (test #f (<=? 3 2 1))
+  (test #t (<=? 1 1 2))
+
+  (test-error (<=? "foo" 2 #(6 7 8))))
+
+(test-group ">?"
+  (test #f (>? 1 2 3))
+  (test #t (>? 3 2 1))
+  (test #f (>? 1 1 2))
+
+  (test-error (>? "foo" 2 #(6 7 8))))
+
+(test-group ">=?"
+  (test #f (>=? 1 2 3))
+  (test #t (>=? 3 2 1))
+  (test #t (>=? 2 1 1))
+
+  (test-error (>=? "foo" 2 #(6 7 8))))

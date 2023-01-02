@@ -2,7 +2,7 @@
   (export
      act accumulate andloc app at
      boolean
-     comp cross-product
+     cmp comp cross-product
      dec dec! def del-at div dup
      empty? eof esc
      fail fin final for for/into fun*
@@ -27,6 +27,7 @@
      xcond xfold xfold-right xreduce xreduce-right xscan xscan-right
      -> fun-> fun->> set->
      =? <>?
+     <? <=? >? >=?
      ~?
      => =>* and=> fun=> op=> set=>
 
@@ -1294,6 +1295,57 @@
           ((string? o) (string-concatenate (repeat (list o) n)))
           ((char? o) (make-string n o))
           (#t (error "no repeat defined"))))
+
+  (define (cmp a b)
+    (cond ((and (real? a) (real? b) (= a b)) 0)
+          ((and (real? a) (real? b) (< a b)) -1)
+          ((and (real? a) (real? b) (> a b)) 1)
+
+          ((and (char? a) (char? b) (char=? a b)) 0)
+          ((and (char? a) (char? b) (char<? a b)) -1)
+          ((and (char? a) (char? b) (char>? a b)) 1)
+
+          ((and (string? a) (string? b) (string=? a b)) 0)
+          ((and (string? a) (string? b) (string<? a b)) -1)
+          ((and (string? a) (string? b) (string>? a b)) 1)
+
+          ((and (null? a) (null? b)) 0)
+          ((and (list? a) (null? b)) 1)
+          ((and (null? a) (list? b)) -1)
+          ((and (list? a) (list? b)) (let ((c (cmp (car a) (car b))))
+                                       (if (zero? c)
+                                         (cmp (cdr a) (cdr b))
+                                         c)))
+
+          ((and (vector? a) (vector? b)) (let ((m (min (vector-length a)
+                                                       (vector-length b))))
+                                           (let loop ((i 0))
+                                             (if (< i m)
+                                               (let ((c (cmp (vector-ref a i)
+                                                             (vector-ref b i))))
+                                                 (if (zero? c)
+                                                   (loop (+ i 1))
+                                                   c))
+                                               (cmp (vector-length a)
+                                                    (vector-length b))))))
+
+          (else #f)))
+
+  (define (cmp-op f)
+    (case-lambda
+      ((a b) (f (cmp a b)))
+      ((a b . xs)
+       (let loop ((x a) (xs (cons b xs)))
+         (if (null? xs)
+           #t
+           (if (f (cmp x (car xs)))
+             (loop (car xs) (cdr xs))
+             #f))))))
+
+  (define <? (cmp-op negative?))
+  (define <=? (cmp-op (negate positive?)))
+  (define >? (cmp-op positive?))
+  (define >=? (cmp-op (negate negative?)))
 
   (let ((old-repl-prompt (repl-prompt)))
     (repl-prompt (lambda ()
