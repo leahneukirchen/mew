@@ -803,3 +803,7 @@
   (test #(1 2 3) (loc (v #(3 1 2)) (sort! v) v))
   (test #(3 2 1) (loc (v #(3 1 2)) (sort! v >) v))
   (test-error (sort! '(3 2 1))))
+
+(test-group "sort-by"
+  (test '("foobar" "zing" "baz") (sort-by '("foobar" "zing" "baz")
+                                          (op - (len _)))))

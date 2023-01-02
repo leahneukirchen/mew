@@ -19,7 +19,7 @@
      per pop! prn proj push! puts
      rand range rep repeat
      sample scan scan-right sing? search seq set set-at sgn
-     shuffle shuffle! sort sort! str slurp
+     shuffle shuffle! sort sort-by sort! str slurp
      tally-accumulator tbl time
      while
      uniq-accumulator unlist until
@@ -1360,6 +1360,21 @@
       ((xs less?) (if (vector? xs)
                     (chicken-sort! xs less?)
                     (error "can only sort! vectors")))))
+
+  (define sort-by
+    (case-lambda
+      ((sequence transform) (sort-by sequence transform <?))
+      ((sequence transform less?)
+       (let ((t (tbl)))
+         (define (cached k)
+           (hash-table-ref t k
+                           (lambda ()
+                             (let ((v (transform k)))
+                               (hash-table-set! t k v)
+                               v))))
+         (sort sequence (lambda (a b)
+                          (less? (cached a) (cached b))))))))
+
 
   (let ((old-repl-prompt (repl-prompt)))
     (repl-prompt (lambda ()

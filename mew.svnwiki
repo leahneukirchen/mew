@@ -384,13 +384,19 @@ It is an error to compare uncomparable values.
 
 <procedure>(sort <obj> [<less?>])</procedure>
 
-Sort the list/vector {{<obj>}} according to the relation {{less?}}
+Sort the list/vector {{<obj>}} according to the relation {{<less?>}}
 (by default: {{<?}}).
 
 <procedure>(sort! <obj> [<less?>])</procedure>
 
 Sort the vector {{<obj>}} destructively according to the relation
-{{less?}} (by default: {{<?}}).
+{{<less>?}} (by default: {{<?}}).
+
+<procedure>(sort-by <obj> <f> [<less?>])</procedure>
+
+Sort the items of the list/vector {{<obj>}} by their image under {{f}},
+according to the relation {{<less?>}} (by default: {{<?}}).
+This uses a Schwartzian transform and evaluates {{f}} only once per item.
 
 
 == Data types
