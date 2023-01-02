@@ -16,7 +16,7 @@
      mod
      negate nth-accumulator
      odometer one-of op op*
-     per prn proj puts
+     per pop! prn proj push! puts
      rand range rep
      sample scan scan-right sing? search seq set set-at sgn
      shuffle shuffle! str slurp
@@ -1076,6 +1076,26 @@
        (dec! location 1))
       ((_ location n)
        (set location (- location n)))))
+
+  (define-syntax push!
+    (syntax-rules ()
+      ((_ location x)
+       (set location (cons x location)))))
+
+  (define-syntax pop!
+    (syntax-rules ()
+      ((_ location)
+       (if (null? location)
+         (error "pop from empty list")
+         (let ((r (car location)))
+           (set! location (cdr location))
+           r)))
+      ((_ location default)
+       (if (null? location)
+         default
+         (let ((r (car location)))
+           (set! location (cdr location))
+           r)))))
 
   (define (and=> x . fs)
     (and x

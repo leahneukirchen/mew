@@ -114,6 +114,14 @@
   (test 5 (loc (x 6) (dec! x)))
   (test 5 (loc (x 7) (dec! x 2))))
 
+(test-group "push!"
+  (test '(3 2 1) (loc (l '()) (push! l 1) (push! l 2) (push! l 3) l)))
+
+(test-group "pop!"
+  (test 1 (loc (l '(3 2 1)) (pop! l) (pop! l) (pop! l)))
+  (test-error (loc (l '(2 1)) (pop! l) (pop! l) (pop! l)))
+  (test 'foo (loc (l '(2 1)) (pop! l) (pop! l) (pop! l 'foo))))
+
 (test-group "boolean"
   (test #f (boolean #f))
   (test #t (boolean #t))

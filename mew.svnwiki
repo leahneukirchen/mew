@@ -144,8 +144,8 @@ with a {{'message}} of {{<message>}} passed through {{format}} with
 
 Increment or decrement the argument by 1.
 
-<procedure>(inc! <loc> [<n>])</procedure>
-<procedure>(dec! <loc> [<n>])</procedure>
+<syntax>(inc! <loc> [<n>])</syntax>
+<syntax>(dec! <loc> [<n>])</syntax>
 
 Increment or decrement the location {{<loc>}} by {{<n>}} (default: 1).
 
@@ -301,6 +301,15 @@ are passed.
 Material implication: evaluate {{<antecedent>...}} until one is false,
 then shortcut and return true.  If all {{<antecedent>...}} are true,
 evaluate {{<consequent>}}.
+
+<syntax>(push! <loc> <val>)</syntax>
+
+Prepend {{<val>}} to the list stored at {{<loc>}}.
+
+<syntax>(pop! <loc> [<val>])</syntax>
+
+Return the head of {{<loc>}} and replace {{<loc>}} with its tail.
+If {{<loc>}} is empty, return {{<val>}} if given; else throw an exception.
 
 
 == I/O helpers
