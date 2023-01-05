@@ -12,7 +12,7 @@
      imp inc inc! inject inject-accumulator into
      juxt
      keys
-     len lines loc
+     len len>= lines loc
      mod
      negate nth-accumulator
      odometer one-of op op*
@@ -398,6 +398,19 @@
           ((hash-table? o) (hash-table-size o))
           ((procedure? o) (generator-count (op #t) o))
           (#t (error "no len defined"))))
+
+  (define (len>= o n)
+    (cond ((list? o)
+           (let loop ((o o) (n n))
+             (cond ((null? o) (not (positive? n)))
+                   ((positive? n) (loop (cdr o) (- n 1)))
+                   (else #t))))
+          ((procedure? o)
+           (let loop ((v (o)) (n n))
+             (cond ((eof-object? v) (not (positive? n)))
+                   ((positive? n) (loop (o) (- n 1)))
+                   (else #t))))
+          (else (>= (len o) n))))
 
   (define dup
     (case-lambda

@@ -394,6 +394,16 @@
   (test 3 (len (generator 5 6 7)))
   (test-error (len #t)))
 
+(test-group "len>="
+  (test #t (len>= '() 0))
+  (test #f (len>= '() 1))
+  (test #t (len>= '(1) 0))
+  (test #t (len>= '(1 2 3) 2))
+  (test #f (len>= '(1 2 3) 4))
+  (test #t (len>= (generator 5 6 7) 2))
+  (test #f (len>= (generator 5 6 7) 4))
+  (test-error (len>= #t 0)))
+
 (test-group "dup"
   (let* ((x (list (list "foo") "bar"))
          (y1 (dup x))

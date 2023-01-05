@@ -438,6 +438,12 @@ Test if {{<obj>}} is an empty list/string/vector/hash-table.
 
 Return the length of the list/vector/string/hash-table/generator {{<obj>}}.
 
+<procedure>(len>= <obj> <n>)</procedure>
+
+Return true if the list/vector/string/hash-table/generator {{<obj>}}
+has at least {{<n>}} elements.  This is more efficient for lists and
+generators than {{len}} and works on infinite structures.
+
 <procedure>(dup <obj> [<depth>])<procedure>
 
 Return a duplicate of the nested datastructure {{<obj>}}, consisting
