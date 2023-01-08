@@ -198,6 +198,10 @@ and finally 2.
 Expands to a function that returns its {{<N>}}th argument (zero indexed).
 Multiple arguments are returned as multiple values.
 
+<procedure>(cr <obj>)</procedure>
+
+The single argument identity function.  Generalizes the {{c.*r}} family.
+
 <procedure>(boolean <obj>)</procedure>
 
 Return false if {{<obj>}} is {{#f}}, and true else.

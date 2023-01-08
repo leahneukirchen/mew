@@ -2,7 +2,7 @@
   (export
      act accumulate andloc app at
      boolean
-     cmp comp cross-product
+     cmp comp cross-product cr
      dec dec! def del-at div dup
      empty? eof esc
      fail fin final for for/into fun*
@@ -427,6 +427,9 @@
                  ((string? o) (string-copy o))
                  (else o)))
          o))))
+
+  (define (cr o)
+    o)
 
   (define (generic-for-each obj)
     (cond ((list? obj) for-each)

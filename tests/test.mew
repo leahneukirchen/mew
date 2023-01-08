@@ -285,6 +285,12 @@
   (test 42 ((op* * 7) 2 3))
   (test 42 ((op* * 2 ... 3) 7)))
 
+(test-group "cr"
+  (test '(foo) (cr '(foo)))
+  (test 42 (cr 42))
+  (test-error (cr))
+  (test-error (cr 42 43)))
+
 (test-group "rep"
   (test #t (void? (rep loop ())))
   (test 42 (rep loop (x 27 y 5)
