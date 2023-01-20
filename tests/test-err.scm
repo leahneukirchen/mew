@@ -10,7 +10,8 @@
   (test #t (ok? (if #f #f)))
   (test #t (ok? '()))
   (test 42 (unerr (err 42)))
-  (test #t (void? (unerr 42))))
+  (test #t (void? (unerr 42)))
+  (test #t (equal? (err 42) (err 42))))
 
 (test-group "record-printer"
   (test "#<err 42>" (format "~a" (err 42))))
